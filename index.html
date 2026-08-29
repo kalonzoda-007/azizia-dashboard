@@ -1,49 +1,87 @@
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌭 Колбасное производство «Азизия» · ХАЛЯЛЬ</title>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>🌭 Колбасное производство «Азизия»</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg1:#fff5f3;--bg2:#ffe9e4;--bg3:#ffd9d2;--glass:rgba(255,255,255,.55);--glass-2:rgba(255,255,255,.72);
---stroke:rgba(255,255,255,.75);--stroke-2:rgba(214,120,110,.28);--ink:#3a1410;--ink-2:#7a3b33;--ink-3:#b07a72;
---meat:#e23744;--meat-d:#b71c2b;--meat-l:#ff6b6b;--meat-ll:#ffe3e1;--ok:#16a34a;--warn:#f59e0b;--bad:#ef4444;
---bento-r:24px;}
+:root{
+  --bg1:#fff5f3; --bg2:#ffe9e4; --bg3:#ffd9d2;
+  --glass:rgba(255,255,255,0.55); --glass-2:rgba(255,255,255,0.72);
+  --stroke:rgba(255,255,255,0.75); --stroke-2:rgba(214,120,110,0.28);
+  --ink:#3a1410; --ink-2:#7a3b33; --ink-3:#b07a72;
+  --meat:#e23744; --meat-d:#b71c2b; --meat-l:#ff6b6b; --meat-ll:#ffe3e1;
+  --ok:#16a34a; --warn:#f59e0b; --bad:#ef4444; --blue:#3b82f6;
+  --bento-r:24px;
+}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-background:radial-gradient(1000px 700px at 10% 0%,#fff0ee,transparent 60%),radial-gradient(1100px 800px at 95% 100%,#ffd9d2,transparent 55%),linear-gradient(135deg,var(--bg1),var(--bg2) 55%,var(--bg3));
-background-attachment:fixed;color:var(--ink);min-height:100vh;padding:18px;}
+  background:
+   radial-gradient(1000px 700px at 10% 0%, #fff0ee, transparent 60%),
+   radial-gradient(1100px 800px at 95% 100%, #ffd9d2, transparent 55%),
+   linear-gradient(135deg,var(--bg1),var(--bg2) 55%,var(--bg3));
+  background-attachment:fixed; color:var(--ink); min-height:100vh; padding:18px;}
+
 .topbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;
-background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,233,228,.45));backdrop-filter:blur(40px) saturate(180%);
--webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid var(--stroke);border-radius:var(--bento-r);padding:16px 20px;margin-bottom:18px;
-box-shadow:0 12px 40px rgba(226,55,68,.16),inset 0 1px 0 rgba(255,255,255,.9);}
+  background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,233,228,.45));
+  backdrop-filter:blur(40px) saturate(180%); -webkit-backdrop-filter:blur(40px) saturate(180%);
+  border:1px solid var(--stroke); border-radius:var(--bento-r); padding:16px 20px; margin-bottom:18px;
+  box-shadow:0 12px 40px rgba(226,55,68,.16), inset 0 1px 0 rgba(255,255,255,.9);}
 .brand{display:flex;align-items:center;gap:14px;}
-.logo{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;font-size:1.5rem;background:linear-gradient(155deg,#ff6b6b,#b71c2b);box-shadow:0 8px 22px rgba(183,28,43,.4),inset 0 1px 2px rgba(255,255,255,.5);}
+.logo{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;font-size:1.5rem;
+  background:linear-gradient(155deg,#ff6b6b,#b71c2b);
+  box-shadow:0 8px 22px rgba(183,28,43,.4), inset 0 1px 2px rgba(255,255,255,.5);}
 .brand h1{font-size:1.32rem;font-weight:800;letter-spacing:-.4px;}
 .brand .sub{font-size:.72rem;color:var(--meat-d);font-weight:700;text-transform:uppercase;letter-spacing:1.6px;}
-.live{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;color:#15803d;background:linear-gradient(180deg,rgba(220,252,231,.7),rgba(187,247,208,.4));border:1px solid rgba(255,255,255,.7);padding:7px 13px;border-radius:999px;}
+.live{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;color:#15803d;
+  background:linear-gradient(180deg,rgba(220,252,231,.7),rgba(187,247,208,.4));
+  border:1px solid rgba(255,255,255,.7); padding:7px 13px;border-radius:999px;}
 .live .dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 10px #22c55e;animation:pulse 1.6s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.actions{display:flex;gap:10px;flex-wrap:wrap;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 19px;border-radius:15px;font-weight:700;font-size:.9rem;
+  cursor:pointer;border:1px solid rgba(255,255,255,.55);
+  background:linear-gradient(180deg,#ff6b6b,#e23744);color:#fff;
+  box-shadow:0 6px 16px rgba(226,55,68,.4), inset 0 1px 0 rgba(255,255,255,.4), inset 0 -2px 5px rgba(183,28,43,.3);
+  transition:transform .18s, filter .18s;}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.05);}
+.btn.ghost{background:linear-gradient(180deg,#ffe3e1,#ffd0cb);color:var(--meat-d);border-color:rgba(214,120,110,.4);box-shadow:inset 0 1px 0 rgba(255,255,255,.8);}
+
 .bento{display:flex;flex-direction:column;gap:16px;}
-.tile{background:linear-gradient(180deg,rgba(255,255,255,.6),rgba(255,233,228,.34));backdrop-filter:blur(34px) saturate(170%);-webkit-backdrop-filter:blur(34px) saturate(170%);border:1px solid var(--stroke);border-radius:var(--bento-r);padding:18px;box-shadow:0 10px 34px rgba(226,55,68,.12),inset 0 1px 0 rgba(255,255,255,.85);}
+.tile{background:linear-gradient(180deg,rgba(255,255,255,.6),rgba(255,233,228,.34));
+  backdrop-filter:blur(34px) saturate(170%); -webkit-backdrop-filter:blur(34px) saturate(170%);
+  border:1px solid var(--stroke); border-radius:var(--bento-r); padding:18px;
+  box-shadow:0 10px 34px rgba(226,55,68,.12), inset 0 1px 0 rgba(255,255,255,.85);}
 .tile h2{font-size:1.02rem;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
 .tile h2 .cnt{margin-left:auto;font-size:.76rem;color:var(--meat-d);background:var(--meat-ll);padding:3px 10px;border-radius:999px;font-weight:700;}
+
+/* KPI strip */
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px;}
-.kpi{background:var(--glass-2);border:1px solid var(--stroke);border-radius:18px;padding:14px 16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 6px 18px rgba(226,55,68,.1);}
+.kpi{background:var(--glass-2);border:1px solid var(--stroke);border-radius:18px;padding:14px 16px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 6px 18px rgba(226,55,68,.1);}
 .kpi .k{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--ink-3);}
 .kpi .v{font-size:1.7rem;font-weight:800;color:var(--meat-d);margin-top:3px;}
 .kpi .v small{font-size:.8rem;color:var(--ink-3);font-weight:600;}
+
+/* аккорды (этапы) */
 .accords{display:flex;flex-direction:column;gap:10px;}
-.acc{background:var(--glass-2);border:1px solid var(--stroke-2);border-radius:16px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.85);}
+.acc{background:var(--glass-2);border:1px solid var(--stroke-2);border-radius:16px;overflow:hidden;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.85);}
 .acc-head{display:flex;align-items:center;gap:12px;padding:13px 16px;}
-.acc-num{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;font-weight:800;color:#fff;background:linear-gradient(180deg,#ff6b6b,#e23744);font-size:.85rem;box-shadow:0 4px 10px rgba(226,55,68,.35);}
+.acc-num{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;font-weight:800;color:#fff;
+  background:linear-gradient(180deg,#ff6b6b,#e23744);font-size:.85rem;box-shadow:0 4px 10px rgba(226,55,68,.35);}
 .acc-name{font-weight:800;font-size:.95rem;flex:1;}
 .acc-count{font-size:.78rem;font-weight:700;color:var(--meat-d);background:var(--meat-ll);padding:3px 10px;border-radius:999px;}
 .acc-body{padding:0 16px 14px;display:flex;flex-direction:column;gap:8px;}
-.ord{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.5);border:1px solid var(--stroke-2);}
+.ord{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.5);
+  border:1px solid var(--stroke-2);}
 .ord .pr{font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:6px;background:rgba(226,55,68,.12);color:var(--meat-d);font-family:'JetBrains Mono',monospace;}
 .ord .nm{font-weight:700;font-size:.86rem;flex:1;}
 .ord .meta{font-size:.74rem;color:var(--ink-2);}
+.ord .mv{font-size:.72rem;font-weight:700;padding:5px 10px;border-radius:9px;cursor:pointer;color:#fff;background:linear-gradient(180deg,#ff6b6b,#e23744);border:none;box-shadow:0 3px 8px rgba(226,55,68,.3);}
+.ord .mv:disabled{background:#e3c3bf;color:#fff;box-shadow:none;cursor:default;}
 .ord .st{font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:6px;background:var(--meat-ll);color:var(--meat-d);}
+
+/* склад / оборудование */
 .list{display:flex;flex-direction:column;gap:9px;}
 .row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.5);border:1px solid var(--stroke-2);}
 .row .nm{font-weight:700;font-size:.86rem;flex:1;}
@@ -55,24 +93,44 @@ box-shadow:0 12px 40px rgba(226,55,68,.16),inset 0 1px 0 rgba(255,255,255,.9);}
 .chip.ok{background:rgba(22,163,74,.14);color:#15803d;}
 .chip.warn{background:rgba(245,158,11,.16);color:#b45309;}
 .chip.run{background:rgba(226,55,68,.14);color:var(--meat-d);}
+
 .sectitle{font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--meat-d);margin:13px 0 8px;}
-.empty{color:var(--ink-3);font-size:.84rem;text-align:center;padding:20px;}
+
+/* MODAL — мясной алый liquid glass */
+.overlay{position:fixed;inset:0;background:rgba(60,12,12,.3);backdrop-filter:blur(8px);
+  display:none;align-items:center;justify-content:center;z-index:50;padding:18px;}
+.overlay.open{display:flex;}
+.modal{width:min(480px,100%);max-height:88vh;overflow:auto;border-radius:28px;padding:24px;
+  background:rgba(255,240,238,.72);backdrop-filter:blur(50px) saturate(200%);-webkit-backdrop-filter:blur(50px) saturate(200%);
+  border:1px solid rgba(255,255,255,.7);
+  box-shadow:0 30px 70px rgba(160,20,30,.5), inset 0 1px 0 rgba(255,255,255,.9), inset 0 -2px 6px rgba(226,55,68,.25);}
+.modal h3{font-size:1.25rem;font-weight:800;margin-bottom:4px;color:var(--meat-d);}
+.modal .mh{font-size:.76rem;color:var(--ink-3);margin-bottom:18px;font-weight:600;}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:.8rem;font-weight:700;color:var(--ink-2);margin-bottom:7px;}
+.field input,.field textarea,.field select{width:100%;padding:12px 14px;border-radius:14px;border:1px solid rgba(226,55,68,.3);
+  background:linear-gradient(180deg,#fff,#fff3f1);color:var(--ink);font-size:.92rem;font-family:inherit;outline:none;box-shadow:inset 0 2px 5px rgba(226,55,68,.1);}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--meat);box-shadow:inset 0 2px 5px rgba(226,55,68,.12),0 0 0 3px rgba(226,55,68,.18);}
+.field textarea{resize:vertical;min-height:70px;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chipx{padding:8px 12px;border-radius:12px;font-size:.8rem;font-weight:600;cursor:pointer;border:1px solid rgba(226,55,68,.3);background:rgba(255,240,238,.7);color:var(--ink-2);}
+.chipx.on{background:linear-gradient(180deg,#ff6b6b,#e23744);color:#fff;border-color:var(--meat-d);}
+.modal .mclose{position:absolute;top:18px;right:20px;font-size:1.35rem;color:var(--ink-3);cursor:pointer;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:rgba(255,240,238,.8);border:1px solid rgba(226,55,68,.3);}
+.modal .mactions{display:flex;gap:10px;margin-top:10px;}
 .foot{color:var(--ink-3);font-size:.76rem;text-align:center;margin-top:14px;}
-.warn-box{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);color:#b45309;border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:.82rem;display:none;}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 19px;border-radius:15px;font-weight:700;font-size:.9rem;cursor:pointer;border:1px solid rgba(255,255,255,.55);background:linear-gradient(180deg,#ff6b6b,#e23744);color:#fff;box-shadow:0 6px 16px rgba(226,55,68,.4),inset 0 1px 0 rgba(255,255,255,.4);text-decoration:none;}
 </style></head>
 <body>
 
 <div class="topbar">
-  <div class="brand"><div class="logo">🌭</div>
-    <div><h1>Колбасное производство «Азизия»</h1><div class="sub">Sausage Plant · Control · ✅ ХАЛЯЛЬ</div></div></div>
+  <div class="brand">
+    <div class="logo">🌭</div>
+    <div><h1>Колбасное производство «Азизия»</h1><div class="sub">Sausage Plant · Control · ✅ ХАЛЯЛЬ</div></div>
+  </div>
   <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-    <div class="live"><span class="dot"></span> LIVE CSV · <span id="ts">—</span></div>
-    <a class="btn" href="https://docs.google.com/spreadsheets/d/19TkAQDxrfaF8auyZsIiJFmSI-wxS9fRT8TPX1_r2XBE/edit" target="_blank">📄 Таблица</a>
+    <div class="live"><span class="dot"></span> LIVE · <span id="ts">—</span></div>
+    <div class="actions"><button class="btn" onclick="openOrderModal()">＋ Заявка</button></div>
   </div>
 </div>
-
-<div class="warn-box" id="warn"></div>
 
 <div class="kpis">
   <div class="kpi"><div class="k">Заказы</div><div class="v" id="kOrders">0</div></div>
@@ -83,73 +141,143 @@ box-shadow:0 12px 40px rgba(226,55,68,.16),inset 0 1px 0 rgba(255,255,255,.9);}
 </div>
 
 <div class="bento">
-  <div class="tile"><h2>🔄 Процесс: Заявка → Отгрузка <span class="cnt" id="ordCnt">0</span></h2><div class="accords" id="accords"></div></div>
-  <div class="tile"><h2>📦 Склад сырья</h2><div class="list" id="rawList"></div></div>
-  <div class="tile"><h2>⚙ Оборудование цеха</h2><div class="list" id="equipList"></div></div>
-  <div class="tile"><h2>🏭 Структура: кто чем занимается</h2>
-    <div class="sectitle">Поставщики сырья (что поставляют)</div><div class="list" id="supList"></div>
-    <div class="sectitle">Магазины / клиенты</div><div class="list" id="shopList"></div>
-    <div class="sectitle">Ответственный</div><div class="list" id="mgrList"></div></div>
-  <div class="tile wide"><h2>📊 Аналитика</h2>
-    <div class="sectitle">Выпуск по продуктам</div><div class="list" id="prodChart"></div>
-    <div class="sectitle">Источники заявок</div><div class="list" id="srcChart"></div>
-    <div class="foot">Дашборд тянет данные напрямую из Google Таблицы (CSV) — без сервера. Постоянная ссылка. Аккордная система: заявка → принято → производство → готово → отгрузка → закрыто.</div></div>
+  <div class="tile">
+    <h2>🔄 Процесс: Заявка → Отгрузка <span class="cnt" id="ordCnt">0</span></h2>
+    <div class="accords" id="accords"></div>
+  </div>
+
+  <div class="tile">
+    <h2>📦 Склад сырья</h2>
+    <div class="list" id="rawList"></div>
+  </div>
+
+  <div class="tile">
+    <h2>⚙ Оборудование цеха</h2>
+    <div class="list" id="equipList"></div>
+  </div>
+
+  <div class="tile">
+    <h2>🏭 Структура: кто чем занимается</h2>
+    <div class="sectitle">Поставщики сырья (что поставляют)</div>
+    <div class="list" id="supList"></div>
+    <div class="sectitle">Магазины / клиенты</div>
+    <div class="list" id="shopList"></div>
+    <div class="sectitle">Ответственный</div>
+    <div class="list" id="mgrList"></div>
+  </div>
+
+  <div class="tile wide">
+    <h2>📊 Аналитика</h2>
+    <div class="sectitle">Выпуск по продуктам</div>
+    <div class="list" id="prodChart"></div>
+    <div class="sectitle">Источники заявок</div>
+    <div class="list" id="srcChart"></div>
+    <div class="foot">Дашборд готов к автоматизации: Telegram-бот и n8n.io будут дёргать те же эндпоинты (/api/orders, /stage). Аккордная система: заявка → принято → производство → готово → отгрузка → закрыто.</div>
+  </div>
 </div>
 
+<div class="overlay" id="orderOverlay"><div class="modal" style="position:relative;">
+  <span class="mclose" onclick="closeModals()">✕</span><h3>Новая заявка</h3><div class="mh">поступит в аккорд производства</div>
+  <div class="field"><label>Клиент</label><input id="oCustomer" placeholder="Магазин 'Ориён'"></div>
+  <div class="field"><label>Продукт</label><select id="oProduct"></select></div>
+  <div class="field"><label>Вес, кг</label><input id="oWeight" type="number" value="50"></div>
+  <div class="field"><label>Источник</label><select id="oSource"><option>телеграм</option><option>менеджер</option><option>n8n</option><option>заявка</option></select></div>
+  <div class="field"><label>Приоритет</label><select id="oPrio"><option>P0</option><option>P1</option><option selected>P2</option><option>P3</option><option>P4</option></select></div>
+  <div class="field"><label>Заметка</label><textarea id="oNote" placeholder="Особые условия"></textarea></div>
+  <div class="mactions"><button class="btn" onclick="createOrder()">Создать заявку</button><button class="btn ghost" onclick="closeModals()">Отмена</button></div>
+</div></div>
+
 <script>
-const SID="19TkAQDxrfaF8auyZsIiJFmSI-wxS9fRT8TPX1_r2XBE";
-const GID={orders:0,shops:347924609,suppliers:618116582,raw:971706084,equip:609202406};
-const STAGES=["заявка","принято","производство","готово","отгрузка","закрыто"];
-const esc=s=>(s||"").replace(/[&<>\"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let STATE={orders:{},stages:[],products:[],raw:[],equip:[]};
+const API_BASE="https://corporation-text-verified-identity.trycloudflare.com";
+async function load(){try{const r=await fetch(API_BASE+'/api/state',{cache:'no-store'});STATE=await r.json();render();document.getElementById('ts').textContent=new Date().toLocaleTimeString('ru-RU');}catch(e){console.error(e);}}
+function jpost(u,b){return fetch(API_BASE+u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});}
 
-function parseCSV(t){const rows=[];let row=[],cur="",q=false;
-  for(let i=0;i<t.length;i++){const c=t[i];
-    if(q){if(c=='"'){if(t[i+1]=='"'){cur+='"';i++;}else q=false;}else cur+=c;}
-    else{if(c=='"')q=true;else if(c==","){row.push(cur);cur="";}else if(c=="\n"||c=="\r"){if(c=="\r"&&t[i+1]=="\n")i++;row.push(cur);rows.push(row);row=[];cur="";}else cur+=c;}}
-  if(cur!==""||row.length){row.push(cur);rows.push(row);}
-  return rows;}
+function render(){
+  const ords=Object.values(STATE.orders).map(o=>({...o, stage:o.этап||o.stage, weight:+o.вес_кг||+o.weight||0, product:o.продукт||o.product, customer:o.клиент||o.customer, source:o.источник||o.source, priority:o.приоритет||o.priority, note:o.заметка||o.note}));
+  document.getElementById('kOrders').textContent=ords.length;
+  document.getElementById('kProd').textContent=ords.filter(o=>o.stage==='производство').length;
+  document.getElementById('kShip').textContent=ords.filter(o=>o.stage==='отгрузка'||o.stage==='закрыто').length;
+  document.getElementById('kKg').innerHTML=ords.reduce((s,o)=>s+(o.weight||0),0)+'<small> кг</small>';
+  document.getElementById('kRaw').innerHTML=(STATE.raw||[]).length+'<small> поз.</small>';
+  document.getElementById('ordCnt').textContent=ords.length;
 
-async function getCSV(name){const r=await fetch(`https://docs.google.com/spreadsheets/d/${SID}/export?format=csv&gid=${GID[name]}`,{cache:"no-store"});
-  if(!r.ok)throw new Error(name+" "+r.status);
-  const t=await r.text();const rows=parseCSV(t);if(!rows.length)return[];
-  const h=rows[0].map(x=>x.trim());return rows.slice(1).filter(r=>r.some(x=>(x||"").trim())).map(r=>{const o={};h.forEach((k,i)=>o[k]=r[i]||"");return o;});}
-
-function render(orders,shops,sups,raw,equip){
-  const ords=orders.map(o=>({...o,stage:o.этап||o.stage,weight:+o.вес_кг||0,product:o.продукт||"",customer:o.клиент||"",source:o.источник||"",priority:o.приоритет||"",note:o.заметка||"",manager:o.менеджер||""}));
-  document.getElementById("kOrders").textContent=ords.length;
-  document.getElementById("kProd").textContent=ords.filter(o=>o.stage==="производство").length;
-  document.getElementById("kShip").textContent=ords.filter(o=>o.stage==="отгрузка"||o.stage==="закрыто").length;
-  document.getElementById("kKg").innerHTML=ords.reduce((s,o)=>s+(o.weight||0),0)+"<small> кг</small>";
-  document.getElementById("kRaw").innerHTML=(raw||[]).length+"<small> поз.</small>";
-  document.getElementById("ordCnt").textContent=ords.length;
-
-  const acc=document.getElementById("accords");acc.innerHTML="";
-  STAGES.forEach((st,i)=>{const list=ords.filter(o=>o.stage===st);const div=document.createElement("div");div.className="acc";
+  // аккорды по этапам
+  const acc=document.getElementById('accords');acc.innerHTML='';
+  const stageOrder=STATE.stages||['заявка','принято','производство','готово','отгрузка','закрыто'];
+  const idx={};stageOrder.forEach((s,i)=>idx[s]=i);
+  stageOrder.forEach((st,i)=>{
+    const list=ords.filter(o=>o.stage===st).sort((a,b)=>(idx[a.stage]-idx[b.stage]));
+    const div=document.createElement('div');div.className='acc';
     div.innerHTML=`<div class="acc-head"><div class="acc-num">${i+1}</div><div class="acc-name">${st.toUpperCase()}</div><div class="acc-count">${list.length}</div></div>`;
-    if(list.length){const b=document.createElement("div");b.className="acc-body";list.forEach(o=>{const row=document.createElement("div");row.className="ord";
-      row.innerHTML=`<span class="pr">${esc(o.priority)}</span><div style="flex:1"><div class="nm">${esc(o.product)} · ${esc(o.customer)}</div><div class="meta">${o.weight} кг · ${esc(o.source)} · ${esc(o.note)}</div></div><span class="st">${esc(o.stage)}</span>`;b.appendChild(row);});div.appendChild(b);}acc.appendChild(div);});
+    if(list.length){const body=document.createElement('div');body.className='acc-body';
+      list.forEach(o=>{const next=nextStage(o.stage);
+        const row=document.createElement('div');row.className='ord';
+        row.innerHTML=`<span class="pr">${esc(o.priority)}</span>
+          <div style="flex:1"><div class="nm">${esc(o.product)} · ${esc(o.customer)}</div><div class="meta">${o.weight} кг · ${esc(o.source)} · ${esc(o.note||'')}</div></div>
+          <button class="mv" ${next?'':'disabled'} onclick="advance('${o.id}')">${next?('→ '+next):'✓'}</button>`;
+        body.appendChild(row);});
+      div.appendChild(body);}
+    acc.appendChild(div);});
 
-  const rl=document.getElementById("rawList");rl.innerHTML="";(raw||[]).forEach(r=>{const low=+r.остаток_кг<=+r.мин_кг;const d=document.createElement("div");d.className="row";
-    d.innerHTML=`<span class="nm">${esc(r.название)}</span><span class="val">${r.остаток_кг} кг</span><div class="bar"><i class="${low?"low":""}" style="width:${Math.min(100,Math.round(+r.остаток_кг/(+r.мин_кг||1)*40))}%"></i></div>${low?'<span class="chip warn">MIN</span>':'<span class="chip ok">OK</span>'}`;rl.appendChild(d);});
+  // склад
+  const rl=document.getElementById('rawList');rl.innerHTML='';
+  (STATE.raw||[]).forEach(r=>{const low=r.stock<=r.min;const div=document.createElement('div');div.className='row';
+    div.innerHTML=`<span class="nm">${esc(r.name)}</span><span class="val">${r.stock} кг</span>
+      <div class="bar"><i class="${low?'low':''}" style="width:${Math.min(100,Math.round(r.stock/r.min*40))}%"></i></div>
+      ${low?'<span class="chip warn">MIN</span>':'<span class="chip ok">OK</span>'}`;
+    rl.appendChild(div);});
 
-  const el=document.getElementById("equipList");el.innerHTML="";(equip||[]).forEach(e=>{const d=document.createElement("div");d.className="row";const cls=e.статус==="работает"?"run":e.статус==="внимание"?"warn":"warn";
-    d.innerHTML=`<span class="nm">${esc(e.название)}</span><span class="val">${e.здоровье_%}%</span><div class="bar"><i class="${+e.здоровье_%<75?"low":""}" style="width:${e.здоровье_%}%"></i></div><span class="chip ${cls}">${esc(e.статус)}</span>`;el.appendChild(d);});
+  // оборудование
+  const el=document.getElementById('equipList');el.innerHTML='';
+  (STATE.equip||[]).forEach(e=>{const div=document.createElement('div');div.className='row';
+    const cls=e.status==='работает'?'run':e.status==='внимание'?'warn':'warn';
+    div.innerHTML=`<span class="nm">${esc(e.name)}</span><span class="val">${e.health}%</span>
+      <div class="bar"><i class="${e.health<75?'low':''}" style="width:${e.health}%"></i></div>
+      <span class="chip ${cls}">${esc(e.status)}</span>`;el.appendChild(div);});
 
-  const supl=document.getElementById("supList");supl.innerHTML="";(sups||[]).forEach(s=>{const d=document.createElement("div");d.className="row";d.innerHTML=`<span class="nm">${esc(s.название)}</span><span class="val">${esc(s.товар)}</span>`;supl.appendChild(d);});
-  const shl=document.getElementById("shopList");shl.innerHTML="";(shops||[]).forEach(m=>{const d=document.createElement("div");d.className="row";d.innerHTML=`<span class="nm">${esc(m.название)}</span><span class="val">${esc(m.район)}</span>`;shl.appendChild(d);});
-  const mgrs={};ords.forEach(o=>{if(o.manager)mgrs[o.manager]=(mgrs[o.manager]||0)+1;});const ml=document.getElementById("mgrList");ml.innerHTML="";
-  const me=Object.entries(mgrs);if(me.length)me.forEach(([m,n])=>{const d=document.createElement("div");d.className="row";d.innerHTML=`<span class="nm">👤 ${esc(m)}</span><span class="val">${n} заказ.</span>`;ml.appendChild(d);});else ml.innerHTML='<div class="empty">нет</div>';
+  // структура: поставщики
+  const supl=document.getElementById('supList');supl.innerHTML='';
+  (STATE.suppliers||[]).forEach(s=>{const div=document.createElement('div');div.className='row';
+    div.innerHTML='<span class="nm">'+esc(s['название']||s.name||'')+'</span><span class="val">'+(s['товар']||s.goods||'')+'</span>';supl.appendChild(div);});
+  // структура: магазины
+  const shl=document.getElementById('shopList');shl.innerHTML='';
+  (STATE.shops||[]).forEach(m=>{const div=document.createElement('div');div.className='row';
+    div.innerHTML='<span class="nm">'+esc(m['название']||m.name||'')+'</span><span class="val">'+esc(m['район']||m.district||'')+'</span>';shl.appendChild(div);});
+  // структура: ответственные менеджеры
+  const mgrs={};(STATE.orders?Object.values(STATE.orders):[]).forEach(o=>{const m=o['менеджер']||o.manager;if(m)mgrs[m]=(mgrs[m]||0)+1;});
+  const ml=document.getElementById('mgrList');ml.innerHTML='';
+  const me=Object.entries(mgrs);
+  if(me.length){me.forEach(([m,n])=>{const div=document.createElement('div');div.className='row';
+    div.innerHTML='<span class="nm">👤 '+esc(m)+'</span><span class="val">'+n+' заказ.</span>';ml.appendChild(div);});}
+  else ml.innerHTML='<div class="empty">нет</div>';
 
-  const byProd={};ords.forEach(o=>byProd[o.product]=(byProd[o.product]||0)+(o.weight||0));const pc=document.getElementById("prodChart");pc.innerHTML="";const maxP=Math.max(1,...Object.values(byProd));
-  Object.entries(byProd).forEach(([p,w])=>{const d=document.createElement("div");d.className="row";d.innerHTML=`<span class="nm">${esc(p)}</span><span class="val">${w} кг</span><div class="bar"><i style="width:${Math.round(w/maxP*100)}%"></i></div>`;pc.appendChild(d);});
-  const bySrc={};ords.forEach(o=>bySrc[o.source]=(bySrc[o.source]||0)+1);const sc=document.getElementById("srcChart");sc.innerHTML="";const maxS=Math.max(1,...Object.values(bySrc));
-  Object.entries(bySrc).forEach(([s,n])=>{const d=document.createElement("div");d.className="row";d.innerHTML=`<span class="nm">${esc(s)}</span><span class="val">${n} заяв.</span><div class="bar"><i style="width:${Math.round(n/maxS*100)}%"></i></div>`;sc.appendChild(d);});}
+  // аналитика: продукты
+  const byProd={};(STATE.products||[]).forEach(p=>byProd[p]=0);
+  ords.forEach(o=>{byProd[o.product]=(byProd[o.product]||0)+(o.weight||0);});
+  const pc=document.getElementById('prodChart');pc.innerHTML='';
+  const maxP=Math.max(1,...Object.values(byProd));
+  Object.entries(byProd).forEach(([p,w])=>{const div=document.createElement('div');div.className='row';
+    div.innerHTML=`<span class="nm">${esc(p)}</span><span class="val">${w} кг</span><div class="bar"><i style="width:${Math.round(w/maxP*100)}%"></i></div>`;pc.appendChild(div);});
 
-async function load(){try{
-  const [orders,shops,sups,raw,equip]=await Promise.all([getCSV("orders"),getCSV("shops"),getCSV("suppliers"),getCSV("raw"),getCSV("equip")]);
-  render(orders,shops,sups,raw,equip);document.getElementById("ts").textContent=new Date().toLocaleTimeString("ru-RU");
-  document.getElementById("warn").style.display="none";
-}catch(e){const w=document.getElementById("warn");w.style.display="block";w.textContent="⚠ Не удалось загрузить данные из таблицы: "+e.message+". Проверь доступ к docs.google.com";}}
-load();setInterval(load,20000);
+  // аналитика: источники
+  const bySrc={};ords.forEach(o=>bySrc[o.source]=(bySrc[o.source]||0)+1);
+  const sc=document.getElementById('srcChart');sc.innerHTML='';
+  const maxS=Math.max(1,...Object.values(bySrc));
+  Object.entries(bySrc).forEach(([s,n])=>{const div=document.createElement('div');div.className='row';
+    div.innerHTML=`<span class="nm">${esc(s)}</span><span class="val">${n} заяв.</span><div class="bar"><i style="width:${Math.round(n/maxS*100)}%"></i></div>`;sc.appendChild(div);});
+
+  fillSelect('oProduct',(STATE.products||[]).map(p=>({id:p,name:p})));
+}
+function nextStage(st){const o=STATE.stages||[];const i=o.indexOf(st);return i>=0&&i<o.length-1?o[i+1]:null;}
+function fillSelect(id,arr){const el=document.getElementById(id);if(!el)return;el.innerHTML=arr.map(a=>`<option value="${a.id}">${a.name}</option>`).join('');}
+const esc=s=>(s||'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function openOrderModal(){document.getElementById('orderOverlay').classList.add('open');}
+function closeModals(){document.querySelectorAll('.overlay').forEach(o=>o.classList.remove('open'));}
+async function createOrder(){await jpost('/api/orders',{customer:document.getElementById('oCustomer').value,product:document.getElementById('oProduct').value,weight:+document.getElementById('oWeight').value,source:document.getElementById('oSource').value,priority:document.getElementById('oPrio').value,note:document.getElementById('oNote').value});closeModals();await load();}
+async function advance(id){const o=STATE.orders[id];if(!o)return;const ns=nextStage(o.stage);if(ns){await jpost('/api/orders/'+id+'/stage',{stage:ns});await load();}}
+
+load();setInterval(load,8000);
 </script>
 </body></html>
