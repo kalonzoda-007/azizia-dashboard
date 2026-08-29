@@ -3,92 +3,122 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Xpeadia AI — Dashboard</title>
+<title>Xpeadia AI — Analytics Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 :root {
-  --bg: #f8f9fc;
-  --card: #ffffff;
-  --border: #e8ecf2;
-  --ink: #1a1d29;
-  --ink-2: #5f6577;
-  --ink-3: #9ca3b5;
-  --blue: #4f7cff;
-  --blue-l: #e8efff;
-  --green: #16a34a;
-  --green-l: #e6f7ed;
-  --red: #ef4444;
-  --red-l: #fde8e8;
-  --amber: #f59e0b;
-  --amber-l: #fef3e1;
-  --purple: #8b5cf6;
-  --purple-l: #f0eaff;
+  --bg: #f8f9fc; --card: #ffffff; --border: #e8ecf2;
+  --ink: #1a1d29; --ink-2: #5f6577; --ink-3: #9ca3b5;
+  --blue: #4f7cff; --blue-l: #e8efff;
+  --green: #16a34a; --green-l: #e6f7ed;
+  --red: #ef4444; --red-l: #fde8e8;
+  --amber: #f59e0b; --amber-l: #fef3e1;
+  --purple: #8b5cf6; --purple-l: #f0eaff;
+  --sidebar-w: 240px; --sidebar-collapsed: 64px;
   --radius: 14px;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--bg);
-  color: var(--ink);
-  min-height: 100vh;
-  padding: 20px;
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--ink); display: flex; min-height: 100vh; }
+
+/* SIDEBAR */
+.sidebar {
+  width: var(--sidebar-w); background: var(--card); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0;
+  transition: width .25s cubic-bezier(.4,0,.2,1); z-index: 200; overflow: hidden;
 }
-/* NAV */
-.nav {
+.sidebar.collapsed { width: var(--sidebar-collapsed); }
+.sidebar-header {
+  display: flex; align-items: center; gap: 12px; padding: 16px 18px; border-bottom: 1px solid var(--border);
+  height: 64px; min-height: 64px;
+}
+.sidebar-header .logo { width: 34px; height: 34px; min-width: 34px; border-radius: 10px; background: linear-gradient(135deg,#4f7cff,#8b5cf6); display: grid; place-items: center; color: #fff; font-weight: 800; font-size: .9rem; }
+.sidebar-header .brand { font-weight: 800; font-size: 1.05rem; white-space: nowrap; opacity: 1; transition: opacity .2s; }
+.sidebar.collapsed .sidebar-header .brand { opacity: 0; pointer-events: none; }
+
+.hamburger {
+  width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg);
+  cursor: pointer; display: grid; place-items: center; margin-left: auto; transition: all .15s;
+}
+.hamburger:hover { background: var(--blue-l); border-color: var(--blue); }
+.hamburger svg { width: 18px; height: 18px; }
+
+.sidebar-nav { flex: 1; padding: 12px 10px; overflow-y: auto; }
+.sidebar-nav a {
+  display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 10px;
+  text-decoration: none; font-weight: 600; font-size: .88rem; color: var(--ink-2);
+  transition: all .15s; white-space: nowrap; margin-bottom: 4px;
+}
+.sidebar-nav a:hover { background: var(--blue-l); color: var(--blue); }
+.sidebar-nav a.active { background: var(--blue); color: #fff; }
+.sidebar-nav a .icon { width: 20px; height: 20px; min-width: 20px; display: grid; place-items: center; font-size: .95rem; }
+.sidebar-nav a .lbl { opacity: 1; transition: opacity .2s; }
+.sidebar.collapsed .sidebar-nav a .lbl { opacity: 0; pointer-events: none; }
+
+.sidebar-footer { padding: 12px 10px; border-top: 1px solid var(--border); }
+.sidebar-footer .user { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 10px; background: var(--bg); }
+.sidebar-footer .user .av { width: 32px; height: 32px; min-width: 32px; border-radius: 50%; background: linear-gradient(135deg,#4f7cff,#16a34a); display: grid; place-items: center; color: #fff; font-weight: 700; font-size: .8rem; }
+.sidebar-footer .user .info { font-size: .82rem; font-weight: 600; white-space: nowrap; opacity: 1; transition: opacity .2s; }
+.sidebar-footer .user .info small { display: block; font-size: .7rem; color: var(--ink-3); font-weight: 500; }
+.sidebar.collapsed .sidebar-footer .user .info { opacity: 0; }
+
+/* MAIN */
+.main {
+  flex: 1; margin-left: var(--sidebar-w); transition: margin-left .25s cubic-bezier(.4,0,.2,1);
+  display: flex; flex-direction: column; min-height: 100vh;
+}
+.sidebar.collapsed ~ .main { margin-left: var(--sidebar-collapsed); }
+
+/* TOPBAR */
+.topbar {
   display: flex; align-items: center; justify-content: space-between;
-  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 14px 22px; margin-bottom: 22px;
-  box-shadow: 0 2px 8px rgba(0,0,0,.04);
+  background: var(--card); border-bottom: 1px solid var(--border);
+  padding: 14px 22px; height: 64px; position: sticky; top: 0; z-index: 100;
 }
-.logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.2rem; }
-.logo .icon { width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg,#4f7cff,#8b5cf6); display: grid; place-items: center; color: #fff; font-size: 1rem; }
-.nav-links { display: flex; gap: 8px; flex-wrap: wrap; }
-.nav-links a {
-  padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: .88rem;
-  color: var(--ink-2); transition: all .15s;
-}
-.nav-links a:hover, .nav-links a.active { background: var(--blue-l); color: var(--blue); }
-.nav-right { display: flex; align-items: center; gap: 12px; }
+.topbar .left { display: flex; align-items: center; gap: 14px; }
+.topbar .page-title { font-size: 1.15rem; font-weight: 800; }
+.topbar .right { display: flex; align-items: center; gap: 10px; }
 .badge { padding: 6px 12px; border-radius: 8px; font-size: .78rem; font-weight: 700; }
 .badge.pro { background: var(--purple-l); color: var(--purple); }
-.avatar { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg,#4f7cff,#16a34a); display: grid; place-items: center; color: #fff; font-weight: 700; font-size: .85rem; }
+.badge.live { background: var(--green-l); color: var(--green); display: inline-flex; align-items: center; gap: 6px; }
+.badge.live .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 1.4s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+/* CONTENT */
+.content { flex: 1; padding: 22px; }
+.page { display: none; }
+.page.active { display: block; }
 
 /* STATS */
-.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 16px; margin-bottom: 22px; }
-.stat {
-  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.04);
-}
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 16px; margin-bottom: 22px; }
+.stat { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.04); }
 .stat .label { font-size: .78rem; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: .6px; }
 .stat .value { font-size: 1.85rem; font-weight: 800; margin-top: 6px; letter-spacing: -.5px; }
-.stat .change { font-size: .78rem; font-weight: 600; margin-top: 4px; display: inline-flex; align-items: center; gap: 4px; }
+.stat .change { font-size: .78rem; font-weight: 600; margin-top: 4px; }
 .stat .change.up { color: var(--green); }
 .stat .change.down { color: var(--red); }
 .stat.blue { border-left: 4px solid var(--blue); }
 .stat.red { border-left: 4px solid var(--red); }
 .stat.green { border-left: 4px solid var(--green); }
 .stat.amber { border-left: 4px solid var(--amber); }
+.stat.purple { border-left: 4px solid var(--purple); }
 
 /* GRID */
 .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 22px; }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 22px; }
-.card {
-  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.04);
-}
+.card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.04); }
 .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
 .card h3 .icon { width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; font-size: .85rem; }
 .icon.blue { background: var(--blue-l); color: var(--blue); }
 .icon.red { background: var(--red-l); color: var(--red); }
 .icon.green { background: var(--green-l); color: var(--green); }
+.icon.amber { background: var(--amber-l); color: var(--amber); }
+.icon.purple { background: var(--purple-l); color: var(--purple); }
 
 /* CHARTS */
-.chart { width: 100%; height: 220px; }
 .chart-bars { display: flex; align-items: flex-end; gap: 8px; height: 180px; padding: 10px 0; }
-.chart-bars .bar {
-  flex: 1; border-radius: 6px 6px 0 0; background: linear-gradient(180deg, var(--blue), #a5bfff);
-  position: relative; min-height: 12px; transition: all .15s;
-}
+.chart-bars .bar { flex: 1; border-radius: 6px 6px 0 0; background: linear-gradient(180deg, var(--blue), #a5bfff); position: relative; min-height: 12px; transition: all .15s; }
 .chart-bars .bar:hover { opacity: .85; }
 .chart-bars .bar .val { position: absolute; top: -22px; left: 50%; transform: translateX(-50%); font-size: .7rem; font-weight: 700; color: var(--ink-2); white-space: nowrap; }
 .chart-bars .bar .lbl { position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%); font-size: .68rem; color: var(--ink-3); white-space: nowrap; }
@@ -113,136 +143,501 @@ body {
 .table .rank.top { background: var(--blue-l); color: var(--blue); }
 .table .model { font-weight: 600; }
 .table .vol { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--ink-2); }
-.table .pct { width: 60px; }
 .bar-inline { height: 6px; border-radius: 3px; background: var(--blue); min-width: 4px; }
 
-/* LINE CHART */
-.line-chart { width: 100%; height: 200px; }
+/* PROVIDERS */
+.provider { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 10px; background: var(--bg); border: 1px solid var(--border); margin-bottom: 10px; }
+.provider .logo { width: 36px; height: 36px; min-width: 36px; border-radius: 8px; display: grid; place-items: center; font-weight: 800; font-size: .85rem; }
+.provider .info { flex: 1; }
+.provider .info .name { font-weight: 700; font-size: .9rem; }
+.provider .info .meta { font-size: .75rem; color: var(--ink-3); }
+.provider .status { padding: 4px 10px; border-radius: 6px; font-size: .72rem; font-weight: 700; }
+.status.online { background: var(--green-l); color: var(--green); }
+.status.degraded { background: var(--amber-l); color: var(--amber); }
+.status.offline { background: var(--red-l); color: var(--red); }
 
-/* FOOTER */
+/* ALERTS */
+.alert { display: flex; align-items: flex-start; gap: 12px; padding: 12px; border-radius: 10px; margin-bottom: 10px; border: 1px solid; }
+.alert.warn { background: var(--amber-l); border-color: rgba(245,158,11,.3); }
+.alert.danger { background: var(--red-l); border-color: rgba(239,68,68,.3); }
+.alert.info { background: var(--blue-l); border-color: rgba(79,124,255,.3); }
+.alert .icon { font-size: 1.1rem; }
+.alert .body .title { font-weight: 700; font-size: .88rem; }
+.alert .body .desc { font-size: .78rem; color: var(--ink-2); margin-top: 2px; }
+.alert .time { margin-left: auto; font-size: .72rem; color: var(--ink-3); white-space: nowrap; }
+
+/* MAP */
+#map { height: 300px; border-radius: 10px; }
+
+/* FINANCIAL */
+.fin-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 14px; }
+.fin-item { padding: 14px; border-radius: 10px; background: var(--bg); border: 1px solid var(--border); }
+.fin-item .k { font-size: .72rem; font-weight: 700; color: var(--ink-3); text-transform: uppercase; letter-spacing: .5px; }
+.fin-item .v { font-size: 1.4rem; font-weight: 800; margin-top: 4px; }
+
+/* FORECAST */
+.forecast-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.forecast-row:last-child { border-bottom: none; }
+.forecast-row .day { width: 50px; font-weight: 700; font-size: .85rem; color: var(--ink-2); }
+.forecast-row .bar { flex: 1; height: 24px; border-radius: 6px; background: linear-gradient(90deg,var(--blue),#a5bfff); display: flex; align-items: center; padding: 0 10px; color: #fff; font-weight: 700; font-size: .78rem; min-width: 60px; }
+
+/* GUIDE */
+.guide-member { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 10px; background: var(--bg); border: 1px solid var(--border); margin-bottom: 10px; }
+.guide-member .av { width: 38px; height: 38px; min-width: 38px; border-radius: 50%; background: linear-gradient(135deg,var(--blue),var(--purple)); display: grid; place-items: center; color: #fff; font-weight: 700; font-size: .9rem; }
+.guide-member .info { flex: 1; }
+.guide-member .info .name { font-weight: 700; font-size: .9rem; }
+.guide-member .info .meta { font-size: .78rem; color: var(--ink-3); }
+.guide-member button { background: none; border: none; color: var(--red); cursor: pointer; font-size: .85rem; font-weight: 600; }
+
+/* FORM */
+.field { margin-bottom: 12px; }
+.field label { display: block; font-size: .72rem; font-weight: 700; color: var(--ink-2); margin-bottom: 5px; }
+.field input, .field select { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); font-size: .9rem; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 17px; border-radius: 10px; font-weight: 700; font-size: .9rem; cursor: pointer; border: none; }
+.btn.primary { background: var(--blue); color: #fff; }
+.btn.ghost { background: var(--bg); color: var(--ink-2); border: 1px solid var(--border); }
+
+/* PROVIDERS PAGE */
+.provider-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+.provider-card .head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.provider-card .head .logo { width: 44px; height: 44px; border-radius: 10px; display: grid; place-items: center; font-weight: 800; font-size: 1rem; }
+.provider-card .head .info .name { font-weight: 700; font-size: 1rem; }
+.provider-card .head .info .meta { font-size: .78rem; color: var(--ink-3); }
+.provider-card .metrics { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+.provider-card .metrics .m { padding: 12px; border-radius: 8px; background: var(--bg); }
+.provider-card .metrics .m .k { font-size: .7rem; font-weight: 700; color: var(--ink-3); text-transform: uppercase; }
+.provider-card .metrics .m .v { font-size: 1.2rem; font-weight: 800; margin-top: 3px; }
+
+/* API KEYS */
+.key-card { display: flex; align-items: center; gap: 14px; padding: 14px; border-radius: 10px; background: var(--bg); border: 1px solid var(--border); margin-bottom: 10px; }
+.key-card .icon { width: 36px; height: 36px; min-width: 36px; border-radius: 8px; background: var(--blue-l); color: var(--blue); display: grid; place-items: center; font-size: 1rem; }
+.key-card .info { flex: 1; }
+.key-card .info .name { font-weight: 700; font-size: .9rem; }
+.key-card .info .key { font-family: 'JetBrains Mono', monospace; font-size: .78rem; color: var(--ink-3); }
+.key-card .actions { display: flex; gap: 6px; }
+.key-card .actions button { padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--card); font-size: .75rem; font-weight: 600; cursor: pointer; }
+.key-card .actions button:hover { background: var(--blue-l); color: var(--blue); }
+
+/* DOCS */
+.doc-section { margin-bottom: 22px; }
+.doc-section h4 { font-size: 1rem; font-weight: 700; margin-bottom: 10px; }
+.doc-section p { font-size: .88rem; color: var(--ink-2); line-height: 1.6; }
+.doc-section code { background: var(--bg); padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: .82rem; }
+.doc-section pre { background: #1a1d29; color: #e8eef6; padding: 14px; border-radius: 10px; font-family: 'JetBrains Mono', monospace; font-size: .82rem; overflow-x: auto; margin-top: 10px; }
+
+/* TOGGLE */
+.toggle { display: flex; align-items: center; gap: 10px; }
+.toggle .sw { width: 40px; height: 22px; border-radius: 11px; background: var(--border); position: relative; cursor: pointer; transition: background .2s; }
+.toggle .sw.on { background: var(--blue); }
+.toggle .sw::after { content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: left .2s; }
+.toggle .sw.on::after { left: 21px; }
+
 .foot { text-align: center; font-size: .78rem; color: var(--ink-3); margin-top: 20px; padding: 14px; }
 
 @media (max-width: 768px) {
+  .sidebar { width: var(--sidebar-collapsed); }
+  .sidebar .sidebar-header .brand,
+  .sidebar .sidebar-nav a .lbl,
+  .sidebar .sidebar-footer .user .info { opacity: 0; pointer-events: none; }
+  .main { margin-left: var(--sidebar-collapsed); }
   .grid, .grid-2 { grid-template-columns: 1fr; }
-  .nav { flex-direction: column; gap: 12px; align-items: stretch; }
-  .nav-links { justify-content: center; }
+  .fin-grid { grid-template-columns: 1fr; }
+  .provider-card .metrics { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
 
-<div class="nav">
-  <div class="logo"><div class="icon">X</div> Xpeadia AI</div>
-  <div class="nav-links">
-    <a href="#" class="active">Dashboard</a>
-    <a href="#" onclick="showGuide()">Руководство</a>
-    <a href="#">Providers</a>
-    <a href="#">API Keys</a>
-    <a href="#">Documentation</a>
-    <a href="#">Support</a>
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">X</div>
+    <span class="brand">Xpeadia AI</span>
+    <button class="hamburger" onclick="toggleSidebar()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
   </div>
-  <div class="nav-right">
-    <span class="badge pro">Pro Plan</span>
-    <div class="avatar">KV</div>
-  </div>
-</div>
-
-<div class="stats">
-  <div class="stat blue">
-    <div class="label">Total Requests</div>
-    <div class="value">3,310,278</div>
-    <div class="change up">↑ 12.4% vs last period</div>
-  </div>
-  <div class="stat red">
-    <div class="label">Total Errors</div>
-    <div class="value">4,273</div>
-    <div class="change down">↓ 3.1% vs last period</div>
-  </div>
-  <div class="stat green">
-    <div class="label">Total Cost</div>
-    <div class="value">$93,128.22</div>
-    <div class="change up">↑ 8.7% vs last period</div>
-  </div>
-  <div class="stat amber">
-    <div class="label">Avg Latency</div>
-    <div class="value">6.058s</div>
-    <div class="change down">↓ 1.2% vs last period</div>
-  </div>
-</div>
-
-<div class="grid">
-  <div class="card">
-    <h3><span class="icon blue">📈</span> Requests Over Time</h3>
-    <canvas id="reqChart" class="line-chart"></canvas>
-  </div>
-  <div class="card">
-    <h3><span class="icon red">⚠</span> Error Breakdown</h3>
-    <div class="donut-wrap">
-      <div class="donut">
-        <svg width="160" height="160" viewBox="0 0 160 160">
-          <circle cx="80" cy="80" r="65" fill="none" stroke="#e8ecf2" stroke-width="22"/>
-          <circle cx="80" cy="80" r="65" fill="none" stroke="#ef4444" stroke-width="22" stroke-dasharray="40.8 408" stroke-dashoffset="0" stroke-linecap="round"/>
-          <circle cx="80" cy="80" r="65" fill="none" stroke="#f59e0b" stroke-width="22" stroke-dasharray="91.8 408" stroke-dashoffset="-40.8" stroke-linecap="round"/>
-          <circle cx="80" cy="80" r="65" fill="none" stroke="#4f7cff" stroke-width="22" stroke-dasharray="305.4 408" stroke-dashoffset="-132.6" stroke-linecap="round"/>
-        </svg>
-        <div class="center"><div><div class="num">4,273</div><div class="txt">Total</div></div></div>
-      </div>
-      <div class="legend">
-        <div class="item"><span class="dot" style="background:#4f7cff"></span> Success · 98.7%</div>
-        <div class="item"><span class="dot" style="background:#ef4444"></span> Server Error · 0.8%</div>
-        <div class="item"><span class="dot" style="background:#f59e0b"></span> Rate Limit · 0.5%</div>
-      </div>
+  <nav class="sidebar-nav">
+    <a href="#" class="active" data-page="dashboard"><span class="icon">📊</span><span class="lbl">Dashboard</span></a>
+    <a href="#" data-page="guide"><span class="icon">👥</span><span class="lbl">Руководство</span></a>
+    <a href="#" data-page="providers"><span class="icon">🖥</span><span class="lbl">Providers</span></a>
+    <a href="#" data-page="apikeys"><span class="icon">🔑</span><span class="lbl">API Keys</span></a>
+    <a href="#" data-page="docs"><span class="icon">📖</span><span class="lbl">Documentation</span></a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user">
+      <div class="av">KV</div>
+      <div class="info">Кирилл Великий<small>Pro Plan</small></div>
     </div>
   </div>
-</div>
+</aside>
 
-<div class="grid-2">
-  <div class="card">
-    <h3><span class="icon green">🤖</span> Top Models</h3>
-    <table class="table">
-      <thead><tr><th>#</th><th>Model</th><th>Volume</th><th></th><th style="text-align:right">%</th></tr></thead>
-      <tbody id="modelsTable"></tbody>
-    </table>
-  </div>
-  <div class="card">
-    <h3><span class="icon blue">🌍</span> Top Countries</h3>
-    <table class="table">
-      <thead><tr><th>#</th><th>Country</th><th>Volume</th><th></th><th style="text-align:right">%</th></tr></thead>
-      <tbody id="countriesTable"></tbody>
-    </table>
-  </div>
-</div>
-
-<div class="card" style="margin-bottom:22px;">
-  <h3><span class="icon amber">⏱</span> Latency Trend (seconds)</h3>
-  <div class="chart-bars" id="latencyBars"></div>
-</div>
-
-<div class="foot">Xpeadia AI Dashboard · Data for Jun – Aug 2026 · Updated 2 min ago</div>
-
-<!-- GUIDE MODAL -->
-<div class="overlay" id="guideOverlay" style="z-index:100;">
-  <div class="modal" style="position:relative;max-width:560px;">
-    <span class="mclose" onclick="closeGuide()" style="position:absolute;top:16px;right:18px;font-size:1.3rem;color:var(--ink-3);cursor:pointer;width:32px;height:32px;border-radius:8px;display:grid;place-items:center;background:var(--bg);border:1px solid var(--border);">✕</span>
-    <h3 style="font-size:1.2rem;font-weight:800;margin-bottom:4px;color:var(--ink);">👥 Руководство</h3>
-    <div style="font-size:.78rem;color:var(--ink-3);margin-bottom:16px;">Управляйте командой руководства</div>
-    
-    <div id="guideList" style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;"></div>
-    
-    <div style="border-top:1px solid var(--border);padding-top:14px;">
-      <div style="font-size:.82rem;font-weight:700;color:var(--ink-2);margin-bottom:10px;">Добавить члена руководства</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
-        <input id="guideName" placeholder="Имя" style="padding:10px 12px;border-radius:8px;border:1px solid var(--border);font-size:.9rem;">
-        <input id="guideRole" placeholder="Должность" style="padding:10px 12px;border-radius:8px;border:1px solid var(--border);font-size:.9rem;">
-      </div>
-      <input id="guideEmail" placeholder="Email" style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--border);font-size:.9rem;margin-bottom:10px;">
-      <button class="btn" onclick="addGuideMember()" style="width:100%;justify-content:center;background:var(--blue);color:#fff;border:none;padding:12px 17px;border-radius:10px;font-weight:700;font-size:.9rem;cursor:pointer;">＋ Добавить</button>
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="left">
+      <span class="page-title" id="pageTitle">Dashboard</span>
+    </div>
+    <div class="right">
+      <span class="badge live"><span class="dot"></span> Live</span>
+      <span class="badge pro">Pro</span>
     </div>
   </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD PAGE -->
+    <div class="page active" id="page-dashboard">
+      <div class="stats">
+        <div class="stat blue"><div class="label">Total Requests</div><div class="value">3,310,278</div><div class="change up">↑ 12.4%</div></div>
+        <div class="stat red"><div class="label">Total Errors</div><div class="value">4,273</div><div class="change down">↓ 3.1%</div></div>
+        <div class="stat green"><div class="label">Total Cost</div><div class="value">$93,128</div><div class="change up">↑ 8.7%</div></div>
+        <div class="stat amber"><div class="label">Avg Latency</div><div class="value">6.058s</div><div class="change down">↓ 1.2%</div></div>
+        <div class="stat purple"><div class="label">Active Users</div><div class="value">1,284</div><div class="change up">↑ 5.3%</div></div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3><span class="icon blue">📈</span> Requests Over Time</h3>
+          <canvas id="reqChart" style="width:100%;height:220px"></canvas>
+        </div>
+        <div class="card">
+          <h3><span class="icon red">⚠</span> Error Breakdown</h3>
+          <div class="donut-wrap">
+            <div class="donut">
+              <svg width="160" height="160" viewBox="0 0 160 160">
+                <circle cx="80" cy="80" r="65" fill="none" stroke="#e8ecf2" stroke-width="22"/>
+                <circle cx="80" cy="80" r="65" fill="none" stroke="#ef4444" stroke-width="22" stroke-dasharray="40.8 408" stroke-dashoffset="0" stroke-linecap="round"/>
+                <circle cx="80" cy="80" r="65" fill="none" stroke="#f59e0b" stroke-width="22" stroke-dasharray="91.8 408" stroke-dashoffset="-40.8" stroke-linecap="round"/>
+                <circle cx="80" cy="80" r="65" fill="none" stroke="#4f7cff" stroke-width="22" stroke-dasharray="305.4 408" stroke-dashoffset="-132.6" stroke-linecap="round"/>
+              </svg>
+              <div class="center"><div><div class="num">4,273</div><div class="txt">Total</div></div></div>
+            </div>
+            <div class="legend">
+              <div class="item"><span class="dot" style="background:#4f7cff"></span> Success · 98.7%</div>
+              <div class="item"><span class="dot" style="background:#ef4444"></span> Server Error · 0.8%</div>
+              <div class="item"><span class="dot" style="background:#f59e0b"></span> Rate Limit · 0.5%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3><span class="icon green">🤖</span> Top Models</h3>
+          <table class="table"><thead><tr><th>#</th><th>Model</th><th>Volume</th><th></th><th style="text-align:right">%</th></tr></thead><tbody id="modelsTable"></tbody></table>
+        </div>
+        <div class="card">
+          <h3><span class="icon blue">🌍</span> Top Countries</h3>
+          <table class="table"><thead><tr><th>#</th><th>Country</th><th>Volume</th><th></th><th style="text-align:right">%</th></tr></thead><tbody id="countriesTable"></tbody></table>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3><span class="icon green">🖥</span> Provider Health</h3>
+          <div id="providersList"></div>
+        </div>
+        <div class="card">
+          <h3><span class="icon amber">🔔</span> Alerts & Anomalies</h3>
+          <div id="alertsList"></div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3><span class="icon purple">💰</span> Financial Metrics</h3>
+          <div class="fin-grid">
+            <div class="fin-item"><div class="k">ARPU</div><div class="v">$72.50</div></div>
+            <div class="fin-item"><div class="k">LTV</div><div class="v">$864</div></div>
+            <div class="fin-item"><div class="k">Monthly Budget</div><div class="v">$31k</div></div>
+          </div>
+          <h4 style="font-size:.85rem;font-weight:700;margin-bottom:10px;">Cost Forecast (7 days)</h4>
+          <div id="forecastList"></div>
+        </div>
+        <div class="card">
+          <h3><span class="icon blue">👥</span> Top Users / Projects</h3>
+          <table class="table"><thead><tr><th>#</th><th>User</th><th>Cost</th><th style="text-align:right">Req</th></tr></thead><tbody id="usersTable"></tbody></table>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3><span class="icon blue">🗺</span> Request Geography</h3>
+          <div id="map"></div>
+        </div>
+        <div class="card">
+          <h3><span class="icon amber">⏱</span> Latency Trend</h3>
+          <div class="chart-bars" id="latencyBars"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GUIDE PAGE -->
+    <div class="page" id="page-guide">
+      <div class="card" style="max-width:600px;">
+        <h3><span class="icon purple">👥</span> Руководство</h3>
+        <div style="font-size:.82rem;color:var(--ink-3);margin-bottom:16px;">Управляйте командой руководства</div>
+        <div id="guideList"></div>
+        <div style="border-top:1px solid var(--border);padding-top:14px;margin-top:14px;">
+          <div style="font-size:.82rem;font-weight:700;margin-bottom:10px;">Добавить члена</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+            <input id="guideName" placeholder="Имя">
+            <input id="guideRole" placeholder="Должность">
+          </div>
+          <input id="guideEmail" placeholder="Email" style="margin-bottom:10px;">
+          <button class="btn primary" onclick="addGuideMember()" style="width:100%;justify-content:center;">＋ Добавить</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROVIDERS PAGE -->
+    <div class="page" id="page-providers">
+      <div class="card" style="margin-bottom:16px;">
+        <h3><span class="icon green">🖥</span> Provider Status</h3>
+        <div style="font-size:.82rem;color:var(--ink-3);margin-bottom:16px;">Мониторинг AI-провайдеров в реальном времени</div>
+        <div class="stats">
+          <div class="stat green"><div class="label">Online</div><div class="value">4</div></div>
+          <div class="stat amber"><div class="label">Degraded</div><div class="value">1</div></div>
+          <div class="stat red"><div class="label">Offline</div><div class="value">0</div></div>
+        </div>
+      </div>
+      <div id="providersPageList"></div>
+    </div>
+
+    <!-- API KEYS PAGE -->
+    <div class="page" id="page-apikeys">
+      <div class="card" style="margin-bottom:16px;">
+        <h3><span class="icon amber">🔑</span> API Keys</h3>
+        <div style="font-size:.82rem;color:var(--ink-3);margin-bottom:16px;">Управляйте ключами доступа к API</div>
+        <button class="btn primary" onclick="generateKey()">＋ Создать новый ключ</button>
+      </div>
+      <div id="keysList"></div>
+    </div>
+
+    <!-- DOCS PAGE -->
+    <div class="page" id="page-docs">
+      <div class="card">
+        <h3><span class="icon blue">📖</span> Documentation</h3>
+        <div class="doc-section">
+          <h4>Quick Start</h4>
+          <p>Используйте наш API для доступа к моделям через единый эндпоинт:</p>
+          <pre>curl https://api.xpeadia.ai/v1/chat/completions \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"claude-3-5-sonnet","messages":[{"role":"user","content":"Hello"}]}'</pre>
+        </div>
+        <div class="doc-section">
+          <h4>Models</h4>
+          <p>Доступные модели: <code>claude-3-5-sonnet</code>, <code>gpt-4o</code>, <code>claude-3-opus</code>, <code>gpt-4o-mini</code>, <code>gemini-1.5-pro</code></p>
+        </div>
+        <div class="doc-section">
+          <h4>Rate Limits</h4>
+          <p>Pro Plan: 10,000 req/min. Enterprise: неограниченно.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="foot">Xpeadia AI Analytics · Updated <span id="ts">—</span></div>
 </div>
 
 <script>
-// Guide members
+// === SIDEBAR ===
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('collapsed');
+}
+
+// === PAGE ROUTING ===
+const pages = ['dashboard','guide','providers','apikeys','docs'];
+const pageTitles = {dashboard:'Dashboard',guide:'Руководство',providers:'Providers',apikeys:'API Keys',docs:'Documentation'};
+
+document.querySelectorAll('.sidebar-nav a').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const page = a.dataset.page;
+    showPage(page);
+  });
+});
+
+function showPage(name) {
+  pages.forEach(p => {
+    document.getElementById('page-'+p).classList.toggle('active', p===name);
+  });
+  document.querySelectorAll('.sidebar-nav a').forEach(a => {
+    a.classList.toggle('active', a.dataset.page===name);
+  });
+  document.getElementById('pageTitle').textContent = pageTitles[name] || name;
+  if (name==='dashboard') initDashboard();
+  if (name==='providers') initProvidersPage();
+  if (name==='guide') renderGuide();
+  if (name==='apikeys') renderKeys();
+}
+
+// === DATA ===
+const models = [
+  {name:"claude-3-5-sonnet", vol:"1,204,518", pct:36.4},
+  {name:"gpt-4o", vol:"892,341", pct:27.0},
+  {name:"claude-3-opus", vol:"521,092", pct:15.7},
+  {name:"gpt-4o-mini", vol:"387,654", pct:11.7},
+  {name:"gemini-1.5-pro", vol:"304,673", pct:9.2},
+];
+const countries = [
+  {name:"United States", vol:"1,521,456", flag:"🇺🇸", pct:46.0},
+  {name:"United Kingdom", vol:"412,338", flag:"🇬🇧", pct:12.5},
+  {name:"Germany", vol:"298,712", flag:"🇩🇪", pct:9.0},
+  {name:"Canada", vol:"236,445", flag:"🇨🇦", pct:7.1},
+  {name:"France", vol:"198,265", flag:"🇫🇷", pct:6.0},
+];
+const providers = [
+  {name:"OpenAI", logo:"O", color:"#10a37f", status:"online", uptime:"99.98%", latency:"4.2s", models:4, req:"1.2M"},
+  {name:"Anthropic", logo:"A", color:"#d4a574", status:"online", uptime:"99.95%", latency:"5.8s", models:3, req:"890k"},
+  {name:"Google AI", logo:"G", color:"#4285f4", status:"degraded", uptime:"99.70%", latency:"8.1s", models:2, req:"521k"},
+  {name:"Mistral", logo:"M", color:"#ff7000", status:"online", uptime:"99.92%", latency:"3.9s", models:2, req:"312k"},
+  {name:"xAI", logo:"X", color:"#000000", status:"online", uptime:"99.88%", latency:"6.4s", models:1, req:"198k"},
+];
+const alerts = [
+  {type:"danger", icon:"🚨", title:"Spike in 500 errors", desc:"Anthropic Claude-3-opus: +340% in last 10 min", time:"2m ago"},
+  {type:"warn", icon:"⚠️", title:"Rate limit approaching", desc:"OpenAI gpt-4o at 85% quota", time:"15m ago"},
+  {type:"info", icon:"ℹ️", title:"Latency improved", desc:"Google AI: 8.1s → 6.4s avg", time:"1h ago"},
+  {type:"warn", icon:"⚠️", title:"Budget alert", desc:"Daily spend $3,420 vs $3,100 avg", time:"3h ago"},
+];
+const users = [
+  {name:"Acme Corp", cost:"$12,450", vol:"342k"},
+  {name:"TechStart Inc", cost:"$8,920", vol:"256k"},
+  {name:"DataFlow AI", cost:"$6,340", vol:"189k"},
+  {name:"CloudNine", cost:"$4,810", vol:"134k"},
+  {name:"NexGen Labs", cost:"$3,290", vol:"98k"},
+];
+const forecast = [
+  {day:"Mon", val:3100},{day:"Tue", val:3420},{day:"Wed", val:2980},
+  {day:"Thu", val:3650},{day:"Fri", val:3890},{day:"Sat", val:2740},{day:"Sun", val:2310},
+];
+
+// === DASHBOARD ===
+let dashboardInitialized = false;
+function initDashboard() {
+  if (dashboardInitialized) return;
+  dashboardInitialized = true;
+
+  // Models
+  const mt = document.getElementById('modelsTable'); mt.innerHTML = '';
+  models.forEach((m,i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td><div class="rank ${i<3?'top':''}">${i+1}</div></td><td class="model">${m.name}</td><td class="vol">${m.vol}</td><td><div style="width:100px"><div class="bar-inline" style="width:${m.pct/36.4*100}%"></div></div></td><td style="text-align:right;font-weight:700">${m.pct}%</td>`;
+    mt.appendChild(tr);
+  });
+
+  // Countries
+  const ct = document.getElementById('countriesTable'); ct.innerHTML = '';
+  countries.forEach((c,i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td><div class="rank ${i<3?'top':''}">${i+1}</div></td><td class="model">${c.flag} ${c.name}</td><td class="vol">${c.vol}</td><td><div style="width:100px"><div class="bar-inline" style="width:${c.pct/46*100}%"></div></div></td><td style="text-align:right;font-weight:700">${c.pct}%</td>`;
+    ct.appendChild(tr);
+  });
+
+  // Users
+  const ut = document.getElementById('usersTable'); ut.innerHTML = '';
+  users.forEach((u,i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td><div class="rank ${i<3?'top':''}">${i+1}</div></td><td class="model">${u.name}</td><td class="vol">${u.cost}</td><td style="text-align:right;font-weight:700">${u.vol}</td>`;
+    ut.appendChild(tr);
+  });
+
+  // Providers
+  const pl = document.getElementById('providersList'); pl.innerHTML = '';
+  providers.forEach(p => {
+    const d = document.createElement('div'); d.className = 'provider';
+    d.innerHTML = `<div class="logo" style="background:${p.color}20;color:${p.color}">${p.logo}</div><div class="info"><div class="name">${p.name}</div><div class="meta">Uptime ${p.uptime} · ${p.latency}</div></div><span class="status ${p.status}">${p.status}</span>`;
+    pl.appendChild(d);
+  });
+
+  // Alerts
+  const al = document.getElementById('alertsList'); al.innerHTML = '';
+  alerts.forEach(a => {
+    const d = document.createElement('div'); d.className = `alert ${a.type}`;
+    d.innerHTML = `<span class="icon">${a.icon}</span><div class="body"><div class="title">${a.title}</div><div class="desc">${a.desc}</div></div><span class="time">${a.time}</span>`;
+    al.appendChild(d);
+  });
+
+  // Forecast
+  const fl = document.getElementById('forecastList'); fl.innerHTML = '';
+  const maxF = Math.max(...forecast.map(f=>f.val));
+  forecast.forEach(f => {
+    const d = document.createElement('div'); d.className = 'forecast-row';
+    d.innerHTML = `<span class="day">${f.day}</span><div class="bar" style="width:${f.val/maxF*100}%;${f.val>3500?'background:linear-gradient(90deg,#ef4444,#ff8a8a)':''}">$${f.val.toLocaleString()}</div>`;
+    fl.appendChild(d);
+  });
+
+  // Latency bars
+  const latData = [{m:'Sep',v:7.2},{m:'Oct',v:6.8},{m:'Nov',v:7.5},{m:'Dec',v:6.4},{m:'Jan',v:5.9},{m:'Feb',v:6.7},{m:'Mar',v:6.1},{m:'Apr',v:5.5},{m:'May',v:6.3},{m:'Jun',v:5.8},{m:'Jul',v:6.0},{m:'Aug',v:6.058}];
+  const lb = document.getElementById('latencyBars'); lb.innerHTML = '';
+  const maxLat = Math.max(...latData.map(d=>d.v));
+  latData.forEach(d => {
+    const w = document.createElement('div'); w.style.flex=1; w.style.position='relative';
+    const bar = document.createElement('div'); bar.className='bar';
+    bar.style.height = (d.v/maxLat*100)+'%';
+    bar.style.background = d.v<6.2 ? 'linear-gradient(180deg,#16a34a,#86efac)' : 'linear-gradient(180deg,#4f7cff,#a5bfff)';
+    const val = document.createElement('div'); val.className='val'; val.textContent=d.v+'s';
+    const lbl = document.createElement('div'); lbl.className='lbl'; lbl.textContent=d.m;
+    bar.appendChild(val); w.appendChild(bar); w.appendChild(lbl); lb.appendChild(w);
+  });
+
+  // Requests line chart
+  (function(){
+    const cv = document.getElementById('reqChart'); const ctx = cv.getContext('2d');
+    const W = cv.parentElement.offsetWidth-40, H = 220; cv.width=W; cv.height=H;
+    const data = [210,245,280,310,295,340,380,420,395,440,480,510];
+    const max = Math.max(...data); const step = W/(data.length-1);
+    ctx.clearRect(0,0,W,H);
+    ctx.beginPath(); ctx.moveTo(0,H);
+    data.forEach((d,i)=>{ const x=i*step, y=H-d/max*(H-30); i?ctx.lineTo(x,y):ctx.moveTo(x,y); });
+    ctx.lineTo(W,H); ctx.closePath();
+    const grd = ctx.createLinearGradient(0,0,0,H);
+    grd.addColorStop(0,'rgba(79,124,255,.25)'); grd.addColorStop(1,'rgba(79,124,255,0)');
+    ctx.fillStyle=grd; ctx.fill();
+    ctx.beginPath();
+    data.forEach((d,i)=>{ const x=i*step, y=H-d/max*(H-30); i?ctx.lineTo(x,y):ctx.moveTo(x,y); });
+    ctx.strokeStyle='#4f7cff'; ctx.lineWidth=2.5; ctx.lineJoin='round'; ctx.stroke();
+    data.forEach((d,i)=>{ const x=i*step, y=H-d/max*(H-30); ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2); ctx.fillStyle='#4f7cff'; ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=2; ctx.stroke(); });
+    const months=['Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'];
+    ctx.fillStyle='#9ca3b5'; ctx.font='600 11px Inter'; ctx.textAlign='center';
+    months.forEach((m,i)=>{ ctx.fillText(m,i*step,H-4); });
+  })();
+
+  // Map
+  if (typeof L !== 'undefined') {
+    const map = L.map('map').setView([30, 0], 2);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OSM &copy; CARTO' }).addTo(map);
+    const mapData = [{lat:37.0902,lng:-95.7129,c:"US",v:1521},{lat:55.3781,lng:-3.4360,c:"GB",v:412},{lat:51.1657,lng:-10.4515,c:"DE",v:298},{lat:56.1304,lng:-106.3468,c:"CA",v:236},{lat:46.2276,lng:2.2137,c:"FR",v:198},{lat:-25.2744,lng:133.7751,c:"AU",v:145},{lat:36.2048,lng:138.2529,c:"JP",v:132},{lat:20.5937,lng:78.9629,c:"IN",v:128}];
+    const maxMap = Math.max(...mapData.map(d=>d.v));
+    mapData.forEach(d => {
+      L.circleMarker([d.lat, d.lng], { radius: Math.sqrt(d.v/maxMap)*25, fillColor: '#4f7cff', color: '#fff', weight: 2, fillOpacity: 0.7 }).addTo(map).bindPopup(`<b>${d.c}</b><br>${d.v.toLocaleString()} req`);
+    });
+  }
+}
+
+// === PROVIDERS PAGE ===
+function initProvidersPage() {
+  const el = document.getElementById('providersPageList'); el.innerHTML = '';
+  providers.forEach(p => {
+    const d = document.createElement('div'); d.className = 'provider-card';
+    d.innerHTML = `
+      <div class="head">
+        <div class="logo" style="background:${p.color}20;color:${p.color}">${p.logo}</div>
+        <div class="info"><div class="name">${p.name}</div><div class="meta">${p.models} models · ${p.req} req</div></div>
+        <span class="status ${p.status}">${p.status}</span>
+      </div>
+      <div class="metrics">
+        <div class="m"><div class="k">Uptime</div><div class="v">${p.uptime}</div></div>
+        <div class="m"><div class="k">Latency</div><div class="v">${p.latency}</div></div>
+        <div class="m"><div class="k">Models</div><div class="v">${p.models}</div></div>
+      </div>`;
+    el.appendChild(d);
+  });
+}
+
+// === GUIDE ===
 let guideMembers = JSON.parse(localStorage.getItem('xpeadia_guide')||'[]');
 if (!guideMembers.length) {
   guideMembers = [
@@ -252,19 +647,15 @@ if (!guideMembers.length) {
   ];
   localStorage.setItem('xpeadia_guide', JSON.stringify(guideMembers));
 }
-
 function renderGuide() {
   const el = document.getElementById('guideList');
   el.innerHTML = guideMembers.length ? '' : '<div style="color:var(--ink-3);font-size:.88rem;text-align:center;padding:20px;">Нет членов руководства</div>';
   guideMembers.forEach((m,i) => {
-    const d = document.createElement('div');
-    d.style.cssText = 'display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;background:var(--bg);border:1px solid var(--border);';
-    d.innerHTML = `<div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));display:grid;place-items:center;color:#fff;font-weight:700;font-size:.9rem;">${m.name.split(' ').map(x=>x[0]).join('').slice(0,2)}</div><div style="flex:1"><div style="font-weight:700;font-size:.9rem;">${m.name}</div><div style="font-size:.78rem;color:var(--ink-3);">${m.role} · ${m.email}</div></div><button onclick="removeGuide(${i})" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:.85rem;font-weight:600;">✕</button>`;
+    const d = document.createElement('div'); d.className = 'guide-member';
+    d.innerHTML = `<div class="av">${m.name.split(' ').map(x=>x[0]).join('').slice(0,2)}</div><div class="info"><div class="name">${m.name}</div><div class="meta">${m.role} · ${m.email}</div></div><button onclick="removeGuide(${i})">✕</button>`;
     el.appendChild(d);
   });
 }
-function showGuide() { renderGuide(); document.getElementById('guideOverlay').classList.add('open'); }
-function closeGuide() { document.getElementById('guideOverlay').classList.remove('open'); }
 function addGuideMember() {
   const name = document.getElementById('guideName').value.trim();
   const role = document.getElementById('guideRole').value.trim();
@@ -278,92 +669,52 @@ function addGuideMember() {
   renderGuide();
 }
 function removeGuide(i) {
-  if (!confirm('Удалить члена руководства?')) return;
+  if (!confirm('Удалить?')) return;
   guideMembers.splice(i,1);
   localStorage.setItem('xpeadia_guide', JSON.stringify(guideMembers));
   renderGuide();
 }
+
+// === API KEYS ===
+let apiKeys = JSON.parse(localStorage.getItem('xpeadia_keys')||'[]');
+if (!apiKeys.length) {
+  apiKeys = [
+    {name:'Production Key', key:'xpeadia_sk_live_4f8a2b1c9d3e5f6a7b8c', created:'2026-08-15', status:'active'},
+    {name:'Dev Key', key:'xpeadia_sk_test_1a2b3c4d5e6f7a8b9c0d', created:'2026-08-20', status:'active'},
+  ];
+  localStorage.setItem('xpeadia_keys', JSON.stringify(apiKeys));
+}
+function renderKeys() {
+  const el = document.getElementById('keysList'); el.innerHTML = '';
+  apiKeys.forEach((k,i) => {
+    const d = document.createElement('div'); d.className = 'key-card';
+    d.innerHTML = `<div class="icon">🔑</div><div class="info"><div class="name">${k.name}</div><div class="key">${k.key.slice(0,20)}···${k.key.slice(-6)}</div></div><div class="actions"><button onclick="copyKey(${i})">Copy</button><button onclick="deleteKey(${i})">✕</button></div>`;
+    el.appendChild(d);
+  });
+}
+function generateKey() {
+  const name = prompt('Название ключа:');
+  if (!name) return;
+  const key = 'xpeadia_sk_' + Math.random().toString(36).slice(2,12) + Math.random().toString(36).slice(2,12);
+  apiKeys.push({name, key, created: new Date().toISOString().slice(0,10), status:'active'});
+  localStorage.setItem('xpeadia_keys', JSON.stringify(apiKeys));
+  renderKeys();
+}
+function copyKey(i) {
+  navigator.clipboard.writeText(apiKeys[i].key);
+  alert('Скопировано!');
+}
+function deleteKey(i) {
+  if (!confirm('Удалить ключ?')) return;
+  apiKeys.splice(i,1);
+  localStorage.setItem('xpeadia_keys', JSON.stringify(apiKeys));
+  renderKeys();
+}
+
+// === TIMESTAMP ===
+document.getElementById('ts').textContent = new Date().toLocaleTimeString('ru-RU');
+
+// Init
+initDashboard();
 </script>
-
-<script>
-// Models data
-const models = [
-  {name:"claude-3-5-sonnet", vol:"1,204,518", pct:36.4},
-  {name:"gpt-4o", vol:"892,341", pct:27.0},
-  {name:"claude-3-opus", vol:"521,092", pct:15.7},
-  {name:"gpt-4o-mini", vol:"387,654", pct:11.7},
-  {name:"gemini-1.5-pro", vol:"304,673", pct:9.2},
-];
-const maxVol = 1204518;
-const mt = document.getElementById('modelsTable');
-models.forEach((m,i)=>{
-  const tr=document.createElement('tr');
-  tr.innerHTML=`<td><div class="rank ${i<3?'top':''}">${i+1}</div></td><td class="model">${m.name}</td><td class="vol">${m.vol}</td><td><div style="width:100px"><div class="bar-inline" style="width:${m.pct/36.4*100}%"></div></div></td><td style="text-align:right;font-weight:700">${m.pct}%</td>`;
-  mt.appendChild(tr);
-});
-
-// Countries data
-const countries = [
-  {name:"United States", vol:"1,521,456", flag:"🇺🇸", pct:46.0},
-  {name:"United Kingdom", vol:"412,338", flag:"🇬🇧", pct:12.5},
-  {name:"Germany", vol:"298,712", flag:"🇩🇪", pct:9.0},
-  {name:"Canada", vol:"236,445", flag:"🇨🇦", pct:7.1},
-  {name:"France", vol:"198,265", flag:"🇫🇷", pct:6.0},
-];
-const ct = document.getElementById('countriesTable');
-countries.forEach((c,i)=>{
-  const tr=document.createElement('tr');
-  tr.innerHTML=`<td><div class="rank ${i<3?'top':''}">${i+1}</div></td><td class="model">${c.flag} ${c.name}</td><td class="vol">${c.vol}</td><td><div style="width:100px"><div class="bar-inline" style="width:${c.pct/46*100}%"></div></div></td><td style="text-align:right;font-weight:700">${c.pct}%</td>`;
-  ct.appendChild(tr);
-});
-
-// Latency bars (12 months)
-const latData = [
-  {m:'Sep',v:7.2},{m:'Oct',v:6.8},{m:'Nov',v:7.5},{m:'Dec',v:6.4},
-  {m:'Jan',v:5.9},{m:'Feb',v:6.7},{m:'Mar',v:6.1},{m:'Apr',v:5.5},
-  {m:'May',v:6.3},{m:'Jun',v:5.8},{m:'Jul',v:6.0},{m:'Aug',v:6.058},
-];
-const lb = document.getElementById('latencyBars');
-const maxLat = Math.max(...latData.map(d=>d.v));
-latData.forEach(d=>{
-  const wrap=document.createElement('div'); wrap.style.flex=1; wrap.style.position='relative';
-  const bar=document.createElement('div'); bar.className='bar';
-  bar.style.height = (d.v/maxLat*100)+'%';
-  bar.style.background = 'linear-gradient(180deg,#4f7cff,#a5bfff)';
-  if (d.v < 6.2) bar.style.background='linear-gradient(180deg,#16a34a,#86efac)';
-  const val=document.createElement('div'); val.className='val'; val.textContent=d.v+'s';
-  const lbl=document.createElement('div'); lbl.className='lbl'; lbl.textContent=d.m;
-  bar.appendChild(val); wrap.appendChild(bar); wrap.appendChild(lbl); lb.appendChild(wrap);
-});
-
-// Requests line chart
-(function(){
-  const cv=document.getElementById('reqChart');
-  const ctx=cv.getContext('2d');
-  const W=cv.parentElement.offsetWidth-40, H=200;
-  cv.width=W; cv.height=H;
-  const data=[210,245,280,310,295,340,380,420,395,440,480,510];
-  const max=Math.max(...data);
-  const step=W/(data.length-1);
-  ctx.clearRect(0,0,W,H);
-  // area
-  ctx.beginPath(); ctx.moveTo(0,H);
-  data.forEach((d,i)=>{ const x=i*step, y=H-d/max*(H-30); i?ctx.lineTo(x,y):ctx.moveTo(x,y); });
-  ctx.lineTo(W,H); ctx.closePath();
-  const grd=ctx.createLinearGradient(0,0,0,H);
-  grd.addColorStop(0,'rgba(79,124,255,.25)'); grd.addColorStop(1,'rgba(79,124,255,0)');
-  ctx.fillStyle=grd; ctx.fill();
-  // line
-  ctx.beginPath();
-  data.forEach((d,i)=>{ const x=i*step, y=H-d/max*(H-30); i?ctx.lineTo(x,y):ctx.moveTo(x,y); });
-  ctx.strokeStyle='#4f7cff'; ctx.lineWidth=2.5; ctx.lineJoin='round'; ctx.stroke();
-  // dots
-  data.forEach((d,i)=>{ const x=i*step, y=H-d/max*(H-30); ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2); ctx.fillStyle='#4f7cff'; ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=2; ctx.stroke(); });
-  // labels
-  const months=['Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'];
-  ctx.fillStyle='#9ca3b5'; ctx.font='600 11px Inter'; ctx.textAlign='center';
-  months.forEach((m,i)=>{ ctx.fillText(m,i*step,H-4); });
-})();
-</script>
-</body>
-</html>
+</body></html>
