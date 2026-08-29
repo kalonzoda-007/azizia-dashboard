@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HERMES · Mission Control — 5-Agent Fleet</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#06080d; --bg2:#0a0f18; --bg3:#0e1420;
+  --panel:rgba(14,20,30,.78); --panel-2:rgba(22,30,44,.86);
+  --border:rgba(80,255,160,.14); --border-2:rgba(120,140,170,.16);
+  --ink:#e8eef6; --ink-2:#9fb0c3; --ink-3:#5e7184;
+  --neon:#39ff14; --amber:#ff9f1c; --red:#ff4d4d; --blue:#38bdf8; --purple:#c084fc;
+  --bento-r:18px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:radial-gradient(900px 600px at 20% 10%,rgba(30,80,50,.16),transparent 60%),
+    radial-gradient(900px 600px at 80% 90%,rgba(80,50,10,.14),transparent 55%),
+    linear-gradient(160deg,var(--bg),var(--bg2) 55%,var(--bg3));
+  background-attachment:fixed; color:var(--ink); min-height:100vh; padding:16px;}
+
+/* TOP BAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;
+  background:linear-gradient(180deg,rgba(20,28,40,.88),rgba(12,18,28,.72));
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--border);border-radius:var(--bento-r);padding:14px 18px;margin-bottom:14px;
+  box-shadow:0 0 0 1px rgba(0,0,0,.5),0 10px 30px rgba(0,0,0,.55),inset 0 1px 0 rgba(80,255,160,.08);}
+.brand{display:flex;align-items:center;gap:13px;}
+.logo{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-weight:800;font-size:1.2rem;color:#04140a;
+  background:linear-gradient(155deg,#7dff5e,#1faa3f);
+  box-shadow:0 0 18px rgba(57,255,20,.5),inset 0 1px 2px rgba(255,255,255,.4);}
+.brand h1{font-size:1.25rem;font-weight:800;letter-spacing:-.3px;}
+.brand .sub{font-size:.72rem;color:var(--neon);font-weight:700;text-transform:uppercase;letter-spacing:2px;}
+.live{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;color:var(--neon);
+  font-family:'JetBrains Mono',monospace;
+  background:rgba(57,255,20,.08);border:1px solid rgba(57,255,20,.3);padding:7px 13px;border-radius:8px;
+  box-shadow:inset 0 0 12px rgba(57,255,20,.1);}
+.live .dot{width:9px;height:9px;border-radius:50%;background:var(--neon);box-shadow:0 0 10px var(--neon);animation:pulse 1.4s infinite;}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 10px var(--neon)}50%{opacity:.3;box-shadow:0 0 2px var(--neon)}}
+.actions{display:flex;gap:9px;flex-wrap:wrap;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 17px;border-radius:10px;font-weight:700;font-size:.88rem;
+  cursor:pointer;border:1px solid rgba(57,255,20,.4);
+  background:linear-gradient(180deg,#3dff66,#15a83c);color:#04140a;
+  box-shadow:0 0 16px rgba(57,255,20,.35),inset 0 1px 0 rgba(255,255,255,.3);
+  transition:transform .18s,box-shadow .18s,filter .18s;}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.08);box-shadow:0 0 24px rgba(57,255,20,.55);}
+.btn:active{transform:translateY(0);}
+.btn.ghost{background:rgba(20,28,40,.6);color:var(--amber);border-color:rgba(255,159,28,.45);box-shadow:inset 0 0 12px rgba(255,159,28,.1);}
+
+/* TABS */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.tab{padding:10px 16px;border-radius:10px;font-weight:700;font-size:.85rem;cursor:pointer;
+  background:var(--panel);border:1px solid var(--border);color:var(--ink-2);
+  transition:all .18s;}
+.tab.active{background:linear-gradient(180deg,#3dff66,#15a83c);color:#04140a;border-color:var(--neon);box-shadow:0 0 16px rgba(57,255,20,.35);}
+.tab:hover:not(.active){border-color:rgba(57,255,20,.4);color:var(--neon);}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+
+/* STATUS BAR */
+.statusbar{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:14px;}
+.stat{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:13px 16px;
+  box-shadow:inset 0 0 18px rgba(0,0,0,.35),0 4px 14px rgba(0,0,0,.4);}
+.stat .k{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--ink-3);}
+.stat .v{font-family:'JetBrains Mono',monospace;font-size:1.55rem;font-weight:700;color:var(--neon);
+  text-shadow:0 0 12px rgba(57,255,20,.4);margin-top:3px;}
+.stat.amber .v{color:var(--amber);text-shadow:0 0 12px rgba(255,159,28,.4);}
+.stat.blue .v{color:var(--blue);text-shadow:0 0 12px rgba(56,189,248,.4);}
+
+/* BENTO vertical */
+.bento{display:flex;flex-direction:column;gap:14px;}
+.tile{background:var(--panel);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid var(--border);border-radius:var(--bento-r);padding:16px;
+  box-shadow:inset 0 0 22px rgba(0,0,0,.4),0 8px 26px rgba(0,0,0,.45);}
+.tile h2{font-size:.95rem;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px;
+  text-transform:uppercase;letter-spacing:.6px;color:var(--ink);}
+.tile h2 .cnt{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--neon);
+  background:rgba(57,255,20,.1);border:1px solid rgba(57,255,20,.25);padding:3px 9px;border-radius:6px;}
+
+/* 3D OFFICE */
+.office{perspective:1200px;display:flex;justify-content:center;align-items:center;min-height:420px;margin:10px 0;}
+.office-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;transform-style:preserve-3d;transform:rotateX(18deg) rotateY(-6deg);}
+.desk{background:linear-gradient(180deg,rgba(20,28,40,.92),rgba(12,18,28,.88));border:1px solid var(--border);border-radius:14px;
+  padding:14px;text-align:center;position:relative;transform-style:preserve-3d;transition:all .3s;
+  box-shadow:0 0 0 1px rgba(0,0,0,.5),0 12px 30px rgba(0,0,0,.5);}
+.desk:hover{transform:translateZ(18px) scale(1.04);box-shadow:0 0 28px rgba(57,255,20,.35);}
+.desk .avatar{width:56px;height:56px;border-radius:14px;margin:0 auto 10px;display:grid;place-items:center;font-size:1.4rem;
+  background:linear-gradient(155deg,#3dff66,#15a83c);box-shadow:0 0 16px rgba(57,255,20,.5);}
+.desk.orchestrator .avatar{background:linear-gradient(155deg,#ffd700,#ff8c00);box-shadow:0 0 22px rgba(255,215,0,.6);}
+.desk.scout .avatar{background:linear-gradient(155deg,#38bdf8,#0ea5e9);box-shadow:0 0 18px rgba(56,189,248,.5);}
+.desk.scribe .avatar{background:linear-gradient(155deg,#c084fc,#a855f7);box-shadow:0 0 18px rgba(192,132,252,.5);}
+.desk.reach .avatar{background:linear-gradient(155deg,#ff6b6b,#e23744);box-shadow:0 0 18px rgba(255,107,107,.5);}
+.desk.dev .avatar{background:linear-gradient(155deg,#34d399,#10b981);box-shadow:0 0 18px rgba(52,211,153,.5);}
+.desk .nm{font-weight:700;font-size:.85rem;margin-bottom:4px;}
+.desk .role{font-size:.7rem;color:var(--ink-3);font-family:'JetBrains Mono',monospace;margin-bottom:8px;}
+.desk .status{display:inline-flex;align-items:center;gap:6px;font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:6px;}
+.status.online{background:rgba(57,255,20,.14);color:var(--neon);}
+.status.busy{background:rgba(255,159,28,.14);color:var(--amber);}
+.status.offline{background:rgba(120,140,170,.14);color:var(--ink-3);}
+.desk .glow{position:absolute;inset:-2px;border-radius:16px;opacity:0;transition:opacity .3s;pointer-events:none;
+  box-shadow:0 0 30px rgba(57,255,20,.4),inset 0 0 20px rgba(57,255,20,.15);}
+.desk:hover .glow{opacity:1;}
+
+/* GRAPH */
+.graph-wrap{position:relative;min-height:440px;border-radius:12px;overflow:hidden;
+  background:radial-gradient(circle at 30% 50%,rgba(20,30,44,.6),rgba(8,12,20,.4));
+  border:1px solid var(--border-2);box-shadow:inset 0 0 30px rgba(0,0,0,.6);}
+svg.graph{width:100%;height:100%;display:block;}
+.edge{stroke:rgba(57,255,20,.32);stroke-width:1.6;fill:none;}
+.edge.lit{stroke:rgba(57,255,20,.8);stroke-width:2.4;}
+.node{cursor:pointer;}
+.node rect{fill:rgba(18,26,38,.9);stroke:rgba(57,255,20,.45);stroke-width:2;rx:8;transition:fill .2s,stroke .2s;}
+.node:hover rect{fill:rgba(30,45,30,.95);stroke:var(--neon);}
+.node text{font-size:11px;font-weight:700;fill:var(--ink);pointer-events:none;paint-order:stroke;stroke:rgba(0,0,0,.7);stroke-width:3px;}
+.node .sub{font-size:8px;fill:var(--ink-3);font-family:'JetBrains Mono',monospace;}
+
+/* TASKS */
+.task{display:flex;flex-direction:column;gap:7px;padding:12px;border-radius:10px;margin-bottom:9px;
+  background:var(--panel-2);border:1px solid var(--border-2);
+  box-shadow:inset 0 0 14px rgba(0,0,0,.4);}
+.task .row1{display:flex;align-items:center;gap:8px;}
+.task .tt{font-weight:700;font-size:.9rem;flex:1;}
+.task .pr{font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:6px;background:rgba(56,189,248,.15);color:var(--blue);font-family:'JetBrains Mono',monospace;}
+.task .meta{font-size:.76rem;color:var(--ink-2);font-family:'JetBrains Mono',monospace;}
+.task .st{font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:6px;align-self:flex-start;font-family:'JetBrains Mono',monospace;letter-spacing:.5px;}
+.st.PLANNED{background:rgba(120,140,170,.18);color:#9fb0c3;}
+.st.EXECUTING{background:rgba(57,255,20,.16);color:var(--neon);box-shadow:0 0 10px rgba(57,255,20,.2);}
+.st.COMPLETED{background:rgba(57,255,20,.12);color:#7dff5e;}
+.st.FAILED{background:rgba(255,77,77,.16);color:var(--red);}
+.st.REQUIRES_APPROVAL{background:rgba(255,159,28,.16);color:var(--amber);}
+.task .btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;}
+.mini{font-size:.72rem;font-weight:700;padding:6px 10px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--border-2);background:rgba(30,40,56,.7);color:var(--ink-2);font-family:'JetBrains Mono',monospace;}
+.mini:hover{color:var(--neon);border-color:rgba(57,255,20,.4);}
+
+/* AGENT LIST */
+.unit{background:var(--panel-2);border:1px solid var(--border-2);border-radius:10px;padding:11px 13px;margin-bottom:9px;
+  box-shadow:inset 0 0 14px rgba(0,0,0,.4);}
+.unit .top{display:flex;align-items:center;gap:8px;}
+.unit .nm{font-weight:700;font-size:.88rem;flex:1;}
+.unit .chip{font-size:.66rem;font-weight:700;padding:2px 8px;border-radius:6px;font-family:'JetBrains Mono',monospace;letter-spacing:.5px;}
+.chip.ok{background:rgba(57,255,20,.16);color:var(--neon);}
+.chip.warn{background:rgba(255,159,28,.16);color:var(--amber);}
+.chip.risk{background:rgba(255,77,77,.16);color:var(--red);}
+.bar{height:6px;border-radius:4px;background:rgba(120,140,170,.18);margin-top:8px;overflow:hidden;}
+.bar i{display:block;height:100%;border-radius:4px;}
+.bar i.ok{background:linear-gradient(90deg,#1faa3f,#39ff14);box-shadow:0 0 8px rgba(57,255,20,.5);}
+.bar i.warn{background:linear-gradient(90deg,#b36b00,#ff9f1c);box-shadow:0 0 8px rgba(255,159,28,.5);}
+.bar i.risk{background:linear-gradient(90deg,#a11,#ff4d4d);box-shadow:0 0 8px rgba(255,77,77,.5);}
+.skills-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.skills-list span{font-size:.72rem;padding:4px 9px;border-radius:8px;background:rgba(30,40,56,.7);color:var(--ink-2);border:1px solid var(--border-2);font-family:'JetBrains Mono',monospace;}
+.links-list{margin-top:8px;font-size:.8rem;color:var(--ink-2);}
+.links-list div{padding:5px 0;border-bottom:1px solid var(--border-2);}
+.empty{color:var(--ink-3);font-size:.84rem;text-align:center;padding:20px;font-family:'JetBrains Mono',monospace;}
+.sectitle{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--neon);margin:12px 0 7px;}
+
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(2,5,10,.6);backdrop-filter:blur(8px);
+  display:none;align-items:center;justify-content:center;z-index:50;padding:18px;}
+.overlay.open{display:flex;}
+.modal{width:min(470px,100%);max-height:88vh;overflow:auto;border-radius:18px;padding:22px;
+  background:rgba(14,20,30,.86);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
+  border:1px solid var(--border);box-shadow:0 30px 70px rgba(0,0,0,.7),inset 0 0 30px rgba(57,255,20,.05);}
+.modal h3{font-size:1.2rem;font-weight:800;margin-bottom:4px;color:var(--neon);}
+.modal .mh{font-size:.76rem;color:var(--ink-3);margin-bottom:16px;font-family:'JetBrains Mono',monospace;}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:.76rem;font-weight:700;color:var(--ink-2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+.field input,.field textarea,.field select{width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--border-2);
+  background:rgba(8,12,20,.8);color:var(--ink);font-size:.9rem;font-family:inherit;outline:none;font-family:'JetBrains Mono',monospace;}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--neon);box-shadow:0 0 0 3px rgba(57,255,20,.15);}
+.field textarea{resize:vertical;min-height:70px;}
+.chips{display:flex;flex-wrap:wrap;gap:7px;}
+.chipx{padding:7px 11px;border-radius:9px;font-size:.78rem;font-weight:600;cursor:pointer;
+  border:1px solid var(--border-2);background:rgba(30,40,56,.7);color:var(--ink-2);}
+.chipx.on{background:linear-gradient(180deg,#3dff66,#15a83c);color:#04140a;border-color:var(--neon);}
+.modal .mclose{position:absolute;top:16px;right:18px;font-size:1.3rem;color:var(--ink-3);cursor:pointer;
+  width:32px;height:32px;border-radius:8px;display:grid;place-items:center;background:rgba(30,40,56,.7);border:1px solid var(--border-2);}
+.modal .mactions{display:flex;gap:9px;margin-top:8px;}
+.debate{margin-top:6px;border-top:1px solid var(--border-2);padding-top:9px;}
+.debate .op{font-size:.8rem;color:var(--ink-2);padding:7px 0;border-bottom:1px solid var(--border-2);font-family:'JetBrains Mono',monospace;}
+.debate .op b{color:var(--ink);}
+.debate .conf{font-size:.8rem;color:var(--amber);background:rgba(255,159,28,.1);border:1px solid rgba(255,159,28,.3);border-radius:8px;padding:8px;margin:7px 0;}
+.debate .dec{font-size:.82rem;font-weight:700;color:var(--neon);background:rgba(57,255,20,.1);border:1px solid rgba(57,255,20,.3);border-radius:8px;padding:9px;margin-top:7px;}
+.extra-list{list-style:none;margin-top:7px;}
+.extra-list li{font-size:.8rem;color:var(--ink-2);background:rgba(30,40,56,.7);border:1px solid var(--border-2);border-radius:9px;padding:8px 11px;margin-bottom:6px;}
+.foot{color:var(--ink-3);font-size:.74rem;text-align:center;margin-top:12px;font-family:'JetBrains Mono',monospace;}
+
+/* SIDE PANEL */
+.agent-panel{position:fixed;top:0;right:0;height:100vh;width:min(440px,94vw);z-index:60;overflow:auto;padding:22px;
+  transform:translateX(105%);transition:transform .35s cubic-bezier(.2,.8,.2,1);
+  background:rgba(12,18,28,.9);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
+  border-left:1px solid var(--border);box-shadow:-20px 0 60px rgba(0,0,0,.6);
+  border-top-left-radius:18px;border-bottom-left-radius:18px;}
+.agent-panel.open{transform:translateX(0);}
+.panel-backdrop{position:fixed;inset:0;background:rgba(2,5,10,.5);backdrop-filter:blur(3px);z-index:55;display:none;}
+.panel-backdrop.open{display:block;}
+.agent-panel h2{font-size:1.15rem;font-weight:800;margin-bottom:2px;color:var(--neon);}
+.agent-panel .phead-sub{font-size:.74rem;color:var(--ink-3);font-weight:600;margin-bottom:9px;font-family:'JetBrains Mono',monospace;}
+
+/* ACTIVITY */
+.chart svg{width:100%;height:90px;display:block;}
+
+/* LOGGER */
+.log{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--ink-2);padding:8px 10px;border-radius:8px;background:rgba(20,28,40,.6);border:1px solid var(--border-2);margin-bottom:6px;}
+.log .ts{color:var(--ink-3);font-size:.7rem;}
+</style></head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="logo">H</div>
+    <div><h1>HERMES · Mission Control</h1><div class="sub">5-Agent Fleet · Live Dashboard</div></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+    <div class="live"><span class="dot"></span> LIVE · <span id="ts">—</span></div>
+    <div style="font-size:.72rem;color:var(--ink-3);font-family:'JetBrains Mono',monospace">v1.0</div>
+    <div class="actions">
+      <button class="btn" onclick="openAgentModal()">＋ АГЕНТ</button>
+      <button class="btn" onclick="openTaskModal()">＋ ЗАДАЧА</button>
+      <button class="btn ghost" onclick="openLinkModal()">🔗 СВЯЗЬ</button>
+    </div>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('overview',this)">🏢 Overview</div>
+  <div class="tab" onclick="switchTab('agents',this)">🤖 Agents</div>
+  <div class="tab" onclick="switchTab('tasks',this)">📋 Tasks</div>
+  <div class="tab" onclick="switchTab('chat',this)">💬 Chat</div>
+  <div class="tab" onclick="switchTab('content',this)">📚 Content</div>
+  <div class="tab" onclick="switchTab('schedule',this)">⏰ Schedule</div>
+</div>
+
+<div class="statusbar">
+  <div class="stat"><div class="k">Agents Online</div><div class="v" id="sAgents">0</div></div>
+  <div class="stat blue"><div class="k">Active Tasks</div><div class="v" id="sTasks">0</div></div>
+  <div class="stat amber"><div class="k">Fleet</div><div class="v" id="sRoles">5</div></div>
+  <div class="stat"><div class="k">System Health</div><div class="v" id="sHealth">—</div></div>
+</div>
+
+<div class="bento">
+  <div class="tab-content active" id="tab-overview">
+    <div class="tile">
+      <h2>🏢 3D Office — Fleet Status</h2>
+      <div class="office"><div class="office-grid" id="officeGrid"></div></div>
+      <div class="foot">Orchestrator = HERMES. Scout / Scribe / Reach / Dev. Each agent = one Telegram channel.</div>
+    </div>
+    <div class="tile graf">
+      <h2>🕸 Agent Graph <span class="cnt" id="agentCnt">0</span></h2>
+      <div class="graph-wrap">
+        <svg class="graph" id="graph" viewBox="0 0 420 640" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <linearGradient id="nodeGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a2636"/><stop offset="100%" stop-color="#0e1622"/></linearGradient>
+            <linearGradient id="coreGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3dff66"/><stop offset="100%" stop-color="#15a83c"/></linearGradient>
+          </defs>
+          <g id="edges"></g><g id="nodes"></g>
+        </svg>
+      </div>
+      <div class="foot">Click agent → status, skills, logging, schedule. Lines = links.</div>
+    </div>
+    <div class="tile">
+      <h2>📋 Agent Logs — Last 20</h2>
+      <div id="logList" class="empty">No logs yet.</div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-agents">
+    <div class="tile">
+      <h2>🤖 Agents · Status <span class="cnt" id="agListCnt">0</span></h2>
+      <div id="agentsList"></div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-tasks">
+    <div class="tile">
+      <h2>📋 Tasks Board <span class="cnt" id="taskCnt">0</span></h2>
+      <div id="tasksList"></div>
+      <div class="sectitle">Activity · 24h</div>
+      <div class="chart"><svg id="actChart" viewBox="0 0 300 90" preserveAspectRatio="none"></svg></div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-chat">
+    <div class="tile">
+      <h2>💬 Chat · Live Telegram Session</h2>
+      <div id="chatLog" class="empty">Connect Telegram session to see live chat.</div>
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <input id="chatMsg" placeholder="Message to agent..." style="flex:1;padding:10px 12px;border-radius:10px;border:1px solid var(--border-2);background:rgba(8,12,20,.8);color:var(--ink);font-family:'JetBrains Mono',monospace;">
+        <button class="btn" onclick="sendChat()">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-content">
+    <div class="tile">
+      <h2>📚 Content Library</h2>
+      <div id="contentLib" class="empty">Templates, prompts, agent files — coming next.</div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-schedule">
+    <div class="tile">
+      <h2>⏰ Schedule · Cron Jobs</h2>
+      <div id="scheduleList" class="empty">No scheduled jobs.</div>
+    </div>
+  </div>
+
+  <div class="tile wide">
+    <h2>🧭 Protocol & Roles</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">
+      <div><div class="sectitle">5-Agent Fleet</div><div class="skills-list" id="rolesLegend"></div></div>
+      <div><div class="sectitle">Priority</div><div style="font-size:.8rem;color:var(--ink-2);font-family:'JetBrains Mono',monospace">P0 critical · P1 high · P2 · P3 · P4 low<br><span style="color:var(--ink-3)">Impact × Urgency × Prob ÷ Cost</span></div></div>
+      <div><div class="sectitle">Protocol</div><div style="font-size:.78rem;color:var(--ink-2);font-family:'JetBrains Mono',monospace">UNDERSTAND→DECOMPOSE→SELECT→MULTI→CONFLICT→DECIDE→PLAN→EXECUTE→MONITOR→LEARN</div></div>
+    </div>
+    <div class="foot">Orchestrator owns outcomes. Each task carries role prompt. THINK→DEBATE→DECIDE→EXECUTE→MEASURE→LEARN→IMPROVE</div>
+  </div>
+</div>
+
+<div class="agent-panel" id="agentPanel">
+  <span class="mclose" onclick="closePanel()">✕</span>
+  <div id="panelHeader"></div>
+  <div class="sectitle">Role Prompt</div>
+  <div id="panelPrompt" style="font-size:.82rem;color:var(--ink-2);background:rgba(20,28,40,.7);border:1px solid var(--border-2);border-radius:10px;padding:10px;margin-bottom:6px;"></div>
+  <div class="sectitle">Key Skills / Metrics</div><div id="panelChecklist"></div>
+  <div class="sectitle">Hermes Skills</div><div class="skills-list" id="panelSkills"></div>
+  <div class="sectitle">Links</div><div class="links-list" id="panelLinks"></div>
+  <div class="sectitle">What to delegate next</div><ul class="extra-list" id="panelExtra"></ul>
+  <div class="sectitle">Current Tasks</div><div id="panelTasks"></div>
+  <button class="btn ghost" style="width:100%;justify-content:center;margin-top:10px;" onclick="delAgent()">🗑 Delete Agent</button>
+</div>
+<div class="panel-backdrop" id="panelBackdrop" onclick="closePanel()"></div>
+
+<div class="overlay" id="agentOverlay"><div class="modal" style="position:relative;">
+  <span class="mclose" onclick="closeModals()">✕</span><h3>New Agent</h3><div class="mh">appears in graph + office</div>
+  <div class="field"><label>Name</label><input id="agName" placeholder="Analyst"></div>
+  <div class="field"><label>Role</label><input id="agRole" placeholder="Business analyst"></div>
+  <div class="field"><label>Skills (Hermes)</label><div class="chips" id="agSkills"></div></div>
+  <div class="field"><label>Note</label><textarea id="agNote" placeholder="What it does"></textarea></div>
+  <div class="mactions"><button class="btn" onclick="createAgent()">Create</button><button class="btn ghost" onclick="closeModals()">Cancel</button></div>
+</div></div>
+
+<div class="overlay" id="taskOverlay"><div class="modal" style="position:relative;">
+  <span class="mclose" onclick="closeModals()">✕</span><h3>New Task</h3><div class="mh">council debates automatically</div>
+  <div class="field"><label>Agent</label><select id="tskAgent"></select></div>
+  <div class="field"><label>Title</label><input id="tskTitle" placeholder="Build landing"></div>
+  <div class="field"><label>Description</label><textarea id="tskDesc" placeholder="Details"></textarea></div>
+  <div class="field"><label>Priority</label><select id="tskPrio"><option>P0</option><option>P1</option><option selected>P2</option><option>P3</option><option>P4</option></select></div>
+  <div class="mactions"><button class="btn" onclick="createTask()">Create</button><button class="btn ghost" onclick="closeModals()">Cancel</button></div>
+</div></div>
+
+<div class="overlay" id="linkOverlay"><div class="modal" style="position:relative;">
+  <span class="mclose" onclick="closeModals()">✕</span><h3>Link Agents</h3><div class="mh">edge in graph</div>
+  <div class="field"><label>From</label><select id="lkFrom"></select></div>
+  <div class="field"><label>To</label><select id="lkTo"></select></div>
+  <div class="field"><label>Kind</label><input id="lkKind" value="interacts"></div>
+  <div class="mactions"><button class="btn" onclick="createLink()">Link</button><button class="btn ghost" onclick="closeModals()">Cancel</button></div>
+</div></div>
+
+<script>
+let STATE={agents:{},links:[],tasks:{},skills:{},logs:[],chat:[],content:[],schedule:[]};
+const OFFICE_ORDER=['hermes','scout','scribe','reach','dev'];
+const OFFICE_CLASS={hermes:'orchestrator',scout:'scout',scribe:'scribe',reach:'reach',dev:'dev'};
+const OFFICE_ICON={hermes:'👑',scout:'🔍',scribe:'✍️',reach:'📢',dev:'💻'};
+const OFFICE_ROLE={hermes:'Orchestrator · top-level coordinator',scout:'Scout · research & trend intelligence',scribe:'Scribe · writing & content',reach:'Reach · marketing, growth, monetization',dev:'Dev · engineering, automation, dashboard'};
+
+function switchTab(name,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+}
+
+async function load(){try{
+  const r=await fetch('/api/state',{cache:'no-store'});
+  STATE=await r.json();
+  render();document.getElementById('ts').textContent=new Date().toLocaleTimeString('ru-RU');
+}catch(e){console.error(e);}}
+function jpost(u,b){return fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});}
+
+const W=420,H=640;
+function layout(){const ids=Object.keys(STATE.agents);const pos={};
+  pos['hermes']={x:70,y:H/2};
+  const others=ids.filter(id=>id!=='hermes');
+  const colX=300, step=H/(others.length+1);
+  others.forEach((id,i)=>{ pos[id]={x:colX, y:step*(i+1)}; });
+  return pos;}
+function renderGraph(){const pos=layout();const eg=document.getElementById('edges'),ng=document.getElementById('nodes');eg.innerHTML='';ng.innerHTML='';
+  (STATE.links||[]).forEach(l=>{const a=pos[l.from],b=pos[l.to];if(!a||!b)return;
+    const p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',`M${a.x},${a.y} L${b.x},${b.y}`);p.setAttribute('class','edge');eg.appendChild(p);});
+  Object.entries(STATE.agents).forEach(([id,a])=>{const p=pos[id];if(!p)return;
+    const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.setAttribute('class','node');g.setAttribute('transform',`translate(${p.x},${p.y})`);
+    const s=a.skills&&a.skills.length?26:20;
+    const rect=document.createElementNS('http://www.w3.org/2000/svg','rect');rect.setAttribute('width',s*2);rect.setAttribute('height',s*2);rect.setAttribute('x',-s);rect.setAttribute('y',-s);rect.setAttribute('rx',8);
+    rect.setAttribute('fill',id==='hermes'?'url(#coreGrad)':'url(#nodeGrad)');rect.setAttribute('stroke',id==='hermes'?'#39ff14':'rgba(57,255,20,.45)');rect.setAttribute('stroke-width',2);
+    g.appendChild(rect);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('text-anchor','middle');t.setAttribute('y',4);
+    t.textContent=id==='hermes'?'HERMES':a.name.split(' ')[0].replace('AGENT','').replace('—','');g.appendChild(t);
+    const sub=document.createElementNS('http://www.w3.org/2000/svg','text');sub.setAttribute('text-anchor','middle');sub.setAttribute('y',16);sub.setAttribute('class','sub');
+    sub.textContent=id==='hermes'?'Orchestrator':(a.name.split(' ')[1]||'').replace('AGENT','');g.appendChild(sub);
+    g.onclick=()=>openCard(id);ng.appendChild(g);});}
+
+function agentHealth(a){const ts=Object.values(STATE.tasks).filter(t=>t.agent_id===a.id);
+  const load=ts.filter(t=>['PLANNED','EXECUTING','REQUIRES_APPROVAL'].includes(t.status)).length;
+  const h=Math.max(42,100-load*16);let cls='ok',lab='OK';if(h<60){cls='risk';lab='AT RISK';}else if(h<78){cls='warn';lab='WARN';}
+  return {h,cls,lab,load};}
+
+function renderOffice(){
+  const grid=document.getElementById('officeGrid');grid.innerHTML='';
+  const order=OFFICE_ORDER.filter(id=>STATE.agents[id]).concat(Object.keys(STATE.agents).filter(id=>!OFFICE_ORDER.includes(id)));
+  order.forEach(id=>{const a=STATE.agents[id];if(!a)return;
+    const cls=OFFICE_CLASS[id]||'';const icon=OFFICE_ICON[id]||'🤖';const role=OFFICE_ROLE[id]||a.role||'';
+    const hh=agentHealth(a);const stCls=hh.h>=78?'online':hh.h>=60?'busy':'offline';const stTxt=hh.h>=78?'online':hh.h>=60?'busy':'offline';
+    const desk=document.createElement('div');desk.className='desk '+cls;
+    desk.innerHTML=`<div class="glow"></div><div class="avatar">${icon}</div><div class="nm">${id==='hermes'?'👑 HERMES':esc(a.name)}</div><div class="role">${esc(role)}</div><div class="status ${stCls}"><span class="dot" style="width:6px;height:6px;border-radius:50%;background:currentColor;box-shadow:0 0 6px currentColor;"></span>${stTxt} · ${hh.h}%</div>`;
+    desk.onclick=()=>openCard(id);grid.appendChild(desk);});
+}
+
+function render(){
+  renderOffice();renderGraph();
+  const ags=Object.values(STATE.agents);
+  document.getElementById('agentCnt').textContent=ags.length;document.getElementById('agListCnt').textContent=ags.length;
+  document.getElementById('sAgents').textContent=ags.length;
+  const tl=Object.values(STATE.tasks);const active=tl.filter(t=>['PLANNED','EXECUTING','REQUIRES_APPROVAL'].includes(t.status)).length;
+  document.getElementById('taskCnt').textContent=tl.length;document.getElementById('sTasks').textContent=active;
+  const roles=ags.filter(a=>a.is_role).length;document.getElementById('sRoles').textContent=roles;
+  const avg=Math.round(ags.reduce((s,a)=>s+agentHealth(a).h,0)/ags.length);
+  const hEl=document.getElementById('sHealth');hEl.textContent=avg+'%';hEl.style.color=avg<60?'var(--red)':avg<78?'var(--amber)':'var(--neon)';
+
+  const tlEl=document.getElementById('tasksList');tlEl.innerHTML=tl.length?'':'<div class="empty">нет задач</div>';
+  tl.slice().sort((a,b)=>b.created_at.localeCompare(a.created_at)).forEach(t=>{const ag=STATE.agents[t.agent_id];
+    const div=document.createElement('div');div.className='task';
+    div.innerHTML=`<div class="row1"><span class="tt">${esc(t.title)}</span><span class="pr">${esc(t.priority)}</span></div>
+      <div class="meta">${ag?esc(ag.name):'?'}</div>
+      <span class="st ${t.status}">${t.status}</span>
+      ${t.debate?`<div class="meta" style="margin-top:3px">COUNCIL: ${esc((t.debate.opinions||[]).length)} opinions${t.debate.conflicts.length?' · ⚠ CONFLICT':''}</div>`:''}
+      <div class="btns">${['EXECUTING','COMPLETED','FAILED','REQUIRES_APPROVAL'].map(s=>`<button class="mini" onclick="setStatus('${t.id}','${s}')">${s}</button>`).join('')}</div>`;
+    tlEl.appendChild(div);});
+  renderActivity();
+
+  const al=document.getElementById('agentsList');al.innerHTML=ags.length?'':'<div class="empty">нет агентов</div>';
+  ags.forEach(a=>{const hh=agentHealth(a);const div=document.createElement('div');div.className='unit';
+    div.innerHTML=`<div class="top"><span class="nm">${a.id==='hermes'?'👑 ':''}${esc(a.name)}</span><span class="chip ${hh.cls}">${hh.lab} ${hh.h}%</span></div>
+      <div class="bar"><i class="${hh.cls}" style="width:${hh.h}%"></i></div>
+      <div class="meta" style="font-size:.72rem;color:var(--ink-3);margin-top:5px;font-family:'JetBrains Mono',monospace">${esc(a.role||'')}</div>
+      <div class="btns" style="margin-top:6px"><button class="mini" onclick="openCard('${a.id}')">OPEN</button></div>`;
+    al.appendChild(div);});
+  fillSelect('tskAgent',ags);fillSelect('lkFrom',ags);fillSelect('lkTo',ags);
+  const sc=document.getElementById('agSkills');sc.innerHTML='';
+  Object.keys(STATE.skills||{}).forEach(cat=>{const ch=document.createElement('div');ch.className='chipx';ch.textContent=cat;ch.onclick=()=>ch.classList.toggle('on');ch.dataset.cat=cat;sc.appendChild(ch);});
+  const rl=document.getElementById('rolesLegend');
+  if(rl){rl.innerHTML=ags.filter(a=>a.is_role).map(r=>`<span>${esc(r.name.replace(' AGENT','').replace(' AGENT —',''))}</span>`).join('');}
+
+  const logs=(STATE.logs||[]).slice(0,20).reverse();
+  const ll=document.getElementById('logList');ll.innerHTML=logs.length?'':(ll.classList.add('empty'),'<div class="empty">No logs yet.</div>');
+  logs.forEach(l=>{const d=document.createElement('div');d.className='log';d.innerHTML=`<div class="ts">${esc(l.ts)}</div><div>${esc(l.agent||'system')}: ${esc(l.message)}</div>`;ll.appendChild(d);});
+
+  const chatEl=document.getElementById('chatLog');
+  const chat=(STATE.chat||[]).slice(-50);
+  chatEl.innerHTML=chat.length?'':(chatEl.classList.add('empty'),'<div class="empty">No messages.</div>');
+  chat.forEach(m=>{const d=document.createElement('div');d.className='log';d.innerHTML=`<div class="ts">${esc(m.agent||'?')} · ${esc(m.ts)}</div><div>${esc(m.message)}</div>`;chatEl.appendChild(d);});
+  chatEl.scrollTop=chatEl.scrollHeight;
+
+  const cont=(STATE.content||[]).slice(-20);const ce=document.getElementById('contentLib');
+  ce.innerHTML=cont.length?'':(ce.classList.add('empty'),'<div class="empty">No content.</div>');
+  cont.forEach(c=>{const d=document.createElement('div');d.className='log';d.innerHTML=`<div class="ts">${esc(c.agent||'?')} · ${esc(c.ts)}</div><div>${esc(c.title)} — ${esc(c.kind)}</div>`;ce.appendChild(d);});
+
+  const sched=(STATE.schedule||[]);const se=document.getElementById('scheduleList');
+  se.innerHTML=sched.length?'':(se.classList.add('empty'),'<div class="empty">No scheduled jobs.</div>');
+  sched.forEach(s=>{const d=document.createElement('div');d.className='log';d.innerHTML=`<div class="ts">${esc(s.cron||'once')}</div><div>${esc(s.title)} — ${esc(s.agent||'?')}</div>`;se.appendChild(d);});
+}
+
+function renderActivity(){const svg=document.getElementById('actChart');svg.innerHTML='';
+  const tl=Object.values(STATE.tasks);const now=Date.now();const buckets=Array(12).fill(0);
+  tl.forEach(t=>{const d=new Date(t.created_at).getTime();const age=(now-d)/3600000;if(age>=0&&age<12){buckets[11-Math.floor(age)]++;}});
+  const max=Math.max(1,...buckets);const bw=300/12;
+  buckets.forEach((v,i)=>{const h=6+v/max*78;const x=i*bw+2;const rect=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    rect.setAttribute('x',x);rect.setAttribute('y',90-h);rect.setAttribute('width',bw-3);rect.setAttribute('height',h);rect.setAttribute('rx',2);
+    rect.setAttribute('fill',v?'#39ff14':'rgba(57,255,20,.12)');if(v)rect.setAttribute('style','filter:drop-shadow(0 0 4px rgba(57,255,20,.6))');
+    svg.appendChild(rect);});}
+
+function fillSelect(id,ags){const el=document.getElementById(id);const cur=el.value;el.innerHTML=ags.map(a=>`<option value="${a.id}">${a.name}</option>`).join('');if(cur)el.value=cur;}
+const esc=s=>(s||'').replace(/[&<>\\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function openCard(id){const a=STATE.agents[id];if(!a)return;window._cardId=id;
+  document.getElementById('panelHeader').innerHTML=`<h2>${id==='hermes'?'👑 ':''}${esc(a.name)}</h2><div class="phead-sub">${esc(a.role||'')}</div><div style="font-size:.86rem;color:var(--ink-2);margin-bottom:6px">${esc(a.note||'')}</div>`;
+  document.getElementById('panelPrompt').textContent=a.prompt||'—';
+  const cl=(a.checklist||[]).map(c=>`<li style="margin:4px 0 0 16px;font-size:.78rem;color:var(--ink-2)">${esc(c)}</li>`).join('');
+  document.getElementById('panelChecklist').innerHTML=cl?`<ul>${cl}</ul>`:'';
+  document.getElementById('panelSkills').innerHTML=(a.skills&&a.skills.length)?a.skills.map(s=>`<span>${esc(s)}</span>`).join(''):'<span style="color:var(--ink-3)">none</span>';
+  const links=(STATE.links||[]).filter(l=>l.from===id||l.to===id).map(l=>`<div>${STATE.agents[l.from]?STATE.agents[l.from].name:'?'} → ${STATE.agents[l.to]?STATE.agents[l.to].name:'?'} <i style="color:var(--ink-3)">(${esc(l.kind)})</i></div>`);
+  document.getElementById('panelLinks').innerHTML=links.length?links.join(''):'<div style="color:var(--ink-3)">none</div>';
+  document.getElementById('panelExtra').innerHTML=(a.extra&&a.extra.length)?a.extra.map(e=>`<li>✨ ${esc(e)}</li>`).join(''):'<div style="color:var(--ink-3);font-size:.8rem">no data</div>';
+  const ts=Object.values(STATE.tasks).filter(t=>t.agent_id===id);
+  document.getElementById('panelTasks').innerHTML=ts.length?ts.map(t=>{const d=t.debate;let dh='';
+    if(d){dh=`<div class="debate"><div class="sectitle" style="margin-top:8px">Council</div>`+d.opinions.map(o=>`<div class="op"><b>${esc(o.agent)}:</b> ${esc(o.view)}</div>`).join('')+(d.conflicts.length?`<div class="conf">⚠ ${esc(d.conflicts.join(' '))}</div>`:'')+`<div class="dec">🧭 ${esc(d.decision)}</div></div>`;}
+    return `<div class="task" style="margin-bottom:8px"><div class="row1"><span class="tt">${esc(t.title)}</span><span class="st ${t.status}">${t.status}</span></div><div class="meta">${esc(t.priority)}</div>${dh}</div>`;}).join(''):'<div style="color:var(--ink-3);font-size:.8rem">no tasks</div>';
+  document.getElementById('agentPanel').classList.add('open');document.getElementById('panelBackdrop').classList.add('open');}
+function closePanel(){document.getElementById('agentPanel').classList.remove('open');document.getElementById('panelBackdrop').classList.remove('open');}
+function closeModals(){document.querySelectorAll('.overlay').forEach(o=>o.classList.remove('open'));}
+function openAgentModal(){document.getElementById('agName').value='';document.getElementById('agRole').value='';document.getElementById('agNote').value='';document.querySelectorAll('#agSkills .chipx').forEach(c=>c.classList.remove('on'));document.getElementById('agentOverlay').classList.add('open');}
+function openTaskModal(){document.getElementById('tskTitle').value='';document.getElementById('tskDesc').value='';document.getElementById('taskOverlay').classList.add('open');}
+function openLinkModal(){document.getElementById('lkKind').value='interacts';document.getElementById('linkOverlay').classList.add('open');}
+async function createAgent(){const skills=[...document.querySelectorAll('#agSkills .chipx.on')].map(c=>c.dataset.cat);
+  const r=await jpost('/api/agents',{name:document.getElementById('agName').value,role:document.getElementById('agRole').value,skills,note:document.getElementById('agNote').value});
+  if(r.ok){closeModals();await load();}else alert('Name required');}
+async function createTask(){const r=await jpost('/api/tasks',{agent_id:document.getElementById('tskAgent').value,title:document.getElementById('tskTitle').value,desc:document.getElementById('tskDesc').value,priority:document.getElementById('tskPrio').value});
+  if(r.ok){closeModals();await load();}else alert('Agent + title required');}
+async function createLink(){const r=await jpost('/api/links',{from:document.getElementById('lkFrom').value,to:document.getElementById('lkTo').value,kind:document.getElementById('lkKind').value});
+  if(r.ok){closeModals();await load();}else alert('Invalid nodes');}
+async function setStatus(id,s){await jpost('/api/tasks/'+id+'/status',{status:s});await load();}
+async function delAgent(){if(!window._cardId)return;if(!confirm('Delete agent and tasks?'))return;await fetch('/api/agents/'+window._cardId,{method:'DELETE'});closePanel();await load();}
+async function sendChat(){const msg=document.getElementById('chatMsg').value;if(!msg)return;await jpost('/api/chat',{message:msg,agent_id:'hermes'});document.getElementById('chatMsg').value='';await load();}
+
+load();setInterval(load,8000);
+</script>
+</body></html>
