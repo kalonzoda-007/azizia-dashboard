@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌭 Азизия · Отгрузки</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg1:#fff5f3;--bg2:#ffe9e4;--bg3:#ffd9d2;--glass:rgba(255,255,255,.55);--glass-2:rgba(255,255,255,.72);
+--stroke:rgba(255,255,255,.75);--stroke-2:rgba(214,120,110,.28);--ink:#3a1410;--ink-2:#7a3b33;--ink-3:#b07a72;
+--meat:#e23744;--meat-d:#b71c2b;--meat-l:#ff6b6b;--meat-ll:#ffe3e1;--ok:#16a34a;--warn:#f59e0b;--bad:#ef4444;
+--bento-r:24px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+background:radial-gradient(1000px 700px at 10% 0%,#fff0ee,transparent 60%),radial-gradient(1100px 800px at 95% 100%,#ffd9d2,transparent 55%),linear-gradient(135deg,var(--bg1),var(--bg2) 55%,var(--bg3));
+background-attachment:fixed;color:var(--ink);min-height:100vh;padding:18px;}
+.topbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;
+background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,233,228,.45));backdrop-filter:blur(40px) saturate(180%);
+-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid var(--stroke);border-radius:var(--bento-r);padding:16px 20px;margin-bottom:18px;
+box-shadow:0 12px 40px rgba(226,55,68,.16),inset 0 1px 0 rgba(255,255,255,.9);}
+.brand{display:flex;align-items:center;gap:14px;}
+.logo{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;font-size:1.5rem;background:linear-gradient(155deg,#ff6b6b,#b71c2b);box-shadow:0 8px 22px rgba(183,28,43,.4),inset 0 1px 2px rgba(255,255,255,.5);}
+.brand h1{font-size:1.32rem;font-weight:800;letter-spacing:-.4px;}
+.brand .sub{font-size:.72rem;color:var(--meat-d);font-weight:700;text-transform:uppercase;letter-spacing:1.6px;}
+.live{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;color:#15803d;background:linear-gradient(180deg,rgba(220,252,231,.7),rgba(187,247,208,.4));border:1px solid rgba(255,255,255,.7);padding:7px 13px;border-radius:999px;}
+.live .dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 10px #22c55e;animation:pulse 1.6s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.bento{display:flex;flex-direction:column;gap:16px;}
+.tile{background:linear-gradient(180deg,rgba(255,255,255,.6),rgba(255,233,228,.34));backdrop-filter:blur(34px) saturate(170%);-webkit-backdrop-filter:blur(34px) saturate(170%);border:1px solid var(--stroke);border-radius:var(--bento-r);padding:18px;box-shadow:0 10px 34px rgba(226,55,68,.12),inset 0 1px 0 rgba(255,255,255,.85);}
+.tile h2{font-size:1.02rem;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.tile h2 .cnt{margin-left:auto;font-size:.76rem;color:var(--meat-d);background:var(--meat-ll);padding:3px 10px;border-radius:999px;font-weight:700;}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px;}
+.kpi{background:var(--glass-2);border:1px solid var(--stroke);border-radius:18px;padding:14px 16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 6px 18px rgba(226,55,68,.1);}
+.kpi .k{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--ink-3);}
+.kpi .v{font-size:1.7rem;font-weight:800;color:var(--meat-d);margin-top:3px;}
+.kpi .v small{font-size:.8rem;color:var(--ink-3);font-weight:600;}
+.list{display:flex;flex-direction:column;gap:9px;}
+.row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.5);border:1px solid var(--stroke-2);}
+.row .nm{font-weight:700;font-size:.86rem;flex:1;}
+.row .val{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--ink-2);font-size:.82rem;}
+.chip{font-size:.68rem;font-weight:700;padding:3px 9px;border-radius:6px;font-family:'JetBrains Mono',monospace;}
+.chip.ok{background:rgba(22,163,74,.14);color:#15803d;}
+.chip.warn{background:rgba(245,158,11,.16);color:#b45309;}
+.chip.bad{background:rgba(239,68,68,.14);color:#b91c1c;}
+.chip.blue{background:rgba(59,130,246,.16);color:#1d4ed8;}
+.foot{color:var(--ink-3);font-size:.76rem;text-align:center;margin-top:14px;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 15px;border-radius:12px;font-weight:700;font-size:.85rem;cursor:pointer;border:1px solid rgba(255,255,255,.55);background:linear-gradient(180deg,#ff6b6b,#e23744);color:#fff;box-shadow:0 6px 16px rgba(226,55,68,.4),inset 0 1px 0 rgba(255,255,255,.4);text-decoration:none;}
+</style></head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><div class="logo">🚚</div>
+    <div><h1>Отгрузки</h1><div class="sub">Азизия · Логистика и доставка</div></div></div>
+  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+    <div class="live"><span class="dot"></span> LIVE CSV · <span id="ts">—</span></div>
+    <a class="btn" href="https://kalonzoda-007.github.io/azizia-dashboard/">← Дашборд</a>
+  </div>
+</div>
+
+<div class="kpis">
+  <div class="kpi"><div class="k">Всего</div><div class="v" id="kTotal">0</div></div>
+  <div class="kpi"><div class="k">В пути</div><div class="v" id="kTransit">0</div></div>
+  <div class="kpi"><div class="k">Доставлено</div><div class="v" id="kDone">0</div></div>
+  <div class="kpi"><div class="k">Ожидает</div><div class="v" id="kWait">0</div></div>
+  <div class="kpi"><div class="k">Общий вес</div><div class="v" id="kKg">0<small> кг</small></div></div>
+</div>
+
+<div class="bento">
+  <div class="tile"><h2>📦 Активные отгрузки</h2><div class="list" id="shipList"></div></div>
+  <div class="tile"><h2>📊 По курьерам</h2><div class="list" id="courierList"></div></div>
+  <div class="tile"><h2>📍 По статусам</h2><div class="list" id="statusList"></div></div>
+  <div class="tile wide"><h2>🗺 Карта отгрузок (список)</h2>
+    <div class="list" id="addrList"></div>
+    <div class="foot">Данные из Google Таблицы · Отгрузки. CSV экспорт.</div></div>
+</div>
+
+<script>
+const SID="19TkAQDxrfaF8auyZsIiJFmSI-wxS9fRT8TPX1_r2XBE";
+const GID=1578070231;
+const esc=s=>(s||"").replace(/[&<>\"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function parseCSV(t){const rows=[];let row=[],cur="",q=false;
+  for(let i=0;i<t.length;i++){const c=t[i];
+    if(q){if(c=='"'){if(t[i+1]=='"'){cur+='"';i++;}else q=false;}else cur+=c;}
+    else{if(c=='"')q=true;else if(c==","){row.push(cur);cur="";}else if(c=="\n"||c=="\r"){if(c=="\r"&&t[i+1]=="\n")i++;row.push(cur);rows.push(row);row=[];cur="";}else cur+=c;}}
+  if(cur!==""||row.length){row.push(cur);rows.push(row);}
+  return rows;}
+
+async function getCSV(){const r=await fetch(`https://docs.google.com/spreadsheets/d/${SID}/export?format=csv&gid=${GID}`,{cache:"no-store"});
+  if(!r.ok)throw new Error("HTTP "+r.status);
+  const t=await r.text();const rows=parseCSV(t);if(!rows.length)return[];
+  const h=rows[0].map(x=>x.trim());return rows.slice(1).filter(r=>r.some(x=>(x||"").trim())).map(r=>{const o={};h.forEach((k,i)=>o[k]=r[i]||"");return o;});}
+
+function render(ships){
+  const nums=ships.map(o=>({...o,weight:+o.вес_кг||0}));
+  document.getElementById("kTotal").textContent=nums.length;
+  document.getElementById("kTransit").textContent=nums.filter(o=>o.статус_отгр==="в пути").length;
+  document.getElementById("kDone").textContent=nums.filter(o=>o.статус_отгр==="доставлено").length;
+  document.getElementById("kWait").textContent=nums.filter(o=>o.статус_отгр==="ожидает").length;
+  document.getElementById("kKg").innerHTML=nums.reduce((s,o)=>s+o.weight,0)+"<small> кг</small>";
+
+  const sl=document.getElementById("shipList");sl.innerHTML="";
+  nums.sort((a,b)=>b.id.localeCompare(a.id)).forEach(o=>{
+    const cls=o.статус_отгр==="доставлено"?"ok":o.статус_отгр==="в пути"?"warn":"bad";
+    const d=document.createElement("div");d.className="row";
+    d.innerHTML=`<span class="nm">${esc(o.клиент)} · ${esc(o.продукт)}</span><span class="val">${o.weight} кг</span><span class="chip ${cls}">${esc(o.статус_отгр)}</span>`;
+    sl.appendChild(d);});
+
+  const byC={};nums.forEach(o=>{if(!byC[o.курьер])byC[o.курьер]=[];byC[o.курьер].push(o);});
+  const cl=document.getElementById("courierList");cl.innerHTML="";
+  Object.entries(byC).forEach(([c,arr])=>{const d=document.createElement("div");d.className="row";
+    d.innerHTML=`<span class="nm">🚚 ${esc(c)}</span><span class="val">${arr.length} отгр. · ${arr.reduce((s,o)=>s+o.weight,0)} кг</span>`;
+    cl.appendChild(d);});
+
+  const byS={};nums.forEach(o=>{if(!byS[o.статус_отгр])byS[o.статус_отгр]=0;byS[o.статус_отгр]++;});
+  const stl=document.getElementById("statusList");stl.innerHTML="";
+  Object.entries(byS).forEach(([s,n])=>{const d=document.createElement("div");d.className="row";
+    const cls=s==="доставлено"?"ok":s==="в пути"?"warn":"bad";
+    d.innerHTML=`<span class="nm">${esc(s)}</span><span class="val">${n}</span><span class="chip ${cls}">${n} отгр.</span>`;
+    stl.appendChild(d);});
+
+  const al=document.getElementById("addrList");al.innerHTML="";
+  nums.sort((a,b)=>b.id.localeCompare(a.id)).forEach(o=>{
+    const d=document.createElement("div");d.className="row";
+    d.innerHTML=`<span class="val">${esc(o.id)}</span><span class="nm">${esc(o.клиент)} · ${esc(o.продукт)} · ${o.weight} кг</span><span class="chip blue">${esc(o.курьер)}</span>`;
+    al.appendChild(d);});
+}
+
+async function load(){try{
+  const ships=await getCSV();render(ships);document.getElementById("ts").textContent=new Date().toLocaleTimeString("ru-RU");
+}catch(e){document.getElementById("shipList").innerHTML='<div class="row" style="color:var(--ink-3)">⚠ Ошибка загрузки: '+e.message+'</div>';}}
+load();setInterval(load,30000);
+</script>
+</body></html>
