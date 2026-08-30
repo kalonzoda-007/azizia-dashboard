@@ -31,8 +31,15 @@
 body {
   font-family: var(--font);
   background: #f0f2f5 url('https://kalonzoda-007.github.io/azizia-dashboard/xpeadia-ai-dashboard/bg-alpine.jpg') center/cover fixed;
-  color: var(--ink); min-height: 100vh; padding: 20px;
+  color: var(--ink); min-height: 100vh; padding: 20px; position: relative;
 }
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 0;
+  background: rgba(255,255,255,.55);
+  backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%);
+  pointer-events: none;
+}
+.nav, .stats, .grid, .grid-2, .card, .foot { position: relative; z-index: 1; }
 
 /* NAV */
 .nav {
