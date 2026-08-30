@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Xpeadia AI — Analytics Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Ahemen AI — Analytics Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
@@ -32,20 +32,15 @@
   --sidebar-collapsed: 64px;
   --radius: 16px;
   --glass-blur: 24px;
+  --font: 'Google Sans', 'Inter', sans-serif;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font);
   background: #0a0a12 url('https://kalonzoda-007.github.io/azizia-dashboard/xpeadia-ai-dashboard/bg-sunset.jpg') center/cover fixed;
-  color: var(--ink); display: flex; min-height: 100vh;
-  position: relative;
+  color: var(--ink); display: flex; min-height: 100vh; position: relative;
 }
-body::before {
-  content: ''; position: fixed; inset: 0;
-  background: linear-gradient(135deg, rgba(10,10,18,.7), rgba(10,10,18,.5));
-  z-index: 0;
-  pointer-events: none;
-}
+body::before { content: ''; position: fixed; inset: 0; background: linear-gradient(135deg, rgba(10,10,18,.7), rgba(10,10,18,.5)); z-index: 0; pointer-events: none; }
 
 /* SIDEBAR */
 .sidebar {
@@ -54,33 +49,19 @@ body::before {
   transition: width .25s cubic-bezier(.4,0,.2,1); z-index: 200; overflow: hidden;
 }
 .sidebar.collapsed { width: var(--sidebar-collapsed); }
-.sidebar-header {
-  display: flex; align-items: center; gap: 12px; padding: 16px 18px; border-bottom: 1px solid var(--border);
-  height: 64px; min-height: 64px;
-}
-.sidebar-header .logo { width: 34px; height: 34px; min-width: 34px; border-radius: 10px; background: linear-gradient(135deg,#4f7cff,#8b5cf6); display: grid; place-items: center; color: #fff; font-weight: 800; font-size: .9rem; }
+.sidebar-header { display: flex; align-items: center; gap: 12px; padding: 16px 18px; border-bottom: 1px solid rgba(255,255,255,.12); height: 64px; min-height: 64px; }
+.sidebar-header .logo { width: 34px; height: 34px; min-width: 34px; border-radius: 10px; background: linear-gradient(135deg,#60a5fa,#c084fc); display: grid; place-items: center; color: #fff; font-weight: 800; font-size: .9rem; }
 .sidebar-header .brand { font-weight: 800; font-size: 1.05rem; white-space: nowrap; opacity: 1; transition: opacity .2s; }
 .sidebar.collapsed .sidebar-header .brand { opacity: 0; pointer-events: none; }
-
-.hamburger {
-  width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg);
-  cursor: pointer; display: grid; place-items: center; margin-left: auto; transition: all .15s;
-}
+.hamburger { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); cursor: pointer; display: grid; place-items: center; margin-left: auto; transition: all .15s; color: var(--ink-2); }
 .hamburger:hover { background: var(--blue-l); border-color: var(--blue); }
-.hamburger svg { width: 18px; height: 18px; }
-
 .sidebar-nav { flex: 1; padding: 12px 10px; overflow-y: auto; }
-.sidebar-nav a {
-  display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 10px;
-  text-decoration: none; font-weight: 600; font-size: .88rem; color: var(--ink-2);
-  transition: all .15s; white-space: nowrap; margin-bottom: 4px;
-}
+.sidebar-nav a { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: .88rem; color: var(--ink-2); transition: all .15s; white-space: nowrap; margin-bottom: 4px; }
 .sidebar-nav a:hover { background: rgba(96,165,250,.18); color: var(--blue); }
 .sidebar-nav a.active { background: rgba(96,165,250,.25); color: #fff; box-shadow: 0 0 20px rgba(96,165,250,.4); }
-.sidebar-nav a .icon { width: 20px; height: 20px; min-width: 20px; display: grid; place-items: center; font-size: .95rem; }
+.sidebar-nav a .icon { width: 20px; height: 20px; min-width: 20px; display: grid; place-items: center; }
 .sidebar-nav a .lbl { opacity: 1; transition: opacity .2s; }
 .sidebar.collapsed .sidebar-nav a .lbl { opacity: 0; pointer-events: none; }
-
 .sidebar-footer { padding: 12px 10px; border-top: 1px solid rgba(255,255,255,.12); }
 .sidebar-footer .user { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 10px; background: rgba(255,255,255,.06); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
 .sidebar-footer .user .av { width: 32px; height: 32px; min-width: 32px; border-radius: 50%; background: linear-gradient(135deg,rgba(96,165,250,.7),rgba(74,222,128,.7)); display: grid; place-items: center; color: #fff; font-weight: 700; font-size: .8rem; border: 1px solid rgba(255,255,255,.3); }
@@ -89,18 +70,9 @@ body::before {
 .sidebar.collapsed .sidebar-footer .user .info { opacity: 0; }
 
 /* MAIN */
-.main {
-  flex: 1; margin-left: var(--sidebar-w); transition: margin-left .25s cubic-bezier(.4,0,.2,1);
-  display: flex; flex-direction: column; min-height: 100vh;
-}
+.main { flex: 1; margin-left: var(--sidebar-w); transition: margin-left .25s cubic-bezier(.4,0,.2,1); display: flex; flex-direction: column; min-height: 100vh; position: relative; z-index: 1; }
 .sidebar.collapsed ~ .main { margin-left: var(--sidebar-collapsed); }
-
-/* TOPBAR */
-.topbar {
-  display: flex; align-items: center; justify-content: space-between;
-  background: rgba(255,255,255,.08); backdrop-filter: blur(var(--glass-blur)) saturate(180%); -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-  border-bottom: 1px solid var(--border); padding: 14px 22px; height: 64px; position: sticky; top: 0; z-index: 100;
-}
+.topbar { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,.08); backdrop-filter: blur(var(--glass-blur)) saturate(180%); -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%); border-bottom: 1px solid var(--border); padding: 14px 22px; height: 64px; position: sticky; top: 0; z-index: 100; }
 .topbar .left { display: flex; align-items: center; gap: 14px; }
 .topbar .page-title { font-size: 1.15rem; font-weight: 800; }
 .topbar .right { display: flex; align-items: center; gap: 10px; }
@@ -109,8 +81,6 @@ body::before {
 .badge.live { background: rgba(74,222,128,.18); color: var(--green); display: inline-flex; align-items: center; gap: 6px; }
 .badge.live .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 1.4s infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-
-/* CONTENT */
 .content { flex: 1; padding: 22px; position: relative; z-index: 1; }
 .page { display: none; }
 .page.active { display: block; }
@@ -191,9 +161,6 @@ body::before {
 .alert .body .desc { font-size: .78rem; color: var(--ink-2); margin-top: 2px; }
 .alert .time { margin-left: auto; font-size: .72rem; color: var(--ink-3); white-space: nowrap; }
 
-/* MAP */
-#map { height: 300px; border-radius: 10px; }
-
 /* FINANCIAL */
 .fin-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 14px; }
 .fin-item { padding: 14px; border-radius: 10px; background: rgba(255,255,255,.06); border: 1px solid var(--border); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
@@ -217,31 +184,42 @@ body::before {
 /* FORM */
 .field { margin-bottom: 12px; }
 .field label { display: block; font-size: .72rem; font-weight: 700; color: var(--ink-2); margin-bottom: 5px; }
-.field input, .field select { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); font-size: .9rem; background: rgba(255,255,255,.08); color: var(--ink); }
+.field input, .field select, .field textarea { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); font-size: .9rem; background: rgba(255,255,255,.08); color: var(--ink); }
+.field textarea { min-height: 80px; resize: vertical; }
 .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 17px; border-radius: 10px; font-weight: 700; font-size: .9rem; cursor: pointer; border: none; }
 .btn.primary { background: rgba(96,165,250,.3); color: #fff; border: 1px solid rgba(96,165,250,.5); }
 .btn.ghost { background: rgba(255,255,255,.08); color: var(--ink-2); border: 1px solid var(--border); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
 
-/* PROVIDERS PAGE */
+/* MODAL */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.4); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 100; padding: 18px; }
+.overlay.open { display: flex; }
+.modal { background: rgba(255,255,255,.12); border: 1px solid var(--border-strong); border-radius: 18px; padding: 24px; max-width: 600px; width: 100%; max-height: 88vh; overflow: auto; backdrop-filter: blur(var(--glass-blur)) saturate(180%); -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%); box-shadow: 0 20px 60px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.2); }
+.modal h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 4px; }
+.modal .mh { font-size: .78rem; color: var(--ink-3); margin-bottom: 16px; }
+.mclose { float: right; cursor: pointer; color: var(--ink-2); font-size: 1.1rem; width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; background: rgba(255,255,255,.08); border: 1px solid var(--border); }
+
+/* DISCUSSION */
+.discussion { display: flex; flex-direction: column; gap: 10px; margin: 14px 0; }
+.d-msg { padding: 12px; border-radius: 12px; max-width: 85%; }
+.d-msg.user { background: rgba(96,165,250,.18); margin-left: auto; }
+.d-msg.agent { background: rgba(255,255,255,.08); margin-right: auto; }
+.d-msg .who { font-weight: 700; font-size: .78rem; margin-bottom: 4px; }
+.d-msg .txt { font-size: .88rem; }
+.d-msg .time { font-size: .68rem; color: var(--ink-3); margin-top: 4px; }
+
+/* PROVIDER CARD */
 .provider-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; backdrop-filter: blur(var(--glass-blur)) saturate(180%); -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%); box-shadow: 0 8px 32px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.15); }
 .provider-card .head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
 .provider-card .head .logo { width: 44px; height: 44px; border-radius: 10px; display: grid; place-items: center; font-weight: 800; font-size: 1rem; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15); }
 .provider-card .head .info .name { font-weight: 700; font-size: 1rem; }
 .provider-card .head .info .meta { font-size: .78rem; color: var(--ink-3); }
 .provider-card .metrics { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
-.provider-card .metrics .m { padding: 12px; border-radius: 8px; background: var(--bg); }
+.provider-card .metrics .m { padding: 12px; border-radius: 8px; background: rgba(255,255,255,.06); }
 .provider-card .metrics .m .k { font-size: .7rem; font-weight: 700; color: var(--ink-3); text-transform: uppercase; }
 .provider-card .metrics .m .v { font-size: 1.2rem; font-weight: 800; margin-top: 3px; }
 
-/* API KEYS */
-.key-card { display: flex; align-items: center; gap: 14px; padding: 14px; border-radius: 10px; background: rgba(255,255,255,.06); border: 1px solid var(--border); margin-bottom: 10px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-.key-card .icon { width: 36px; height: 36px; min-width: 36px; border-radius: 8px; background: rgba(96,165,250,.18); color: var(--blue); display: grid; place-items: center; font-size: 1rem; }
-.key-card .info { flex: 1; }
-.key-card .info .name { font-weight: 700; font-size: .9rem; }
-.key-card .info .key { font-family: 'JetBrains Mono', monospace; font-size: .78rem; color: var(--ink-3); }
-.key-card .actions { display: flex; gap: 6px; }
-.key-card .actions button { padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border); background: rgba(255,255,250,.08); font-size: .75rem; font-weight: 600; cursor: pointer; color: var(--ink-2); }
-.key-card .actions button:hover { background: var(--blue-l); color: var(--blue); }
+/* MAP */
+#map { height: 300px; border-radius: 10px; }
 
 /* DOCS */
 .doc-section { margin-bottom: 22px; }
@@ -250,44 +228,71 @@ body::before {
 .doc-section code { background: rgba(255,255,255,.1); padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: .82rem; }
 .doc-section pre { background: rgba(0,0,0,.4); color: #e8eef6; padding: 14px; border-radius: 10px; font-family: 'JetBrains Mono', monospace; font-size: .82rem; overflow-x: auto; margin-top: 10px; border: 1px solid var(--border); }
 
-/* TOGGLE */
-.toggle { display: flex; align-items: center; gap: 10px; }
-.toggle .sw { width: 40px; height: 22px; border-radius: 11px; background: var(--border); position: relative; cursor: pointer; transition: background .2s; }
-.toggle .sw.on { background: var(--blue); }
-.toggle .sw::after { content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: left .2s; }
-.toggle .sw.on::after { left: 21px; }
+/* ROLES TREE */
+.role-level { margin-bottom: 22px; }
+.role-level h4 { font-size: .95rem; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.role-item { display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 12px; background: rgba(255,255,255,.06); border: 1px solid var(--border); margin-bottom: 10px; cursor: pointer; transition: all .15s; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.role-item:hover { background: rgba(255,255,255,.12); border-color: var(--border-strong); }
+.role-item .av { width: 44px; height: 44px; min-width: 44px; border-radius: 12px; display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 1rem; border: 1px solid rgba(255,255,255,.3); }
+.role-item .info { flex: 1; }
+.role-item .info .name { font-weight: 700; font-size: .95rem; }
+.role-item .info .role { font-size: .78rem; color: var(--ink-3); }
+.role-item .skills { display: flex; gap: 4px; flex-wrap: wrap; }
+.role-item .skills span { padding: 3px 8px; border-radius: 6px; font-size: .68rem; font-weight: 600; background: rgba(255,255,255,.08); border: 1px solid var(--border); }
+
+/* AGENT CHAT */
+.agent-chat { background: rgba(0,0,0,.2); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-top: 10px; }
+.agent-chat h5 { font-size: .85rem; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.chat-messages { max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+.chat-msg { padding: 8px 12px; border-radius: 10px; max-width: 90%; }
+.chat-msg.user { background: rgba(96,165,250,.18); margin-left: auto; }
+.chat-msg.agent { background: rgba(255,255,255,.06); margin-right: auto; }
+.chat-msg .who { font-weight: 700; font-size: .72rem; margin-bottom: 2px; }
+.chat-msg .txt { font-size: .82rem; }
+.chat-input { display: flex; gap: 8px; }
+.chat-input input { flex: 1; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: rgba(255,255,255,.08); color: var(--ink); font-size: .85rem; }
+.chat-input button { padding: 8px 14px; border-radius: 8px; border: none; background: var(--blue); color: #fff; font-weight: 600; font-size: .82rem; cursor: pointer; }
+
+/* DECISION */
+.decision-box { background: rgba(74,222,128,.12); border: 1px solid rgba(74,222,128,.3); border-radius: 12px; padding: 14px; margin-top: 12px; }
+.decision-box h5 { font-size: .85rem; font-weight: 700; color: var(--green); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.decision-box .decision-text { font-size: .88rem; line-height: 1.5; }
+
+/* TASK BOARD */
+.task-board { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-top: 16px; }
+.task-col { background: rgba(255,255,255,.06); border: 1px solid var(--border); border-radius: 12px; padding: 12px; }
+.task-col h5 { font-size: .78rem; font-weight: 700; margin-bottom: 10px; text-align: center; text-transform: uppercase; letter-spacing: .5px; color: var(--ink-3); }
+.task-card { background: rgba(255,255,255,.08); border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 8px; }
+.task-card .title { font-weight: 600; font-size: .82rem; margin-bottom: 4px; }
+.task-card .meta { font-size: .72rem; color: var(--ink-3); }
 
 .foot { text-align: center; font-size: .78rem; color: var(--ink-3); margin-top: 20px; padding: 14px; }
 
 @media (max-width: 768px) {
   .sidebar { width: var(--sidebar-collapsed); }
-  .sidebar .sidebar-header .brand,
-  .sidebar .sidebar-nav a .lbl,
-  .sidebar .sidebar-footer .user .info { opacity: 0; pointer-events: none; }
+  .sidebar .sidebar-header .brand, .sidebar .sidebar-nav a .lbl, .sidebar .sidebar-footer .user .info { opacity: 0; pointer-events: none; }
   .main { margin-left: var(--sidebar-collapsed); }
   .grid, .grid-2 { grid-template-columns: 1fr; }
   .fin-grid { grid-template-columns: 1fr; }
   .provider-card .metrics { grid-template-columns: 1fr; }
+  .task-board { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
 
-<!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
     <div class="logo"><i data-lucide="zap" style="width:18px;height:18px;stroke-width:2.5"></i></div>
-    <span class="brand">Xpeadia AI</span>
-    <button class="hamburger" onclick="toggleSidebar()">
-      <i data-lucide="menu" style="width:18px;height:18px"></i>
-    </button>
+    <span class="brand">Ahemen AI</span>
+    <button class="hamburger" onclick="toggleSidebar()"><i data-lucide="menu" style="width:18px;height:18px"></i></button>
   </div>
   <nav class="sidebar-nav">
     <a href="#" class="active" data-page="dashboard"><span class="icon"><i data-lucide="layout-dashboard" style="width:20px;height:20px"></i></span><span class="lbl">Dashboard</span></a>
     <a href="#" data-page="guide"><span class="icon"><i data-lucide="users" style="width:20px;height:20px"></i></span><span class="lbl">Руководство</span></a>
     <a href="#" data-page="providers"><span class="icon"><i data-lucide="server" style="width:20px;height:20px"></i></span><span class="lbl">Providers</span></a>
     <a href="#" data-page="apikeys"><span class="icon"><i data-lucide="key-round" style="width:20px;height:20px"></i></span><span class="lbl">API Keys</span></a>
-    <a href="#" data-page="docs"><span class="icon"><i data-lucide="book-open" style="width:20px;height:20px"></i></span><span class="lbl">Documentation</span></a>
+    <a href="#" data-page="docs"><span class="icon"><i data-lucide="book-open" style="width:20px;height:20px"></i></span><span class="lbl">Docs</span></a>
   </nav>
   <div class="sidebar-footer">
     <div class="user">
@@ -297,12 +302,9 @@ body::before {
   </div>
 </aside>
 
-<!-- MAIN -->
 <div class="main">
   <div class="topbar">
-    <div class="left">
-      <span class="page-title" id="pageTitle">Dashboard</span>
-    </div>
+    <div class="left"><span class="page-title" id="pageTitle">Dashboard</span></div>
     <div class="right">
       <span class="badge live"><i data-lucide="activity" style="width:12px;height:12px"></i> Live</span>
       <span class="badge pro"><i data-lucide="crown" style="width:12px;height:12px"></i> Pro</span>
@@ -311,7 +313,7 @@ body::before {
 
   <div class="content">
 
-    <!-- DASHBOARD PAGE -->
+    <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
       <div class="stats">
         <div class="stat blue"><div class="label">Total Requests</div><div class="value">3,310,278</div><div class="change up">↑ 12.4%</div></div>
@@ -320,58 +322,25 @@ body::before {
         <div class="stat amber"><div class="label">Avg Latency</div><div class="value">6.058s</div><div class="change down">↓ 1.2%</div></div>
         <div class="stat purple"><div class="label">Active Users</div><div class="value">1,284</div><div class="change up">↑ 5.3%</div></div>
       </div>
-
       <div class="grid">
-        <div class="card">
-          <h3><span class="icon blue"><i data-lucide="trending-up" style="width:16px;height:16px"></i></span> Requests Over Time</h3>
-          <canvas id="reqChart" style="width:100%;height:220px"></canvas>
-        </div>
-        <div class="card">
-          <h3><span class="icon red"><i data-lucide="alert-circle" style="width:16px;height:16px"></i></span> Error Breakdown</h3>
+        <div class="card"><h3><span class="icon blue"><i data-lucide="trending-up" style="width:16px;height:16px"></i></span> Requests Over Time</h3><canvas id="reqChart" style="width:100%;height:220px"></canvas></div>
+        <div class="card"><h3><span class="icon red"><i data-lucide="alert-circle" style="width:16px;height:16px"></i></span> Error Breakdown</h3>
           <div class="donut-wrap">
-            <div class="donut">
-              <svg width="160" height="160" viewBox="0 0 160 160">
-                <circle cx="80" cy="80" r="65" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="22"/>
-                <circle cx="80" cy="80" r="65" fill="none" stroke="#ef4444" stroke-width="22" stroke-dasharray="40.8 408" stroke-dashoffset="0" stroke-linecap="round"/>
-                <circle cx="80" cy="80" r="65" fill="none" stroke="#f59e0b" stroke-width="22" stroke-dasharray="91.8 408" stroke-dashoffset="-40.8" stroke-linecap="round"/>
-                <circle cx="80" cy="80" r="65" fill="none" stroke="#4f7cff" stroke-width="22" stroke-dasharray="305.4 408" stroke-dashoffset="-132.6" stroke-linecap="round"/>
-              </svg>
-              <div class="center"><div><div class="num">4,273</div><div class="txt">Total</div></div></div>
-            </div>
-            <div class="legend">
-              <div class="item"><span class="dot" style="background:#4f7cff"></span> Success · 98.7%</div>
-              <div class="item"><span class="dot" style="background:#ef4444"></span> Server Error · 0.8%</div>
-              <div class="item"><span class="dot" style="background:#f59e0b"></span> Rate Limit · 0.5%</div>
-            </div>
+            <div class="donut"><svg width="160" height="160" viewBox="0 0 160 160"><circle cx="80" cy="80" r="65" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="22"/><circle cx="80" cy="80" r="65" fill="none" stroke="#f87171" stroke-width="22" stroke-dasharray="40.8 408" stroke-dashoffset="0" stroke-linecap="round"/><circle cx="80" cy="80" r="65" fill="none" stroke="#fbbf24" stroke-width="22" stroke-dasharray="91.8 408" stroke-dashoffset="-40.8" stroke-linecap="round"/><circle cx="80" cy="80" r="65" fill="none" stroke="#60a5fa" stroke-width="22" stroke-dasharray="305.4 408" stroke-dashoffset="-132.6" stroke-linecap="round"/></svg><div class="center"><div><div class="num">4,273</div><div class="txt">Total</div></div></div></div>
+            <div class="legend"><div class="item"><span class="dot" style="background:#60a5fa"></span> Success · 98.7%</div><div class="item"><span class="dot" style="background:#f87171"></span> Server Error · 0.8%</div><div class="item"><span class="dot" style="background:#fbbf24"></span> Rate Limit · 0.5%</div></div>
           </div>
         </div>
       </div>
-
       <div class="grid-2">
-        <div class="card">
-          <h3><span class="icon green"><i data-lucide="bot" style="width:16px;height:16px"></i></span> Top Models</h3>
-          <table class="table"><thead><tr><th>#</th><th>Model</th><th>Volume</th><th></th><th style="text-align:right">%</th></tr></thead><tbody id="modelsTable"></tbody></table>
-        </div>
-        <div class="card">
-          <h3><span class="icon blue"><i data-lucide="globe" style="width:16px;height:16px"></i></span> Top Countries</h3>
-          <table class="table"><thead><tr><th>#</th><th>Country</th><th>Volume</th><th></th><th style="text-align:right">%</th></tr></thead><tbody id="countriesTable"></tbody></table>
-        </div>
+        <div class="card"><h3><span class="icon green"><i data-lucide="bot" style="width:16px;height:16px"></i></span> Top Models</h3><table class="table"><thead><tr><th>#</th><th>Model</th><th>Volume</th><th></th><th style="text-align:right">%</th></tr></thead><tbody id="modelsTable"></tbody></table></div>
+        <div class="card"><h3><span class="icon blue"><i data-lucide="globe" style="width:16px;height:16px"></i></span> Top Countries</h3><table class="table"><thead><tr><th>#</th><th>Country</th><th>Volume</th><th></th><th style="text-align:right">%</th></tr></thead><tbody id="countriesTable"></tbody></table></div>
       </div>
-
       <div class="grid">
-        <div class="card">
-          <h3><span class="icon green"><i data-lucide="monitor" style="width:16px;height:16px"></i></span> Provider Health</h3>
-          <div id="providersList"></div>
-        </div>
-        <div class="card">
-          <h3><span class="icon amber"><i data-lucide="bell" style="width:16px;height:16px"></i></span> Alerts & Anomalies</h3>
-          <div id="alertsList"></div>
-        </div>
+        <div class="card"><h3><span class="icon green"><i data-lucide="monitor" style="width:16px;height:16px"></i></span> Provider Health</h3><div id="providersList"></div></div>
+        <div class="card"><h3><span class="icon amber"><i data-lucide="bell" style="width:16px;height:16px"></i></span> Alerts & Anomalies</h3><div id="alertsList"></div></div>
       </div>
-
       <div class="grid-2">
-        <div class="card">
-          <h3><span class="icon purple"><i data-lucide="dollar-sign" style="width:16px;height:16px"></i></span> Financial Metrics</h3>
+        <div class="card"><h3><span class="icon purple"><i data-lucide="dollar-sign" style="width:16px;height:16px"></i></span> Financial Metrics</h3>
           <div class="fin-grid">
             <div class="fin-item"><div class="k">ARPU</div><div class="v">$72.50</div></div>
             <div class="fin-item"><div class="k">LTV</div><div class="v">$864</div></div>
@@ -380,52 +349,34 @@ body::before {
           <h4 style="font-size:.85rem;font-weight:700;margin-bottom:10px;">Cost Forecast (7 days)</h4>
           <div id="forecastList"></div>
         </div>
-        <div class="card">
-          <h3><span class="icon blue"><i data-lucide="users" style="width:16px;height:16px"></i></span> Top Users / Projects</h3>
-          <table class="table"><thead><tr><th>#</th><th>User</th><th>Cost</th><th style="text-align:right">Req</th></tr></thead><tbody id="usersTable"></tbody></table>
-        </div>
+        <div class="card"><h3><span class="icon blue"><i data-lucide="users" style="width:16px;height:16px"></i></span> Top Users</h3><table class="table"><thead><tr><th>#</th><th>User</th><th>Cost</th><th style="text-align:right">Req</th></tr></thead><tbody id="usersTable"></tbody></table></div>
       </div>
-
       <div class="grid">
-        <div class="card">
-          <h3><span class="icon blue"><i data-lucide="map" style="width:16px;height:16px"></i></span> Request Geography</h3>
-          <div id="map"></div>
-        </div>
-        <div class="card">
-          <h3><span class="icon amber"><i data-lucide="clock" style="width:16px;height:16px"></i></span> Latency Trend</h3>
-          <div class="chart-bars" id="latencyBars"></div>
-        </div>
+        <div class="card"><h3><span class="icon blue"><i data-lucide="map" style="width:16px;height:16px"></i></span> Request Geography</h3><div id="map"></div></div>
+        <div class="card"><h3><span class="icon amber"><i data-lucide="clock" style="width:16px;height:16px"></i></span> Latency Trend</h3><div class="chart-bars" id="latencyBars"></div></div>
+      </div>
+      <!-- TASK BOARD -->
+      <div class="card" style="margin-top:16px;">
+        <h3><span class="icon green"><i data-lucide="kanban" style="width:16px;height:16px"></i></span> Task Board — Задачи от руководства</h3>
+        <div class="task-board" id="taskBoard"></div>
       </div>
     </div>
 
     <!-- GUIDE PAGE -->
     <div class="page" id="page-guide">
-      <div class="card" style="max-width:600px;">
-        <h3><span class="icon purple"><i data-lucide="users" style="width:16px;height:16px"></i></span> Руководство</h3>
-        <div style="font-size:.82rem;color:var(--ink-3);margin-bottom:16px;">Управляйте командой руководства</div>
-        <div id="guideList"></div>
-        <div style="border-top:1px solid var(--border);padding-top:14px;margin-top:14px;">
-          <div style="font-size:.82rem;font-weight:700;margin-bottom:10px;">Добавить члена</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
-            <input id="guideName" placeholder="Имя">
-            <input id="guideRole" placeholder="Должность">
-          </div>
-          <input id="guideEmail" placeholder="Email" style="margin-bottom:10px;">
-          <button class="btn primary" onclick="addGuideMember()" style="width:100%;justify-content:center;">＋ Добавить</button>
-        </div>
+      <div class="card" style="margin-bottom:22px;">
+        <h3><span class="icon purple"><i data-lucide="building-2" style="width:16px;height:16px"></i></span> Структура компании Ahemen AI</h3>
+        <div style="font-size:.82rem;color:var(--ink-3);margin-bottom:16px;">Иерархия руководства. Нажмите на роль, чтобы начать обсуждение задачи.</div>
+        <div id="rolesTree"></div>
       </div>
     </div>
 
     <!-- PROVIDERS PAGE -->
     <div class="page" id="page-providers">
       <div class="card" style="margin-bottom:16px;">
-        <h3><span class="icon green"><i data-lucide="monitor" style="width:16px;height:16px"></i></span> Provider Status</h3>
-        <div style="font-size:.82rem;color:var(--ink-3);margin-bottom:16px;">Мониторинг AI-провайдеров в реальном времени</div>
-        <div class="stats">
-          <div class="stat green"><div class="label">Online</div><div class="value">4</div></div>
-          <div class="stat amber"><div class="label">Degraded</div><div class="value">1</div></div>
-          <div class="stat red"><div class="label">Offline</div><div class="value">0</div></div>
-        </div>
+        <h3><span class="icon green"><i data-lucide="server" style="width:16px;height:16px"></i></span> Provider Status</h3>
+        <div style="font-size:.82rem;color:var(--ink-3);margin-bottom:16px;">Мониторинг AI-провайдеров</div>
+        <div class="stats"><div class="stat green"><div class="label">Online</div><div class="value">4</div></div><div class="stat amber"><div class="label">Degraded</div><div class="value">1</div></div><div class="stat red"><div class="label">Offline</div><div class="value">0</div></div></div>
       </div>
       <div id="providersPageList"></div>
     </div>
@@ -433,8 +384,7 @@ body::before {
     <!-- API KEYS PAGE -->
     <div class="page" id="page-apikeys">
       <div class="card" style="margin-bottom:16px;">
-        <h3><span class="icon amber">🔑</span> API Keys</h3>
-        <div style="font-size:.82rem;color:var(--ink-3);margin-bottom:16px;">Управляйте ключами доступа к API</div>
+        <h3><span class="icon amber"><i data-lucide="key-round" style="width:16px;height:16px"></i></span> API Keys</h3>
         <button class="btn primary" onclick="generateKey()">＋ Создать новый ключ</button>
       </div>
       <div id="keysList"></div>
@@ -443,59 +393,83 @@ body::before {
     <!-- DOCS PAGE -->
     <div class="page" id="page-docs">
       <div class="card">
-        <h3><span class="icon blue">📖</span> Documentation</h3>
-        <div class="doc-section">
-          <h4>Quick Start</h4>
-          <p>Используйте наш API для доступа к моделям через единый эндпоинт:</p>
-          <pre>curl https://api.xpeadia.ai/v1/chat/completions \
+        <h3><span class="icon blue"><i data-lucide="book-open" style="width:16px;height:16px"></i></span> Documentation</h3>
+        <div class="doc-section"><h4>Quick Start</h4><p>Используйте наш API для доступа к моделям через единый эндпоинт:</p><pre>curl https://api.ahemen.ai/v1/chat/completions \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"model":"claude-3-5-sonnet","messages":[{"role":"user","content":"Hello"}]}'</pre>
-        </div>
-        <div class="doc-section">
-          <h4>Models</h4>
-          <p>Доступные модели: <code>claude-3-5-sonnet</code>, <code>gpt-4o</code>, <code>claude-3-opus</code>, <code>gpt-4o-mini</code>, <code>gemini-1.5-pro</code></p>
-        </div>
-        <div class="doc-section">
-          <h4>Rate Limits</h4>
-          <p>Pro Plan: 10,000 req/min. Enterprise: неограниченно.</p>
-        </div>
+  -d '{"model":"claude-3-5-sonnet","messages":[{"role":"user","content":"Hello"}]}'</pre></div>
+        <div class="doc-section"><h4>Models</h4><p>Доступные модели: <code>claude-3-5-sonnet</code>, <code>gpt-4o</code>, <code>claude-3-opus</code>, <code>gpt-4o-mini</code>, <code>gemini-1.5-pro</code></p></div>
+        <div class="doc-section"><h4>Rate Limits</h4><p>Pro Plan: 10,000 req/min. Enterprise: неограниченно.</p></div>
       </div>
     </div>
 
   </div>
-  <div class="foot">Xpeadia AI Analytics · Updated <span id="ts">—</span></div>
+  <div class="foot">Ahemen AI Analytics · Updated <span id="ts">—</span></div>
+</div>
+
+<!-- AGENT DISCUSSION MODAL -->
+<div class="overlay" id="agentModal" style="z-index:300;">
+  <div class="modal" style="max-width:650px;">
+    <span class="mclose" onclick="closeAgentModal()">✕</span>
+    <h3 id="agentModalTitle">Обсуждение с агентом</h3>
+    <div class="mh" id="agentModalDesc">Обсудите задачу и получите решение</div>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input">
+      <input id="chatInput" placeholder="Опишите задачу...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
 </div>
 
 <script>
+// === ROLES & AGENTS DATA ===
+const ROLES = {
+  ceo: {name:'Генеральный директор',role:'CEO',av:'👑',color:'linear-gradient(135deg,#ffd700,#ff8c00)',skills:['Стратегия','Управление','Решения','Бюджет'],canCreate:true},
+  levels: [
+    {
+      title:'Директора',
+      roles: [
+        {id:'cto',name:'Технический директор',role:'CTO',av:'💻',color:'linear-gradient(135deg,#60a5fa,#3b82f6)',skills:['Архитектура','Разработка','DevOps','AI/ML','Код-ревью']},
+        {id:'cfo',name:'Финансовый директор',role:'CFO',av:'💰',color:'linear-gradient(135deg,#4ade80,#16a34a)',skills:['Финансы','Бюджет','Отчётность','Инвестиции','Аудит']},
+        {id:'coo',name:'Директор по операциям',role:'COO',av:'⚙️',color:'linear-gradient(135deg,#fbbf24,#f59e0b)',skills:['Операции','Процессы','Логистика','Автоматизация','KPI']},
+        {id:'cmo',name:'Директор по маркетингу',role:'CMO',av:'📢',color:'linear-gradient(135deg,#f87171,#ef4444)',skills:['Маркетинг','Реклама','Бренд','Контент','Аналитика']},
+        {id:'legal',name:'Юрист',role:'Legal',av:'⚖️',color:'linear-gradient(135deg,#c084fc,#8b5cf6)',skills:['Право','Контракты','Комплаенс','Риски','IP']},
+        {id:'dev_head',name:'Head of Development',role:'Dev Head',av:'🛠',color:'linear-gradient(135deg,#34d399,#10b981)',skills:['Full-Stack','Backend','Frontend','Mobile','QA']},
+        {id:'design_head',name:'Главный веб-дизайнер',role:'Lead Designer',av:'🎨',color:'linear-gradient(135deg,#f472b6,#ec4899)',skills:['UI/UX','Figma','Прототипы','Бренд','Анимация']},
+      ]
+    },
+    {
+      title:'Работники отделов',
+      roles: [
+        {id:'analyst',name:'Аналитик',role:'Analyst',av:'📊',color:'linear-gradient(135deg,#60a5fa,#818cf8)',skills:['SQL','Python','BI','Отчёты','Метрики']},
+        {id:'backend',name:'Backend-разработчик',role:'Backend',av:'⚡',color:'linear-gradient(135deg,#4ade80,#22c55e)',skills:['Node.js','Python','API','Базы данных','Микросервисы']},
+        {id:'frontend',name:'Frontend-разработчик',role:'Frontend',av:'🖥',color:'linear-gradient(135deg,#60a5fa,#0ea5e9)',skills:['React','Vue','CSS','TypeScript','Next.js']},
+        {id:'marketer',name:'Маркетолог',role:'Marketer',av:'📣',color:'linear-gradient(135deg,#fbbf24,#f97316)',skills:['SMM','SEO','Контекст','Email','Аналитика']},
+        {id:'designer',name:'Веб-дизайнер',role:'Designer',av:'✏️',color:'linear-gradient(135deg,#f472b6,#a855f7)',skills:['Figma','Adobe','UI','UX','Иллюстрации']},
+        {id:'accountant',name:'Бухгалтер',role:'Accountant',av:'🧮',color:'linear-gradient(135deg,#4ade80,#84cc16)',skills:['1С','Налоги','Отчётность','Зарплата','Акты']},
+        {id:'hr',name:'HR-менеджер',role:'HR',av:'🤝',color:'linear-gradient(135deg,#c084fc,#6366f1)',skills:['Рекрутинг','Адаптация','KPI','Обучение','Культура']},
+        {id:'lawyer',name:'Юрист-консультант',role:'Lawyer',av:'📋',color:'linear-gradient(135deg,#8b5cf6,#4f46e5)',skills:['Договоры','Суд','Комплаенс','Документы']},
+      ]
+    }
+  ]
+};
+
 // === SIDEBAR ===
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('collapsed');
-}
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
 
 // === PAGE ROUTING ===
 const pages = ['dashboard','guide','providers','apikeys','docs'];
 const pageTitles = {dashboard:'Dashboard',guide:'Руководство',providers:'Providers',apikeys:'API Keys',docs:'Documentation'};
-
 document.querySelectorAll('.sidebar-nav a').forEach(a => {
-  a.addEventListener('click', e => {
-    e.preventDefault();
-    const page = a.dataset.page;
-    showPage(page);
-  });
+  a.addEventListener('click', e => { e.preventDefault(); showPage(a.dataset.page); });
 });
-
 function showPage(name) {
-  pages.forEach(p => {
-    document.getElementById('page-'+p).classList.toggle('active', p===name);
-  });
-  document.querySelectorAll('.sidebar-nav a').forEach(a => {
-    a.classList.toggle('active', a.dataset.page===name);
-  });
+  pages.forEach(p => document.getElementById('page-'+p).classList.toggle('active', p===name));
+  document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.toggle('active', a.dataset.page===name));
   document.getElementById('pageTitle').textContent = pageTitles[name] || name;
   if (name==='dashboard') initDashboard();
+  if (name==='guide') initGuide();
   if (name==='providers') initProvidersPage();
-  if (name==='guide') renderGuide();
   if (name==='apikeys') renderKeys();
 }
 
@@ -544,203 +518,177 @@ let dashboardInitialized = false;
 function initDashboard() {
   if (dashboardInitialized) return;
   dashboardInitialized = true;
-
-  // Models
   const mt = document.getElementById('modelsTable'); mt.innerHTML = '';
-  models.forEach((m,i) => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td><div class="rank ${i<3?'top':''}">${i+1}</div></td><td class="model">${m.name}</td><td class="vol">${m.vol}</td><td><div style="width:100px"><div class="bar-inline" style="width:${m.pct/36.4*100}%"></div></div></td><td style="text-align:right;font-weight:700">${m.pct}%</td>`;
-    mt.appendChild(tr);
-  });
-
-  // Countries
+  models.forEach((m,i) => { const tr=document.createElement('tr'); tr.innerHTML=`<td><div class="rank ${i<3?'top':''}">${i+1}</div></td><td class="model">${m.name}</td><td class="vol">${m.vol}</td><td><div style="width:100px"><div class="bar-inline" style="width:${m.pct/36.4*100}%"></div></div></td><td style="text-align:right;font-weight:700">${m.pct}%</td>`; mt.appendChild(tr); });
   const ct = document.getElementById('countriesTable'); ct.innerHTML = '';
-  countries.forEach((c,i) => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td><div class="rank ${i<3?'top':''}">${i+1}</div></td><td class="model">${c.flag} ${c.name}</td><td class="vol">${c.vol}</td><td><div style="width:100px"><div class="bar-inline" style="width:${c.pct/46*100}%"></div></div></td><td style="text-align:right;font-weight:700">${c.pct}%</td>`;
-    ct.appendChild(tr);
-  });
-
-  // Users
+  countries.forEach((c,i) => { const tr=document.createElement('tr'); tr.innerHTML=`<td><div class="rank ${i<3?'top':''}">${i+1}</div></td><td class="model">${c.flag} ${c.name}</td><td class="vol">${c.vol}</td><td><div style="width:100px"><div class="bar-inline" style="width:${c.pct/46*100}%"></div></div></td><td style="text-align:right;font-weight:700">${c.pct}%</td>`; ct.appendChild(tr); });
   const ut = document.getElementById('usersTable'); ut.innerHTML = '';
-  users.forEach((u,i) => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td><div class="rank ${i<3?'top':''}">${i+1}</div></td><td class="model">${u.name}</td><td class="vol">${u.cost}</td><td style="text-align:right;font-weight:700">${u.vol}</td>`;
-    ut.appendChild(tr);
-  });
-
-  // Providers
+  users.forEach((u,i) => { const tr=document.createElement('tr'); tr.innerHTML=`<td><div class="rank ${i<3?'top':''}">${i+1}</div></td><td class="model">${u.name}</td><td class="vol">${u.cost}</td><td style="text-align:right;font-weight:700">${u.vol}</td>`; ut.appendChild(tr); });
   const pl = document.getElementById('providersList'); pl.innerHTML = '';
-  providers.forEach(p => {
-    const d = document.createElement('div'); d.className = 'provider';
-    d.innerHTML = `<div class="logo" style="background:${p.color}20;color:${p.color}">${p.logo}</div><div class="info"><div class="name">${p.name}</div><div class="meta">Uptime ${p.uptime} · ${p.latency}</div></div><span class="status ${p.status}">${p.status}</span>`;
-    pl.appendChild(d);
-  });
-
-  // Alerts
+  providers.forEach(p => { const d=document.createElement('div'); d.className='provider'; d.innerHTML=`<div class="logo" style="background:${p.color}20;color:${p.color}">${p.logo}</div><div class="info"><div class="name">${p.name}</div><div class="meta">Uptime ${p.uptime} · ${p.latency}</div></div><span class="status ${p.status}">${p.status}</span>`; pl.appendChild(d); });
   const al = document.getElementById('alertsList'); al.innerHTML = '';
-  alerts.forEach(a => {
-    const d = document.createElement('div'); d.className = `alert ${a.type}`;
-    d.innerHTML = `<span class="icon"><i data-lucide="${a.icon}" style="width:18px;height:18px"></i></span><div class="body"><div class="title">${a.title}</div><div class="desc">${a.desc}</div></div><span class="time">${a.time}</span>`;
-    al.appendChild(d);
-  });
-
-  // Forecast
+  alerts.forEach(a => { const d=document.createElement('div'); d.className=`alert ${a.type}`; d.innerHTML=`<span class="icon"><i data-lucide="${a.icon}" style="width:18px;height:18px"></i></span><div class="body"><div class="title">${a.title}</div><div class="desc">${a.desc}</div></div><span class="time">${a.time}</span>`; al.appendChild(d); });
   const fl = document.getElementById('forecastList'); fl.innerHTML = '';
   const maxF = Math.max(...forecast.map(f=>f.val));
-  forecast.forEach(f => {
-    const d = document.createElement('div'); d.className = 'forecast-row';
-    d.innerHTML = `<span class="day">${f.day}</span><div class="bar" style="width:${f.val/maxF*100}%;${f.val>3500?'background:linear-gradient(90deg,#ef4444,#ff8a8a)':''}">$${f.val.toLocaleString()}</div>`;
-    fl.appendChild(d);
-  });
+  forecast.forEach(f => { const d=document.createElement('div'); d.className='forecast-row'; d.innerHTML=`<span class="day">${f.day}</span><div class="bar" style="width:${f.val/maxF*100}%;${f.val>3500?'background:linear-gradient(90deg,#ef4444,#ff8a8a)':''}">$${f.val.toLocaleString()}</div>`; fl.appendChild(d); });
+  const latData=[{m:'Sep',v:7.2},{m:'Oct',v:6.8},{m:'Nov',v:7.5},{m:'Dec',v:6.4},{m:'Jan',v:5.9},{m:'Feb',v:6.7},{m:'Mar',v:6.1},{m:'Apr',v:5.5},{m:'May',v:6.3},{m:'Jun',v:5.8},{m:'Jul',v:6.0},{m:'Aug',v:6.058}];
+  const lb=document.getElementById('latencyBars'); lb.innerHTML='';
+  const maxLat=Math.max(...latData.map(d=>d.v));
+  latData.forEach(d => { const w=document.createElement('div'); w.style.flex=1; w.style.position='relative'; const bar=document.createElement('div'); bar.className='bar'; bar.style.height=(d.v/maxLat*100)+'%'; bar.style.background=d.v<6.2?'linear-gradient(180deg,#16a34a,#86efac)':'linear-gradient(180deg,#4f7cff,#a5bfff)'; const val=document.createElement('div'); val.className='val'; val.textContent=d.v+'s'; const lbl=document.createElement('div'); lbl.className='lbl'; lbl.textContent=d.m; bar.appendChild(val); w.appendChild(bar); w.appendChild(lbl); lb.appendChild(w); });
+  (function(){ const cv=document.getElementById('reqChart'); const ctx=cv.getContext('2d'); const W=cv.parentElement.offsetWidth-40,H=220; cv.width=W; cv.height=H; const data=[210,245,280,310,295,340,380,420,395,440,480,510]; const max=Math.max(...data); const step=W/(data.length-1); ctx.clearRect(0,0,W,H); ctx.beginPath(); ctx.moveTo(0,H); data.forEach((d,i)=>{const x=i*step,y=H-d/max*(H-30); i?ctx.lineTo(x,y):ctx.moveTo(x,y);}); ctx.lineTo(W,H); ctx.closePath(); const grd=ctx.createLinearGradient(0,0,0,H); grd.addColorStop(0,'rgba(79,124,255,.25)'); grd.addColorStop(1,'rgba(79,124,255,0)'); ctx.fillStyle=grd; ctx.fill(); ctx.beginPath(); data.forEach((d,i)=>{const x=i*step,y=H-d/max*(H-30); i?ctx.lineTo(x,y):ctx.moveTo(x,y);}); ctx.strokeStyle='#4f7cff'; ctx.lineWidth=2.5; ctx.lineJoin='round'; ctx.stroke(); data.forEach((d,i)=>{const x=i*step,y=H-d/max*(H-30); ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2); ctx.fillStyle='#4f7cff'; ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=2; ctx.stroke(); }); const months=['Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug']; ctx.fillStyle='#9ca3b5'; ctx.font='600 11px Inter'; ctx.textAlign='center'; months.forEach((m,i)=>{ctx.fillText(m,i*step,H-4);}); })();
+  if (typeof L !== 'undefined') { const map=L.map('map').setView([30,0],2); L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; OSM &copy; CARTO'}).addTo(map); const mapData=[{lat:37.0902,lng:-95.7129,c:"US",v:1521},{lat:55.3781,lng:-3.4360,c:"GB",v:412},{lat:51.1657,lng:-10.4515,c:"DE",v:298},{lat:56.1304,lng:-106.3468,c:"CA",v:236},{lat:46.2276,lng:2.2137,c:"FR",v:198},{lat:-25.2744,lng:133.7751,c:"AU",v:145},{lat:36.2048,lng:138.2529,c:"JP",v:132},{lat:20.5937,lng:78.9629,c:"IN",v:128}]; const maxMap=Math.max(...mapData.map(d=>d.v)); mapData.forEach(d=>{L.circleMarker([d.lat,d.lng],{radius:Math.sqrt(d.v/maxMap)*25,fillColor:'#4f7cff',color:'#fff',weight:2,fillOpacity:0.7}).addTo(map).bindPopup(`<b>${d.c}</b><br>${d.v.toLocaleString()} req`);}); }
+  renderTaskBoard();
+  lucide.createIcons();
+}
 
-  // Latency bars
-  const latData = [{m:'Sep',v:7.2},{m:'Oct',v:6.8},{m:'Nov',v:7.5},{m:'Dec',v:6.4},{m:'Jan',v:5.9},{m:'Feb',v:6.7},{m:'Mar',v:6.1},{m:'Apr',v:5.5},{m:'May',v:6.3},{m:'Jun',v:5.8},{m:'Jul',v:6.0},{m:'Aug',v:6.058}];
-  const lb = document.getElementById('latencyBars'); lb.innerHTML = '';
-  const maxLat = Math.max(...latData.map(d=>d.v));
-  latData.forEach(d => {
-    const w = document.createElement('div'); w.style.flex=1; w.style.position='relative';
-    const bar = document.createElement('div'); bar.className='bar';
-    bar.style.height = (d.v/maxLat*100)+'%';
-    bar.style.background = d.v<6.2 ? 'linear-gradient(180deg,#16a34a,#86efac)' : 'linear-gradient(180deg,#4f7cff,#a5bfff)';
-    const val = document.createElement('div'); val.className='val'; val.textContent=d.v+'s';
-    const lbl = document.createElement('div'); lbl.className='lbl'; lbl.textContent=d.m;
-    bar.appendChild(val); w.appendChild(bar); w.appendChild(lbl); lb.appendChild(w);
-  });
+// === GUIDE PAGE ===
+function initGuide() {
+  const el = document.getElementById('rolesTree'); el.innerHTML = '';
+  // CEO
+  const ceo = ROLES.ceo;
+  const ceoEl = document.createElement('div'); ceoEl.className='role-level';
+  ceoEl.innerHTML=`<h4><i data-lucide="crown" style="width:18px;height:18px"></i> ${ceo.name}</h4>`;
+  const ceoItem=document.createElement('div'); ceoItem.className='role-item';
+  ceoItem.innerHTML=`<div class="av" style="background:${ceo.color}">${ceo.av}</div><div class="info"><div class="name">${ceo.name}</div><div class="role">Главный исполнительный директор</div></div><div class="skills">${ceo.skills.map(s=>`<span>${s}</span>`).join('')}</div>`;
+  ceoItem.onclick=()=>openAgent(ceo);
+  ceoEl.appendChild(ceoItem); el.appendChild(ceoEl);
 
-  // Requests line chart
-  (function(){
-    const cv = document.getElementById('reqChart'); const ctx = cv.getContext('2d');
-    const W = cv.parentElement.offsetWidth-40, H = 220; cv.width=W; cv.height=H;
-    const data = [210,245,280,310,295,340,380,420,395,440,480,510];
-    const max = Math.max(...data); const step = W/(data.length-1);
-    ctx.clearRect(0,0,W,H);
-    ctx.beginPath(); ctx.moveTo(0,H);
-    data.forEach((d,i)=>{ const x=i*step, y=H-d/max*(H-30); i?ctx.lineTo(x,y):ctx.moveTo(x,y); });
-    ctx.lineTo(W,H); ctx.closePath();
-    const grd = ctx.createLinearGradient(0,0,0,H);
-    grd.addColorStop(0,'rgba(79,124,255,.25)'); grd.addColorStop(1,'rgba(79,124,255,0)');
-    ctx.fillStyle=grd; ctx.fill();
-    ctx.beginPath();
-    data.forEach((d,i)=>{ const x=i*step, y=H-d/max*(H-30); i?ctx.lineTo(x,y):ctx.moveTo(x,y); });
-    ctx.strokeStyle='#4f7cff'; ctx.lineWidth=2.5; ctx.lineJoin='round'; ctx.stroke();
-    data.forEach((d,i)=>{ const x=i*step, y=H-d/max*(H-30); ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2); ctx.fillStyle='#4f7cff'; ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=2; ctx.stroke(); });
-    const months=['Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'];
-    ctx.fillStyle='#9ca3b5'; ctx.font='600 11px Inter'; ctx.textAlign='center';
-    months.forEach((m,i)=>{ ctx.fillText(m,i*step,H-4); });
-  })();
-
-  // Map
-  if (typeof L !== 'undefined') {
-    const map = L.map('map').setView([30, 0], 2);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OSM &copy; CARTO' }).addTo(map);
-    const mapData = [{lat:37.0902,lng:-95.7129,c:"US",v:1521},{lat:55.3781,lng:-3.4360,c:"GB",v:412},{lat:51.1657,lng:-10.4515,c:"DE",v:298},{lat:56.1304,lng:-106.3468,c:"CA",v:236},{lat:46.2276,lng:2.2137,c:"FR",v:198},{lat:-25.2744,lng:133.7751,c:"AU",v:145},{lat:36.2048,lng:138.2529,c:"JP",v:132},{lat:20.5937,lng:78.9629,c:"IN",v:128}];
-    const maxMap = Math.max(...mapData.map(d=>d.v));
-    mapData.forEach(d => {
-      L.circleMarker([d.lat, d.lng], { radius: Math.sqrt(d.v/maxMap)*25, fillColor: '#4f7cff', color: '#fff', weight: 2, fillOpacity: 0.7 }).addTo(map).bindPopup(`<b>${d.c}</b><br>${d.v.toLocaleString()} req`);
+  // Levels
+  ROLES.levels.forEach(level => {
+    const lvlEl = document.createElement('div'); lvlEl.className='role-level';
+    lvlEl.innerHTML=`<h4><i data-lucide="users" style="width:18px;height:18px"></i> ${level.title}</h4>`;
+    level.roles.forEach(r => {
+      const item=document.createElement('div'); item.className='role-item';
+      item.innerHTML=`<div class="av" style="background:${r.color}">${r.av}</div><div class="info"><div class="name">${r.name}</div><div class="role">${r.role}</div></div><div class="skills">${r.skills.map(s=>`<span>${s}</span>`).join('')}</div>`;
+      item.onclick=()=>openAgent(r);
+      lvlEl.appendChild(item);
     });
-  }
+    el.appendChild(lvlEl);
+  });
+  lucide.createIcons();
+}
+
+// === AGENT DISCUSSION ===
+let currentAgent = null;
+let currentTask = {text:'', status:'discussion', messages: [], decision: null};
+let allTasks = JSON.parse(localStorage.getItem('ahemen_tasks')||'[]');
+
+function openAgent(agent) {
+  currentAgent = agent;
+  currentTask = {text:'', status:'discussion', messages: [], decision: null, agent: agent.id, agentName: agent.name};
+  document.getElementById('agentModalTitle').textContent = agent.name + ' — ' + agent.role;
+  document.getElementById('agentModalDesc').textContent = 'Навыки: ' + agent.skills.join(', ');
+  document.getElementById('chatMessages').innerHTML = '';
+  document.getElementById('agentModal').classList.add('open');
+  addAgentMessage('agent', `Здравствуйте! Я — ${agent.name}. Опишите задачу, и я приму решение. Мои навыки: ${agent.skills.join(', ')}.`);
+}
+
+function closeAgentModal() { document.getElementById('agentModal').classList.remove('open'); }
+
+function addAgentMessage(who, text) {
+  const el = document.getElementById('chatMessages');
+  const d = document.createElement('div'); d.className = 'chat-msg ' + who;
+  d.innerHTML = `<div class="who">${who==='user'?'Вы':currentAgent.name}</div><div class="txt">${text}</div>`;
+  el.appendChild(d); el.scrollTop = el.scrollHeight;
+  currentTask.messages.push({who, text});
+}
+
+function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim(); if (!text) return;
+  currentTask.text = text;
+  addAgentMessage('user', text);
+  input.value = '';
+  // Generate decision
+  setTimeout(() => {
+    const decision = generateDecision(currentAgent, text);
+    addAgentMessage('agent', decision);
+    currentTask.decision = decision;
+    currentTask.status = 'completed';
+    allTasks.push({...currentTask, ts: new Date().toISOString()});
+    localStorage.setItem('ahemen_tasks', JSON.stringify(allTasks));
+    // Show decision box
+    const el = document.getElementById('chatMessages');
+    const d = document.createElement('div'); d.className='decision-box';
+    d.innerHTML=`<h5><i data-lucide="check-circle" style="width:16px;height:16px"></i> Решение принято</h5><div class="decision-text">${decision}</div>`;
+    el.appendChild(d); el.scrollTop = el.scrollHeight;
+    lucide.createIcons();
+    // Refresh task board
+    renderTaskBoard();
+  }, 800 + Math.random()*1200);
+}
+
+function generateDecision(agent, task) {
+  const decisions = {
+    ceo: `Как Генеральный директор, я рассмотрел задачу: "${task}". Решение: утверждаю реализацию. Назначаю ответственных из соответствующих отделов. Бюджет и сроки будут согласованы в течение дня. Проект запускается немедленно.`,
+    cto: `Как Технический директор, проанализировал задачу: "${task}". Техническое решение: используем современный стек (React/Node.js/AI API). Архитектура — микросервисная. Срок реализации оценю в 2-3 недели. Назначаю Backend и Frontend разработчиков.`,
+    cfo: `Как Финансовый директор, оценил задачу: "${task}". Финансовый анализ: бюджет проекта ≈ $15,000-25,000. ROI ожидается в 6 месяцев. Рекомендую выделить средства из резервного фонда. Одобряю финансирование.`,
+    coo: `Как Директор по операциям, рассмотрел: "${task}". Операционный план: разбить на 5 этапов, KPI для каждого отдела определены. Срок — 3 недели. Контроль качества на каждом этапе. Одобряю.`,
+    cmo: `Как Директор по маркетингу, оценил: "${task}". Маркетинговая стратегия: таргет + контент + email. Бюджет на продвижение — $5,000. Ожидаемый охват — 500k+. Запускаем кампанию параллельно с разработкой.`,
+    legal: `Как Юрист, проверил: "${task}". Юридическая экспертиза: риски минимальны. Рекомендую подписать NDA с подрядчиками, зарегистрировать IP. Одобряю с юридической точки зрения.`,
+    dev_head: `Как Head of Development, оценил: "${task}". План разработки: спринты по 2 недели, 5 фаз. Стек: React, Node.js, PostgreSQL, AI API. Назначаю команду. Срок — 3 недели.`,
+    design_head: `Как Главный веб-дизайнер, рассмотрел: "${task}". Дизайн-концепция: минимализм, glassmorphism, мобильная адаптация. Создам прототип в Figma за 3 дня, затем UI-кит. Одобряю.`,
+    analyst: `Как Аналитик, проанализировал: "${task}". Данные показывают высокий потенциал. Метрики успеха определены. Рекомендую A/B тестирование. Создам дашборд для мониторинга.`,
+    backend: `Как Backend-разработчик, оценил: "${task}". Архитектура: REST API + WebSocket. Стек: Node.js, Express, PostgreSQL, Redis. Срок — 2 недели. Готов приступить.`,
+    frontend: `Как Frontend-разработчик, рассмотрел: "${task}". План: React + TypeScript, компонентный подход, Storybook. Анимации через Framer Motion. Срок — 2 недели.`,
+    marketer: `Как Маркетолог, оценил: "${task}". Каналы: SMM, SEO, контекстная реклама. Бюджет — $3,000. Ожидаемый CTR — 3.5%. Запускаем предпродажи.`,
+    designer: `Как Веб-дизайнер, рассмотрел: "${task}". Создам UI в Figma: 5 экранов, адаптив, тёмная/светлая тема. Срок — 5 дней. Начинаю.`,
+    accountant: `Как Бухгалтер, проверил: "${task}". Бухгалтерский учёт: оформлю как расходы на развитие. НДС учтён. Одобряю для оплаты.`,
+    hr: `Как HR-менеджер, оценил: "${task}". Кадровое обеспечение: текущая команда справится. При необходимости найм за 2 недели. Одобряю.`,
+    lawyer: `Как Юрист-консультант, проверил: "${task}". Риски низкие. Договор с подрядчиком готов. Одобряю.`,
+  };
+  return decisions[agent.id] || `Рассмотрел задачу: "${task}". Решение: задача принята в работу. Будет выполнена в установленные сроки.`;
+}
+
+// === TASK BOARD ===
+function renderTaskBoard() {
+  const el = document.getElementById('taskBoard'); el.innerHTML = '';
+  const cols = [
+    {id:'discussion', name:'Обсуждение', color:'var(--blue)'},
+    {id:'in_progress', name:'В работе', color:'var(--amber)'},
+    {id:'review', name:'На проверке', color:'var(--purple)'},
+    {id:'completed', name:'Выполнено', color:'var(--green)'},
+  ];
+  cols.forEach(col => {
+    const c = document.createElement('div'); c.className='task-col';
+    c.innerHTML=`<h5 style="color:${col.color}">${col.name}</h5>`;
+    const tasks = allTasks.filter(t => t.status === col.id);
+    if (!tasks.length) { const empty=document.createElement('div'); empty.style.cssText='color:var(--ink-3);font-size:.78rem;text-align:center;padding:14px;'; empty.textContent='Нет задач'; c.appendChild(empty); }
+    tasks.forEach(t => {
+      const d = document.createElement('div'); d.className='task-card';
+      d.innerHTML=`<div class="title">${t.agentName}: ${t.text.slice(0,60)}</div><div class="meta">${t.decision ? '✅ Решение принято' : '💬 Обсуждение'}</div>`;
+      c.appendChild(d);
+    });
+    el.appendChild(c);
+  });
 }
 
 // === PROVIDERS PAGE ===
 function initProvidersPage() {
   const el = document.getElementById('providersPageList'); el.innerHTML = '';
   providers.forEach(p => {
-    const d = document.createElement('div'); d.className = 'provider-card';
-    d.innerHTML = `
-      <div class="head">
-        <div class="logo" style="background:${p.color}20;color:${p.color}">${p.logo}</div>
-        <div class="info"><div class="name">${p.name}</div><div class="meta">${p.models} models · ${p.req} req</div></div>
-        <span class="status ${p.status}">${p.status}</span>
-      </div>
-      <div class="metrics">
-        <div class="m"><div class="k">Uptime</div><div class="v">${p.uptime}</div></div>
-        <div class="m"><div class="k">Latency</div><div class="v">${p.latency}</div></div>
-        <div class="m"><div class="k">Models</div><div class="v">${p.models}</div></div>
-      </div>`;
+    const d=document.createElement('div'); d.className='provider-card';
+    d.innerHTML=`<div class="head"><div class="logo" style="background:${p.color}20;color:${p.color}">${p.logo}</div><div class="info"><div class="name">${p.name}</div><div class="meta">${p.models} models · ${p.req} req</div></div><span class="status ${p.status}">${p.status}</span></div><div class="metrics"><div class="m"><div class="k">Uptime</div><div class="v">${p.uptime}</div></div><div class="m"><div class="k">Latency</div><div class="v">${p.latency}</div></div><div class="m"><div class="k">Models</div><div class="v">${p.models}</div></div></div>`;
     el.appendChild(d);
   });
-}
-
-// === GUIDE ===
-let guideMembers = JSON.parse(localStorage.getItem('xpeadia_guide')||'[]');
-if (!guideMembers.length) {
-  guideMembers = [
-    {name:'Акмаль Рахимов',role:'CEO',email:'a.rakhimov@xpeadia.ai'},
-    {name:'Диана Ким',role:'CTO',email:'d.kim@xpeadia.ai'},
-    {name:'Марк Уилсон',role:'CFO',email:'m.wilson@xpeadia.ai'},
-  ];
-  localStorage.setItem('xpeadia_guide', JSON.stringify(guideMembers));
-}
-function renderGuide() {
-  const el = document.getElementById('guideList');
-  el.innerHTML = guideMembers.length ? '' : '<div style="color:var(--ink-3);font-size:.88rem;text-align:center;padding:20px;">Нет членов руководства</div>';
-  guideMembers.forEach((m,i) => {
-    const d = document.createElement('div'); d.className = 'guide-member';
-    d.innerHTML = `<div class="av">${m.name.split(' ').map(x=>x[0]).join('').slice(0,2)}</div><div class="info"><div class="name">${m.name}</div><div class="meta">${m.role} · ${m.email}</div></div><button onclick="removeGuide(${i})">✕</button>`;
-    el.appendChild(d);
-  });
-}
-function addGuideMember() {
-  const name = document.getElementById('guideName').value.trim();
-  const role = document.getElementById('guideRole').value.trim();
-  const email = document.getElementById('guideEmail').value.trim();
-  if (!name || !role) return alert('Имя и должность обязательны');
-  guideMembers.push({name, role, email});
-  localStorage.setItem('xpeadia_guide', JSON.stringify(guideMembers));
-  document.getElementById('guideName').value = '';
-  document.getElementById('guideRole').value = '';
-  document.getElementById('guideEmail').value = '';
-  renderGuide();
-}
-function removeGuide(i) {
-  if (!confirm('Удалить?')) return;
-  guideMembers.splice(i,1);
-  localStorage.setItem('xpeadia_guide', JSON.stringify(guideMembers));
-  renderGuide();
 }
 
 // === API KEYS ===
-let apiKeys = JSON.parse(localStorage.getItem('xpeadia_keys')||'[]');
-if (!apiKeys.length) {
-  apiKeys = [
-    {name:'Production Key', key:'xpeadia_sk_live_4f8a2b1c9d3e5f6a7b8c', created:'2026-08-15', status:'active'},
-    {name:'Dev Key', key:'xpeadia_sk_test_1a2b3c4d5e6f7a8b9c0d', created:'2026-08-20', status:'active'},
-  ];
-  localStorage.setItem('xpeadia_keys', JSON.stringify(apiKeys));
-}
+let apiKeys = JSON.parse(localStorage.getItem('ahemen_keys')||'[]');
+if (!apiKeys.length) { apiKeys = [{name:'Production Key', key:'ahemen_sk_live_4f8a2b1c9d3e5f6a7b8c', created:'2026-08-15', status:'active'}]; localStorage.setItem('ahemen_keys', JSON.stringify(apiKeys)); }
 function renderKeys() {
   const el = document.getElementById('keysList'); el.innerHTML = '';
-  apiKeys.forEach((k,i) => {
-    const d = document.createElement('div'); d.className = 'key-card';
-    d.innerHTML = `<div class="icon">🔑</div><div class="info"><div class="name">${k.name}</div><div class="key">${k.key.slice(0,20)}···${k.key.slice(-6)}</div></div><div class="actions"><button onclick="copyKey(${i})">Copy</button><button onclick="deleteKey(${i})">✕</button></div>`;
-    el.appendChild(d);
-  });
+  apiKeys.forEach((k,i) => { const d=document.createElement('div'); d.className='key-card'; d.innerHTML=`<div class="icon"><i data-lucide="key" style="width:18px;height:18px"></i></div><div class="info"><div class="name">${k.name}</div><div class="key">${k.key.slice(0,20)}···${k.key.slice(-6)}</div></div><div class="actions"><button onclick="copyKey(${i})">Copy</button><button onclick="deleteKey(${i})">✕</button></div>`; el.appendChild(d); });
+  lucide.createIcons();
 }
-function generateKey() {
-  const name = prompt('Название ключа:');
-  if (!name) return;
-  const key = 'xpeadia_sk_' + Math.random().toString(36).slice(2,12) + Math.random().toString(36).slice(2,12);
-  apiKeys.push({name, key, created: new Date().toISOString().slice(0,10), status:'active'});
-  localStorage.setItem('xpeadia_keys', JSON.stringify(apiKeys));
-  renderKeys();
-}
-function copyKey(i) {
-  navigator.clipboard.writeText(apiKeys[i].key);
-  alert('Скопировано!');
-}
-function deleteKey(i) {
-  if (!confirm('Удалить ключ?')) return;
-  apiKeys.splice(i,1);
-  localStorage.setItem('xpeadia_keys', JSON.stringify(apiKeys));
-  renderKeys();
-}
+function generateKey() { const name=prompt('Название ключа:'); if (!name) return; const key='ahemen_sk_'+Math.random().toString(36).slice(2,12)+Math.random().toString(36).slice(2,12); apiKeys.push({name,key,created:new Date().toISOString().slice(0,10),status:'active'}); localStorage.setItem('ahemen_keys', JSON.stringify(apiKeys)); renderKeys(); }
+function copyKey(i) { navigator.clipboard.writeText(apiKeys[i].key); alert('Скопировано!'); }
+function deleteKey(i) { if (!confirm('Удалить ключ?')) return; apiKeys.splice(i,1); localStorage.setItem('ahemen_keys', JSON.stringify(apiKeys)); renderKeys(); }
 
 // === TIMESTAMP ===
 document.getElementById('ts').textContent = new Date().toLocaleTimeString('ru-RU');
 
-// Init
+// === INIT ===
 initDashboard();
-lucide.createIcons();
 </script>
 </body></html>
