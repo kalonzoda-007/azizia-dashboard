@@ -8,192 +8,143 @@
 <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
 <style>
 :root {
-  --bg: rgba(255,255,255,.08); --card: rgba(255,255,255,.12); --card-hover: rgba(255,255,255,.18);
-  --border: rgba(255,255,255,.18); --border-strong: rgba(255,255,255,.28);
-  --ink: #ffffff; --ink-2: rgba(255,255,255,.72); --ink-3: rgba(255,255,255,.50);
-  --blue: #60a5fa; --blue-l: rgba(96,165,250,.18);
-  --green: #4ade80; --green-l: rgba(74,222,128,.18);
-  --red: #f87171; --red-l: rgba(248,113,113,.18);
-  --amber: #fbbf24; --amber-l: rgba(251,191,36,.18);
-  --purple: #c084fc; --purple-l: rgba(192,132,252,.18);
-  --sidebar-w: 240px; --sidebar-collapsed: 64px; --radius: 16px; --glass-blur: 24px;
-  --font: 'Google Sans', 'Inter', sans-serif;
+  --bg: #f0f2f5; --card: rgba(255,255,255,.85); --border: rgba(0,0,0,.08);
+  --ink: #1a1d29; --ink-2: #5f6577; --ink-3: #9ca3b5;
+  --blue: #4f7cff; --blue-l: #e8efff;
+  --green: #16a34a; --green-l: #e6f7ed;
+  --red: #ef4444; --red-l: #fde8e8;
+  --amber: #f59e0b; --amber-l: #fef3e1;
+  --purple: #8b5cf6; --purple-l: #f0eaff;
+  --radius: 16px; --font: 'Google Sans', 'Inter', sans-serif;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
   font-family: var(--font);
-  background: #0a0a12 url('https://kalonzoda-007.github.io/azizia-dashboard/xpeadia-ai-dashboard/bg-sunset.jpg') center/cover fixed;
-  color: var(--ink); display: flex; min-height: 100vh; position: relative;
+  background: #f0f2f5 url('https://kalonzoda-007.github.io/azizia-dashboard/xpeadia-ai-dashboard/bg-alpine.jpg') center/cover fixed;
+  color: var(--ink); min-height: 100vh; position: relative;
 }
-body::before { content: ''; position: fixed; inset: 0; background: linear-gradient(135deg, rgba(10,10,18,.7), rgba(10,10,18,.5)); z-index: 0; pointer-events: none; }
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 0;
+  background: rgba(255,255,255,.55);
+  backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%);
+  pointer-events: none;
+}
 
-.sidebar { width: var(--sidebar-w); background: rgba(255,255,255,.08); backdrop-filter: blur(var(--glass-blur)) saturate(180%); -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; transition: width .25s cubic-bezier(.4,0,.2,1); z-index: 200; overflow: hidden; }
-.sidebar.collapsed { width: var(--sidebar-collapsed); }
-.sidebar-header { display: flex; align-items: center; gap: 12px; padding: 16px 18px; border-bottom: 1px solid rgba(255,255,255,.12); height: 64px; min-height: 64px; }
-.sidebar-header .logo { width: 34px; height: 34px; min-width: 34px; border-radius: 10px; background: linear-gradient(135deg,#60a5fa,#c084fc); display: grid; place-items: center; color: #fff; font-weight: 800; font-size: .9rem; }
-.sidebar-header .brand { font-weight: 800; font-size: 1.05rem; white-space: nowrap; opacity: 1; transition: opacity .2s; }
-.sidebar.collapsed .sidebar-header .brand { opacity: 0; pointer-events: none; }
-.hamburger { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); cursor: pointer; display: grid; place-items: center; margin-left: auto; transition: all .15s; color: var(--ink-2); }
-.hamburger:hover { background: var(--blue-l); border-color: var(--blue); }
-.sidebar-nav { flex: 1; padding: 12px 10px; overflow-y: auto; }
-.sidebar-nav a { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: .88rem; color: var(--ink-2); transition: all .15s; white-space: nowrap; margin-bottom: 4px; }
-.sidebar-nav a:hover { background: rgba(96,165,250,.18); color: var(--blue); }
-.sidebar-nav a.active { background: rgba(96,165,250,.25); color: #fff; box-shadow: 0 0 20px rgba(96,165,250,.4); }
-.sidebar-nav a .icon { width: 20px; height: 20px; min-width: 20px; display: grid; place-items: center; }
-.sidebar-nav a .lbl { opacity: 1; transition: opacity .2s; }
-.sidebar.collapsed .sidebar-nav a .lbl { opacity: 0; pointer-events: none; }
-.sidebar-footer { padding: 12px 10px; border-top: 1px solid rgba(255,255,255,.12); }
-.sidebar-footer .user { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 10px; background: rgba(255,255,255,.06); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-.sidebar-footer .user .av { width: 32px; height: 32px; min-width: 32px; border-radius: 50%; background: linear-gradient(135deg,rgba(96,165,250,.7),rgba(74,222,128,.7)); display: grid; place-items: center; color: #fff; font-weight: 700; font-size: .8rem; border: 1px solid rgba(255,255,255,.3); }
-.sidebar-footer .user .info { font-size: .82rem; font-weight: 600; white-space: nowrap; opacity: 1; transition: opacity .2s; }
-.sidebar-footer .user .info small { display: block; font-size: .7rem; color: var(--ink-3); font-weight: 500; }
-.sidebar.collapsed .sidebar-footer .user .info { opacity: 0; }
+/* MOBILE NAV */
+.mobile-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 250; backdrop-filter: blur(4px); }
+.mobile-overlay.open { display: block; }
+.mobile-nav { display: none; position: fixed; top: 0; left: 0; bottom: 0; width: 280px; background: var(--card); border-right: 1px solid var(--border); z-index: 300; padding: 20px; flex-direction: column; gap: 8px; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+.mobile-nav.open { display: flex; }
+.mobile-nav-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.mobile-nav a { padding: 12px 16px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: .95rem; color: var(--ink-2); }
+.mobile-nav a:hover, .mobile-nav a.active { background: var(--blue-l); color: var(--blue); }
 
-.main { flex: 1; margin-left: var(--sidebar-w); transition: margin-left .25s cubic-bezier(.4,0,.2,1); display: flex; flex-direction: column; min-height: 100vh; position: relative; z-index: 1; }
-.sidebar.collapsed ~ .main { margin-left: var(--sidebar-collapsed); }
-.topbar { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,.08); backdrop-filter: blur(var(--glass-blur)) saturate(180%); -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%); border-bottom: 1px solid var(--border); padding: 14px 22px; height: 64px; position: sticky; top: 0; z-index: 100; }
-.topbar .left { display: flex; align-items: center; gap: 14px; }
-.topbar .page-title { font-size: 1.15rem; font-weight: 800; }
-.topbar .right { display: flex; align-items: center; gap: 10px; }
-.badge { padding: 6px 12px; border-radius: 8px; font-size: .78rem; font-weight: 700; background: rgba(255,255,255,.1); border: 1px solid var(--border); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
-.badge.live { background: rgba(74,222,128,.18); color: var(--green); display: inline-flex; align-items: center; gap: 6px; }
+/* NAV */
+.nav { display: flex; align-items: center; justify-content: space-between; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 22px; margin: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.04); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); position: relative; z-index: 1; }
+.nav-left { display: flex; align-items: center; gap: 14px; }
+.logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.2rem; }
+.logo .icon { width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg,#4f7cff,#8b5cf6); display: grid; place-items: center; color: #fff; font-size: 1rem; }
+.nav-links { display: flex; gap: 8px; flex-wrap: wrap; }
+.nav-links a { padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: .88rem; color: var(--ink-2); transition: all .15s; }
+.nav-links a:hover, .nav-links a.active { background: var(--blue-l); color: var(--blue); }
+.nav-right { display: flex; align-items: center; gap: 12px; }
+.badge { padding: 6px 12px; border-radius: 8px; font-size: .78rem; font-weight: 700; }
+.badge.live { background: var(--green-l); color: var(--green); display: inline-flex; align-items: center; gap: 6px; }
 .badge.live .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 1.4s infinite; }
-.badge.blue { background: rgba(96,165,250,.18); color: var(--blue); }
+.badge.blue { background: var(--blue-l); color: var(--blue); }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-.content { flex: 1; padding: 22px; position: relative; z-index: 1; }
-.page { display: none; }
-.page.active { display: block; }
+.hamburger { display: none; width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); cursor: pointer; align-items: center; justify-content: center; }
+.hamburger:hover { background: var(--blue-l); }
 
-.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 16px; margin-bottom: 22px; }
-.stat { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; backdrop-filter: blur(var(--glass-blur)) saturate(180%); -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%); box-shadow: 0 8px 32px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.15); text-align: center; }
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hamburger { display: inline-flex; }
+  .nav-right .badge:not(.live) { display: none; }
+}
+
+/* CONTENT */
+.content { padding: 0 20px 20px; position: relative; z-index: 1; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 16px; margin-bottom: 22px; }
+.stat { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
 .stat .label { font-size: .78rem; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: .6px; }
 .stat .value { font-size: 1.85rem; font-weight: 800; margin-top: 6px; letter-spacing: -.5px; }
-.stat.blue { border-left: 3px solid var(--blue); }
-.stat.red { border-left: 3px solid var(--red); }
-.stat.green { border-left: 3px solid var(--green); }
-.stat.amber { border-left: 3px solid var(--amber); }
-.stat.purple { border-left: 3px solid var(--purple); }
+.stat.blue { border-left: 4px solid var(--blue); }
+.stat.red { border-left: 4px solid var(--red); }
+.stat.green { border-left: 4px solid var(--green); }
+.stat.amber { border-left: 4px solid var(--amber); }
+.stat.purple { border-left: 4px solid var(--purple); }
 
 .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 22px; }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 22px; }
-.card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; backdrop-filter: blur(var(--glass-blur)) saturate(180%); -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%); box-shadow: 0 8px 32px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.15); }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
 .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-.card h3 .icon { width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; font-size: .85rem; }
-.icon.blue { background: var(--blue-l); color: var(--blue); }
-.icon.red { background: var(--red-l); color: var(--red); }
-.icon.green { background: var(--green-l); color: var(--green); }
-.icon.amber { background: var(--amber-l); color: var(--amber); }
-.icon.purple { background: var(--purple-l); color: var(--purple); }
-
 .table { width: 100%; border-collapse: collapse; }
-.table th { text-align: left; padding: 10px 12px; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--ink-3); border-bottom: 1px solid rgba(255,255,255,.15); }
-.table td { padding: 10px 12px; font-size: .88rem; font-weight: 500; border-bottom: 1px solid rgba(255,255,255,.1); }
+.table th { text-align: left; padding: 12px; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--ink-3); border-bottom: 1px solid var(--border); }
+.table td { padding: 12px; font-size: .88rem; font-weight: 500; border-bottom: 1px solid var(--border); }
 .table tr:last-child td { border-bottom: none; }
 .badge-status { padding: 3px 10px; border-radius: 999px; font-size: .78rem; font-weight: 600; white-space: nowrap; }
 .pos { color: var(--ink-2); font-size: .82rem; }
-
-.status-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; backdrop-filter: blur(var(--glass-blur)) saturate(180%); -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%); box-shadow: 0 8px 32px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.15); text-align: center; }
-.status-card .value { font-size: 1.85rem; font-weight: 800; }
-.status-card .label { font-size: .74rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
-
-.foot { text-align: center; font-size: .78rem; color: var(--ink-3); margin-top: 20px; padding: 14px; }
-.err-box { background: rgba(248,113,113,.15); border: 1px solid rgba(248,113,113,.4); color: #fecaca; padding: 14px; border-radius: 14px; margin-bottom: 16px; display: none; }
+.foot { text-align: center; font-size: .78rem; color: var(--ink-3); margin-top: 24px; padding: 16px; }
+.err-box { background: var(--red-l); border: 1px solid rgba(239,68,68,.4); color: var(--red); padding: 14px; border-radius: 14px; margin-bottom: 16px; display: none; }
 
 @media (max-width: 768px) {
-  .sidebar { width: var(--sidebar-collapsed); }
-  .sidebar .sidebar-header .brand, .sidebar .sidebar-nav a .lbl, .sidebar .sidebar-footer .user .info { opacity: 0; pointer-events: none; }
-  .main { margin-left: var(--sidebar-collapsed); }
   .grid, .grid-2 { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
 
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-header">
-    <div class="logo"><i data-lucide="zap" style="width:18px;height:18px;stroke-width:2.5"></i></div>
-    <span class="brand">Bozor4a</span>
-    <button class="hamburger" onclick="toggleSidebar()"><i data-lucide="menu" style="width:18px;height:18px"></i></button>
+<div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileNav()"></div>
+<nav class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-header">
+    <div class="logo" style="font-size:1rem"><div class="icon" style="width:30px;height:30px"><i data-lucide="zap" style="width:16px;height:16px;stroke-width:2.5"></i></div> Bozor4a</div>
+    <button class="hamburger" onclick="toggleMobileNav()"><i data-lucide="x" style="width:20px;height:20px"></i></button>
   </div>
-  <nav class="sidebar-nav">
-    <a href="#" class="active" data-page="dashboard"><span class="icon"><i data-lucide="layout-dashboard" style="width:20px;height:20px"></i></span><span class="lbl">Dashboard</span></a>
-    <a href="#" data-page="suppliers"><span class="icon"><i data-lucide="truck" style="width:20px;height:20px"></i></span><span class="lbl">Поставщики</span></a>
-    <a href="#" data-page="sellers"><span class="icon"><i data-lucide="store" style="width:20px;height:20px"></i></span><span class="lbl">Продавцы</span></a>
-    <a href="#" data-page="products"><span class="icon"><i data-lucide="package" style="width:20px;height:20px"></i></span><span class="lbl">Товары</span></a>
-    <a href="#" data-page="orders"><span class="icon"><i data-lucide="clipboard-list" style="width:20px;height:20px"></i></span><span class="lbl">Заказы</span></a>
-  </nav>
-  <div class="sidebar-footer">
-    <div class="user">
-      <div class="av">KV</div>
-      <div class="info">Оператор<small>Pilot Dushanbe</small></div>
-    </div>
+  <a href="#" class="active" onclick="showPage('dashboard');toggleMobileNav()">Dashboard</a>
+  <a href="#" onclick="showPage('suppliers');toggleMobileNav()">Поставщики</a>
+  <a href="#" onclick="showPage('sellers');toggleMobileNav()">Продавцы</a>
+  <a href="#" onclick="showPage('products');toggleMobileNav()">Товары</a>
+  <a href="#" onclick="showPage('orders');toggleMobileNav()">Заказы</a>
+</nav>
+
+<nav class="nav">
+  <div class="nav-left">
+    <button class="hamburger" onclick="toggleMobileNav()"><i data-lucide="menu" style="width:20px;height:20px"></i></button>
+    <div class="logo"><div class="icon"><i data-lucide="zap" style="width:18px;height:18px;stroke-width:2.5"></i></div> Bozor4a</div>
   </div>
-</aside>
-
-<div class="main">
-  <div class="topbar">
-    <div class="left"><span class="page-title" id="pageTitle">Dashboard</span></div>
-    <div class="right">
-      <span class="badge live"><span class="dot"></span> LIVE · <span id="ts">—</span></span>
-      <span class="badge blue"><i data-lucide="database" style="width:12px;height:12px"></i> Google Sheets</span>
-    </div>
+  <div class="nav-links">
+    <a href="#" class="active" data-page="dashboard" onclick="showPage('dashboard')">Dashboard</a>
+    <a href="#" data-page="suppliers" onclick="showPage('suppliers')">Поставщики</a>
+    <a href="#" data-page="sellers" onclick="showPage('sellers')">Продавцы</a>
+    <a href="#" data-page="products" onclick="showPage('products')">Товары</a>
+    <a href="#" data-page="orders" onclick="showPage('orders')">Заказы</a>
   </div>
-
-  <div class="content">
-    <div id="errbox" class="err-box"></div>
-
-    <!-- DASHBOARD PAGE -->
-    <div class="page active" id="page-dashboard">
-      <div class="stats" id="kpis"></div>
-      <h3 style="font-size:1rem;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px;"><span class="icon amber"><i data-lucide="bar-chart-3" style="width:16px;height:16px"></i></span> Статусы заказов</h3>
-      <div class="stats" id="statuses"></div>
-      <div class="grid-2">
-        <div class="card"><h3><span class="icon green"><i data-lucide="trending-up" style="width:16px;height:16px"></i></span> Ходовые товары</h3><div id="top"></div></div>
-        <div class="card"><h3><span class="icon blue"><i data-lucide="truck" style="width:16px;height:16px"></i></span> Заказы по поставщикам</h3><table class="table"><thead><tr><th>Поставщик</th><th style="text-align:right">Заказов</th></tr></thead><tbody id="by-sup"></tbody></table></div>
-      </div>
-    </div>
-
-    <!-- SUPPLIERS PAGE -->
-    <div class="page" id="page-suppliers">
-      <div class="card"><h3><span class="icon blue"><i data-lucide="truck" style="width:16px;height:16px"></i></span> Поставщики</h3><table class="table"><thead><tr><th>ID</th><th>Название</th><th>Контакт</th><th>Рейтинг</th></tr></thead><tbody id="suppliers-tbody"></tbody></table></div>
-    </div>
-
-    <!-- SELLERS PAGE -->
-    <div class="page" id="page-sellers">
-      <div class="card"><h3><span class="icon green"><i data-lucide="store" style="width:16px;height:16px"></i></span> Продавцы</h3><table class="table"><thead><tr><th>ID</th><th>Магазин</th><th>Район</th><th>Контакт</th></tr></thead><tbody id="sellers-tbody"></tbody></table></div>
-    </div>
-
-    <!-- PRODUCTS PAGE -->
-    <div class="page" id="page-products">
-      <div class="card"><h3><span class="icon purple"><i data-lucide="package" style="width:16px;height:16px"></i></span> Товары</h3><table class="table"><thead><tr><th>ID</th><th>Название</th><th>Категория</th><th>Цена, сом</th><th>Остаток</th></tr></thead><tbody id="products-tbody"></tbody></table></div>
-    </div>
-
-    <!-- ORDERS PAGE -->
-    <div class="page" id="page-orders">
-      <div class="card"><h3><span class="icon amber"><i data-lucide="clipboard-list" style="width:16px;height:16px"></i></span> Заказы</h3><table class="table"><thead><tr><th>ID</th><th>Магазин</th><th>Поставщик</th><th>Позиции</th><th>Сумма</th><th>Комиссия</th><th>Статус</th><th>Когда</th></tr></thead><tbody id="orders-tbody"></tbody></table></div>
-    </div>
-
+  <div class="nav-right">
+    <span class="badge live"><span class="dot"></span> LIVE · <span id="ts">—</span></span>
+    <span class="badge blue"><i data-lucide="database" style="width:12px;height:12px"></i> Google Sheets</span>
   </div>
-  <div class="foot">Bozor4a · Пилот Душанбе · Данные из Google Sheets · Автообновление каждые 10 с</div>
+</nav>
+
+<div class="content">
+  <div id="errbox" class="err-box"></div>
+  <div id="kpis" class="stats"></div>
+  <h3 style="font-size:1rem;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px"><i data-lucide="bar-chart-3" style="width:18px;height:18px;color:var(--amber)"></i> Статусы заказов</h3>
+  <div id="statuses" class="stats"></div>
+  <div class="grid-2">
+    <div class="card"><h3><i data-lucide="trending-up" style="width:18px;height:18px;color:var(--green)"></i> Ходовые товары</h3><div id="top"></div></div>
+    <div class="card"><h3><i data-lucide="truck" style="width:18px;height:18px;color:var(--blue)"></i> Заказы по поставщикам</h3><table class="table"><thead><tr><th>Поставщик</th><th style="text-align:right">Заказов</th></tr></thead><tbody id="by-sup"></tbody></table></div>
+  </div>
+  <div class="card" style="margin-top:22px"><h3><i data-lucide="clipboard-list" style="width:18px;height:18px;color:var(--purple)"></i> Последние заказы</h3><table class="table"><thead><tr><th>ID</th><th>Магазин</th><th>Поставщик</th><th>Позиции</th><th>Сумма</th><th>Комиссия</th><th>Статус</th><th>Когда</th></tr></thead><tbody id="orders"></tbody></table></div>
 </div>
 
-<script>
-// === SIDEBAR ===
-function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
+<div class="foot">Bozor4a · Пилот Душанбе · Данные из Google Sheets · Автообновление каждые 10 с</div>
 
-const pages = ['dashboard','suppliers','sellers','products','orders'];
-const pageTitles = {dashboard:'Dashboard',suppliers:'Поставщики',sellers:'Продавцы',products:'Товары',orders:'Заказы'};
-document.querySelectorAll('.sidebar-nav a').forEach(a => {
-  a.addEventListener('click', e => { e.preventDefault(); showPage(a.dataset.page); });
-});
-function showPage(name) {
-  pages.forEach(p => document.getElementById('page-'+p).classList.toggle('active', p===name));
-  document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.toggle('active', a.dataset.page===name));
-  document.getElementById('pageTitle').textContent = pageTitles[name] || name;
-  if (name==='dashboard') initDashboard();
+<script>
+function toggleMobileNav() {
+  document.getElementById('mobileNav').classList.toggle('open');
+  document.getElementById('mobileOverlay').classList.toggle('open');
 }
 
-// === DATA ===
 const SID = "18ljshdCnNZw_Cd-rApiEckUvFZIkC1yOTbrnyxM9ukE";
 const GID = { sellers:875173856, suppliers:390414981, products:1040561075, orders:473853638 };
 const STATUS_COLORS = { "новый":"#2dd4bf","в сборке":"#38bdf8","доставляется":"#fbbf24","доставлен":"#34d399","отменён":"#f87171" };
@@ -217,9 +168,6 @@ function parseCSV(text){ const rows=[]; let row=[], field="", q=false;
 async function getCSV(tab){ const r = await fetch(csvURL(tab), {cache:'no-store'}); if(!r.ok) throw new Error(tab+" HTTP "+r.status); return parseCSV(await r.text()); }
 function rowsToObjs(rows){ if(!rows.length) return []; const h = rows[0].map(x=>x.trim()); return rows.slice(1).map(r=>{ const o={}; h.forEach((k,i)=>o[k]=r[i]!==undefined?r[i]:""); return o; }); }
 
-let dashboardInitialized = false;
-function initDashboard() { if (dashboardInitialized) return; dashboardInitialized = true; loadData(); }
-
 async function loadData() {
   try {
     const [sr, sp, pr, or] = await Promise.all([getCSV('sellers'),getCSV('suppliers'),getCSV('products'),getCSV('orders')]);
@@ -233,44 +181,31 @@ async function loadData() {
 function renderDashboard(d){
   const orders=d.orders, suppliers=d.suppliers, sellers=d.sellers, products=d.products;
   const supName={}; suppliers.forEach(s=>supName[s.supplier_id]=s.supplier_name);
-  let revenue=0, commission=0; const byStatus={}, bySup={}, top={};
+  let revenue=0, commission=0; const byStatus={}, bySup={}, bySell={}, top={};
   orders.forEach(o=>{
     revenue+=num(o.total); commission+=num(o.commission);
     byStatus[o.status]=(byStatus[o.status]||0)+1;
     const sn=supName[o.supplier_id]||o.supplier_id||"?"; bySup[sn]=(bySup[sn]||0)+1;
+    const sh=o.shop_name||o.seller_id||"?"; bySell[sh]=(bySell[sh]||0)+1;
     try { (JSON.parse(o.positions||'[]')).forEach(p=> top[p.key]=(top[p.key]||0)+(+p.qty||0)); }catch(e){}
   });
 
-  // KPIs
   const kpis=[['Заказов',orders.length],['Сумма, сом',fmt(revenue)],['Комиссия, сом',fmt(commission)],['Продавцов',sellers.length],['Поставщиков',suppliers.length],['Товаров',products.length]];
   document.getElementById('kpis').innerHTML = kpis.map(([l,v])=>`<div class="stat"><div class="value">${v}</div><div class="label">${l}</div></div>`).join('');
 
-  // Statuses
   document.getElementById('statuses').innerHTML = Object.keys(byStatus).length
-    ? Object.entries(byStatus).map(([k,v])=>`<div class="status-card" style="border-left:3px solid ${STATUS_COLORS[k]||'#9fb6c4'}"><div class="value">${v}</div><div class="label">${k}</div></div>`).join('')
-    : '<div class="status-card"><div class="value">0</div><div class="label">новых</div></div>';
+    ? Object.entries(byStatus).map(([k,v])=>`<div class="stat" style="border-left:4px solid ${STATUS_COLORS[k]||'#9fb6c4'}"><div class="value">${v}</div><div class="label">${k}</div></div>`).join('')
+    : '<div class="stat"><div class="value">0</div><div class="label">новых</div></div>';
 
-  // Top products
   const topArr=Object.entries(top).sort((a,b)=>b[1]-a[1]).slice(0,6);
   document.getElementById('top').innerHTML = topArr.length
-    ? topArr.map(([k,v])=>`<div class="stat"><div class="value">${v}</div><div class="label">${k}</div></div>`).join('')
+    ? topArr.map(([k,v])=>`<div class="stat" style="margin-bottom:10px"><div class="value">${v}</div><div class="label">${k}</div></div>`).join('')
     : '<div class="stat"><div class="value">—</div><div class="label">нет</div></div>';
 
-  // By supplier
   document.getElementById('by-sup').innerHTML = Object.entries(bySup).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<tr><td>${k}</td><td style="text-align:right;font-weight:700">${v}</td></tr>`).join('')||'<tr><td colspan="2">—</td></tr>';
 
-  // Suppliers table
-  document.getElementById('suppliers-tbody').innerHTML = suppliers.map(s=>`<tr><td>${s.supplier_id||"—"}</td><td>${s.supplier_name||"—"}</td><td>${s.contact||s.phone||"—"}</td><td>${s.rating||"—"}</td></tr>`).join('')||'<tr><td colspan="4">Нет данных</td></tr>';
-
-  // Sellers table
-  document.getElementById('sellers-tbody').innerHTML = sellers.map(s=>`<tr><td>${s.seller_id||"—"}</td><td>${s.shop_name||"—"}</td><td>${s.district||s.area||"—"}</td><td>${s.contact||s.phone||"—"}</td></tr>`).join('')||'<tr><td colspan="4">Нет данных</td></tr>';
-
-  // Products table
-  document.getElementById('products-tbody').innerHTML = products.map(p=>`<tr><td>${p.product_id||"—"}</td><td>${p.name||p.product_name||"—"}</td><td>${p.category||"—"}</td><td style="font-family:'JetBrains Mono',monospace;font-weight:600">${fmt(num(p.price))}</td><td style="font-family:'JetBrains Mono',monospace;font-weight:600">${fmt(num(p.stock))}</td></tr>`).join('')||'<tr><td colspan="5">Нет данных</td></tr>';
-
-  // Orders table
   const rows=[...orders].sort((a,b)=>(b.created_at||"").localeCompare(a.created_at||"")).slice(0,40);
-  document.getElementById('orders-tbody').innerHTML = rows.length ? rows.map(o=>{
+  document.getElementById('orders').innerHTML = rows.length ? rows.map(o=>{
     let pos=[]; try{ pos=JSON.parse(o.positions||'[]'); }catch(e){}
     const ps=pos.map(p=>`${p.qty} ${p.unit} ${p.key}`).join(", ");
     const when=(o.created_at||"").replace("T"," ").slice(0,16);
@@ -278,8 +213,7 @@ function renderDashboard(d){
   }).join('') : '<tr><td colspan="8">Заказов пока нет</td></tr>';
 }
 
-// === INIT ===
-initDashboard();
+loadData();
 setInterval(loadData, 10000);
 lucide.createIcons();
 </script>
