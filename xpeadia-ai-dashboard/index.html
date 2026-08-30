@@ -9,8 +9,7 @@
 <style>
 :root {
   --bg: #f0f2f5;
-  --card: rgba(255,255,255,.7);
-  --card-solid: #ffffff;
+  --card: rgba(255,255,255,.85);
   --border: rgba(0,0,0,.08);
   --ink: #1a1d29;
   --ink-2: #5f6577;
@@ -25,104 +24,134 @@
   --amber-l: #fef3e1;
   --purple: #8b5cf6;
   --purple-l: #f0eaff;
-  --sidebar-w: 260px;
   --radius: 16px;
   --font: 'Google Sans', 'Inter', sans-serif;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: var(--font); background: #f0f2f5 url('bg-alpine.jpg') center/cover fixed; color: var(--ink); display: flex; min-height: 100vh; }
-
-/* SIDEBAR - MOBILE FIRST (off-canvas) */
-.sidebar {
-  width: var(--sidebar-w); background: var(--card-solid); border-right: 1px solid var(--border);
-  display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 200;
-  transform: translateX(-100%); transition: transform .3s cubic-bezier(.4,0,.2,1);
+body {
+  font-family: var(--font);
+  background: #f0f2f5 url('https://kalonzoda-007.github.io/azizia-dashboard/xpeadia-ai-dashboard/bg-alpine.jpg') center/cover fixed;
+  color: var(--ink); min-height: 100vh; padding: 20px;
 }
-.sidebar.open { transform: translateX(0); }
-.sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 150; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
-.sidebar-overlay.open { display: block; }
-.sidebar-header { display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--border); }
-.sidebar-close { display: flex; margin-left: auto; width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); cursor: pointer; align-items: center; justify-content: center; }
 
-/* DESKTOP: show sidebar always */
-@media (min-width: 1024px) {
-  .sidebar { transform: translateX(0); }
-  .sidebar-overlay { display: none !important; }
-  .sidebar-close { display: none; }
-  .sidebar-header { padding: 20px; }
+/* NAV */
+.nav {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 14px 22px; margin-bottom: 22px; box-shadow: 0 2px 8px rgba(0,0,0,.04);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
 }
-.sidebar-header { display: flex; align-items: center; gap: 12px; padding: 20px; border-bottom: 1px solid var(--border); }
-.sidebar-header .logo { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg,var(--blue),var(--purple)); display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 1.1rem; }
-.sidebar-header .brand { font-weight: 800; font-size: 1.15rem; }
-.sidebar-nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
-.nav-section { margin-bottom: 22px; }
-.nav-section .title { font-size: .72rem; font-weight: 700; color: var(--ink-3); text-transform: uppercase; letter-spacing: .6px; padding: 0 12px; margin-bottom: 8px; }
-.sidebar-nav a { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; font-weight: 500; font-size: .88rem; color: var(--ink-2); transition: all .15s; margin-bottom: 2px; }
-.sidebar-nav a:hover { background: var(--blue-l); color: var(--blue); }
-.sidebar-nav a.active { background: var(--blue); color: #fff; }
-.sidebar-nav a .icon { width: 20px; height: 20px; display: grid; place-items: center; }
-.sidebar-footer { padding: 16px; border-top: 1px solid var(--border); }
-.sidebar-footer .user { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 12px; background: var(--bg); }
-.sidebar-footer .user .av { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg,var(--blue),var(--green)); display: grid; place-items: center; color: #fff; font-weight: 700; font-size: .9rem; }
-.sidebar-footer .user .info { font-size: .85rem; font-weight: 600; }
-.sidebar-footer .user .info small { display: block; font-size: .72rem; color: var(--ink-3); font-weight: 400; }
+.logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.2rem; }
+.logo .icon { width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg,#4f7cff,#8b5cf6); display: grid; place-items: center; color: #fff; font-size: 1rem; }
+.nav-links { display: flex; gap: 8px; flex-wrap: wrap; }
+.nav-links a {
+  padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: .88rem;
+  color: var(--ink-2); transition: all .15s;
+}
+.nav-links a:hover, .nav-links a.active { background: var(--blue-l); color: var(--blue); }
+.nav-right { display: flex; align-items: center; gap: 12px; }
+.badge { padding: 6px 12px; border-radius: 8px; font-size: .78rem; font-weight: 700; }
+.badge.pro { background: var(--purple-l); color: var(--purple); }
+.badge.live { background: var(--green-l); color: var(--green); display: inline-flex; align-items: center; gap: 6px; }
+.badge.live .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 1.4s infinite; }
+.avatar { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg,#4f7cff,#16a34a); display: grid; place-items: center; color: #fff; font-weight: 700; font-size: .85rem; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
 
-/* MAIN */
-.main { flex: 1; margin-left: 0; display: flex; flex-direction: column; min-height: 100vh; }
-@media (min-width: 1024px) { .main { margin-left: var(--sidebar-w); } }
-.topbar { display: flex; align-items: center; justify-content: space-between; background: var(--card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 16px 24px; height: 68px; position: sticky; top: 0; z-index: 100; }
-.topbar .left { display: flex; align-items: center; gap: 16px; }
-.topbar .page-title { font-size: 1.2rem; font-weight: 800; }
-.topbar .breadcrumb { font-size: .82rem; color: var(--ink-3); }
-.topbar .right { display: flex; align-items: center; gap: 12px; }
-.topbar .actions { display: flex; gap: 8px; }
-.hamburger-btn { display: none; width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); cursor: pointer; align-items: center; justify-content: center; }
-@media (max-width: 1023px) { .hamburger-btn { display: inline-flex; } }
-.btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 10px; font-weight: 600; font-size: .88rem; cursor: pointer; border: none; transition: all .15s; }
-.btn.primary { background: var(--ink); color: #fff; }
-.btn.primary:hover { background: #333; }
-.btn.ghost { background: transparent; color: var(--ink-2); border: 1px solid var(--border); }
-.btn.ghost:hover { background: var(--blue-l); color: var(--blue); }
+/* HAMBURGER */
+.hamburger { display: none; width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); cursor: pointer; align-items: center; justify-content: center; }
+.hamburger:hover { background: var(--blue-l); }
 
-/* CONTENT */
-.content { flex: 1; padding: 24px; }
-.page { display: none; }
-.page.active { display: block; }
+/* MOBILE NAV */
+.mobile-nav { display: none; position: fixed; top: 0; left: 0; bottom: 0; width: 280px; background: var(--card); border-right: 1px solid var(--border); z-index: 300; padding: 20px; flex-direction: column; gap: 8px; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+.mobile-nav.open { display: flex; }
+.mobile-nav-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.mobile-nav a { padding: 12px 16px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: .95rem; color: var(--ink-2); }
+.mobile-nav a:hover, .mobile-nav a.active { background: var(--blue-l); color: var(--blue); }
+.mobile-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 250; backdrop-filter: blur(4px); }
+.mobile-overlay.open { display: block; }
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hamburger { display: inline-flex; }
+  .nav-right .badge:not(.live) { display: none; }
+}
 
 /* STATS */
-.stats { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 16px; margin-bottom: 24px; }
-.stat { background: rgba(255,255,255,.85); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 16px; margin-bottom: 22px; }
+.stat {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.04); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+}
 .stat .label { font-size: .78rem; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: .6px; }
 .stat .value { font-size: 1.85rem; font-weight: 800; margin-top: 6px; letter-spacing: -.5px; }
-.stat .change { font-size: .78rem; font-weight: 600; margin-top: 4px; }
+.stat .change { font-size: .78rem; font-weight: 600; margin-top: 4px; display: inline-flex; align-items: center; gap: 4px; }
 .stat .change.up { color: var(--green); }
 .stat .change.down { color: var(--red); }
-
-/* FILTERS */
-.filters { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-.filter { padding: 8px 16px; border-radius: 999px; font-size: .85rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--card); color: var(--ink-2); transition: all .15s; }
-.filter:hover { background: var(--blue-l); color: var(--blue); }
-.filter.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+.stat.blue { border-left: 4px solid var(--blue); }
+.stat.red { border-left: 4px solid var(--red); }
+.stat.green { border-left: 4px solid var(--green); }
+.stat.amber { border-left: 4px solid var(--amber); }
 
 /* GRID */
-.grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 24px; }
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
-.card { background: rgba(255,255,255,.85); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+.grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 22px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 22px; }
+.card {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.04); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+}
 .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.card h3 .icon { width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; font-size: .85rem; }
+.icon.blue { background: var(--blue-l); color: var(--blue); }
+.icon.red { background: var(--red-l); color: var(--red); }
+.icon.green { background: var(--green-l); color: var(--green); }
+
+/* CHARTS */
+.chart { width: 100%; height: 220px; }
+.chart-bars { display: flex; align-items: flex-end; gap: 8px; height: 180px; padding: 10px 0; }
+.chart-bars .bar {
+  flex: 1; border-radius: 6px 6px 0 0; background: linear-gradient(180deg, var(--blue), #a5bfff);
+  position: relative; min-height: 12px; transition: all .15s;
+}
+.chart-bars .bar:hover { opacity: .85; }
+.chart-bars .bar .val { position: absolute; top: -22px; left: 50%; transform: translateX(-50%); font-size: .7rem; font-weight: 700; color: var(--ink-2); white-space: nowrap; }
+.chart-bars .bar .lbl { position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%); font-size: .68rem; color: var(--ink-3); white-space: nowrap; }
+
+/* DONUT */
+.donut-wrap { display: flex; align-items: center; justify-content: center; gap: 30px; padding: 10px 0; }
+.donut { position: relative; width: 160px; height: 160px; }
+.donut svg { transform: rotate(-90deg); }
+.donut .center { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
+.donut .center .num { font-size: 1.6rem; font-weight: 800; }
+.donut .center .txt { font-size: .72rem; color: var(--ink-3); }
+.legend { display: flex; flex-direction: column; gap: 10px; }
+.legend .item { display: flex; align-items: center; gap: 10px; font-size: .85rem; font-weight: 500; }
+.legend .dot { width: 10px; height: 10px; border-radius: 50%; }
 
 /* TABLE */
 .table { width: 100%; border-collapse: collapse; }
 .table th { text-align: left; padding: 12px; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--ink-3); border-bottom: 1px solid var(--border); }
 .table td { padding: 12px; font-size: .88rem; font-weight: 500; border-bottom: 1px solid var(--border); }
 .table tr:last-child td { border-bottom: none; }
-.badge { padding: 4px 10px; border-radius: 999px; font-size: .75rem; font-weight: 600; }
-.badge.ok { background: var(--green-l); color: var(--green); }
-.badge.warn { background: var(--amber-l); color: #b45309; }
-.badge.danger { background: var(--red-l); color: var(--red); }
-.badge.info { background: var(--blue-l); color: var(--blue); }
+.badge-status { padding: 4px 10px; border-radius: 999px; font-size: .75rem; font-weight: 600; }
+.badge-status.ok { background: var(--green-l); color: var(--green); }
+.badge-status.warn { background: var(--amber-l); color: #b45309; }
+.badge-status.danger { background: var(--red-l); color: var(--red); }
+.badge-status.info { background: var(--blue-l); color: var(--blue); }
+
+/* FIN */
+.fin-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 14px; }
+.fin-item { padding: 14px; border-radius: 10px; background: var(--bg); border: 1px solid var(--border); }
+.fin-item .k { font-size: .72rem; font-weight: 700; color: var(--ink-3); text-transform: uppercase; letter-spacing: .5px; }
+.fin-item .v { font-size: 1.4rem; font-weight: 800; margin-top: 4px; }
+
+/* FORECAST */
+.forecast-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.forecast-row:last-child { border-bottom: none; }
+.forecast-row .day { width: 50px; font-weight: 700; font-size: .85rem; color: var(--ink-2); }
+.forecast-row .bar { flex: 1; height: 24px; border-radius: 6px; background: linear-gradient(90deg,var(--blue),#a5bfff); display: flex; align-items: center; padding: 0 10px; color: #fff; font-weight: 700; font-size: .78rem; min-width: 60px; }
 
 /* ROLES */
-.role-level { margin-bottom: 24px; }
+.role-level { margin-bottom: 22px; }
 .role-level h4 { font-size: .95rem; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; color: var(--ink-2); }
 .role-item { display: flex; align-items: center; gap: 14px; padding: 14px; border-radius: 12px; background: var(--card); border: 1px solid var(--border); margin-bottom: 10px; cursor: pointer; transition: all .15s; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
 .role-item:hover { border-color: var(--blue); box-shadow: 0 4px 12px rgba(79,124,255,.15); }
@@ -162,144 +191,112 @@ body { font-family: var(--font); background: #f0f2f5 url('bg-alpine.jpg') center
 
 @media (max-width: 768px) {
   .grid, .grid-2 { grid-template-columns: 1fr; }
+  .fin-grid { grid-template-columns: 1fr; }
   .task-board { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
 
-<aside class="sidebar">
-  <div class="sidebar-header">
-    <div class="logo"><i data-lucide="zap" style="width:20px;height:20px;stroke-width:2.5"></i></div>
-    <span class="brand">Ahemen AI</span>
+<!-- MOBILE NAV -->
+<div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileNav()"></div>
+<nav class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-header">
+    <div class="logo" style="font-size:1rem"><div class="icon" style="width:30px;height:30px"><i data-lucide="zap" style="width:16px;height:16px;stroke-width:2.5"></i></div> Ahemen AI</div>
+    <button class="hamburger" onclick="toggleMobileNav()"><i data-lucide="x" style="width:20px;height:20px"></i></button>
   </div>
-  <nav class="sidebar-nav">
-    <div class="nav-section">
-      <div class="title">Main menu</div>
-      <a href="#" class="active" data-page="dashboard"><span class="icon"><i data-lucide="layout-dashboard" style="width:18px;height:18px"></i></span> Overview</a>
-      <a href="#" data-page="guide"><span class="icon"><i data-lucide="users" style="width:18px;height:18px"></i></span> Руководство</a>
-      <a href="#" data-page="tasks"><span class="icon"><i data-lucide="kanban" style="width:18px;height:18px"></i></span> Задачи</a>
-      <a href="#" data-page="analytics"><span class="icon"><i data-lucide="bar-chart-3" style="width:18px;height:18px"></i></span> Аналитика</a>
-    </div>
-    <div class="nav-section">
-      <div class="title">Management</div>
-      <a href="#" data-page="providers"><span class="icon"><i data-lucide="server" style="width:18px;height:18px"></i></span> Провайдеры</a>
-      <a href="#" data-page="apikeys"><span class="icon"><i data-lucide="key-round" style="width:18px;height:18px"></i></span> API Keys</a>
-      <a href="#" data-page="docs"><span class="icon"><i data-lucide="book-open" style="width:18px;height:18px"></i></span> Документация</a>
-    </div>
-  </nav>
-  <div class="sidebar-footer">
-    <div class="user">
-      <div class="av">KV</div>
-      <div class="info">Кирилл Великий<small>CEO, Pro Plan</small></div>
-    </div>
+  <a href="#" class="active" data-page="dashboard" onclick="showPage('dashboard');toggleMobileNav()">Overview</a>
+  <a href="#" data-page="guide" onclick="showPage('guide');toggleMobileNav()">Руководство</a>
+  <a href="#" data-page="tasks" onclick="showPage('tasks');toggleMobileNav()">Задачи</a>
+  <a href="#" data-page="analytics" onclick="showPage('analytics');toggleMobileNav()">Аналитика</a>
+  <a href="#" data-page="providers" onclick="showPage('providers');toggleMobileNav()">Провайдеры</a>
+  <a href="#" data-page="apikeys" onclick="showPage('apikeys');toggleMobileNav()">API Keys</a>
+  <a href="#" data-page="docs" onclick="showPage('docs');toggleMobileNav()">Документация</a>
+</nav>
+
+<!-- NAV -->
+<nav class="nav">
+  <div style="display:flex;align-items:center;gap:14px">
+    <button class="hamburger" onclick="toggleMobileNav()"><i data-lucide="menu" style="width:20px;height:20px"></i></button>
+    <div class="logo"><div class="icon"><i data-lucide="zap" style="width:18px;height:18px;stroke-width:2.5"></i></div> Ahemen AI</div>
   </div>
-</aside>
-
-<div class="main">
-  <div class="topbar">
-    <div class="left">
-      <span class="page-title" id="pageTitle">Overview</span>
-      <span class="breadcrumb">Ahemen > Dashboard</span>
-    </div>
-    <div class="right">
-      <div class="actions">
-        <button class="btn ghost"><i data-lucide="search" style="width:16px;height:16px"></i></button>
-        <button class="btn ghost"><i data-lucide="bell" style="width:16px;height:16px"></i></button>
-        <button class="btn primary" onclick="alert('Добавить')"><i data-lucide="plus" style="width:16px;height:16px"></i> Добавить</button>
-      </div>
-    </div>
+  <div class="nav-links">
+    <a href="#" class="active" data-page="dashboard" onclick="showPage('dashboard')">Overview</a>
+    <a href="#" data-page="guide" onclick="showPage('guide')">Руководство</a>
+    <a href="#" data-page="tasks" onclick="showPage('tasks')">Задачи</a>
+    <a href="#" data-page="analytics" onclick="showPage('analytics')">Аналитика</a>
+    <a href="#" data-page="providers" onclick="showPage('providers')">Провайдеры</a>
+    <a href="#" data-page="apikeys" onclick="showPage('apikeys')">API Keys</a>
+    <a href="#" data-page="docs" onclick="showPage('docs')">Документация</a>
   </div>
-
-  <div class="content">
-
-    <!-- DASHBOARD -->
-    <div class="page active" id="page-dashboard">
-      <div class="stats">
-        <div class="stat"><div class="label">Total Requests</div><div class="value">3,310,278</div><div class="change up">↑ 12.4% vs last period</div></div>
-        <div class="stat"><div class="label">Total Errors</div><div class="value">4,273</div><div class="change down">↓ 3.1%</div></div>
-        <div class="stat"><div class="label">Total Cost</div><div class="value">$93,128</div><div class="change up">↑ 8.7%</div></div>
-        <div class="stat"><div class="label">Avg Latency</div><div class="value">6.058s</div><div class="change down">↓ 1.2%</div></div>
-      </div>
-      <div class="filters">
-        <div class="filter active">All</div>
-        <div class="filter">Models</div>
-        <div class="filter">Countries</div>
-        <div class="filter">Providers</div>
-        <div class="filter">Errors</div>
-      </div>
-      <div class="grid">
-        <div class="card"><h3><i data-lucide="trending-up" style="width:18px;height:18px;color:var(--blue)"></i> Requests Over Time</h3><canvas id="reqChart" style="width:100%;height:220px"></canvas></div>
-        <div class="card"><h3><i data-lucide="alert-circle" style="width:18px;height:18px;color:var(--red)"></i> Error Breakdown</h3>
-          <div style="display:flex;align-items:center;justify-content:center;gap:30px;padding:10px 0;">
-            <div style="position:relative;width:140px;height:140px;">
-              <svg width="140" height="140" viewBox="0 0 140 140"><circle cx="70" cy="70" r="55" fill="none" stroke="#e8ecf2" stroke-width="18"/><circle cx="70" cy="70" r="55" fill="none" stroke="#ef4444" stroke-width="18" stroke-dasharray="35 345" stroke-dashoffset="0" stroke-linecap="round"/><circle cx="70" cy="70" r="55" fill="none" stroke="#f59e0b" stroke-width="18" stroke-dasharray="80 345" stroke-dashoffset="-35" stroke-linecap="round"/><circle cx="70" cy="70" r="55" fill="none" stroke="#4f7cff" stroke-width="18" stroke-dasharray="230 345" stroke-dashoffset="-115" stroke-linecap="round"/></svg>
-              <div style="position:absolute;inset:0;display:grid;place-items:center;text-align:center;"><div style="font-size:1.4rem;font-weight:800">4,273</div><div style="font-size:.7rem;color:var(--ink-3)">Total</div></div>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:8px;">
-              <div style="display:flex;align-items:center;gap:8px;font-size:.82rem"><span style="width:10px;height:10px;border-radius:50%;background:#4f7cff"></span> Success · 98.7%</div>
-              <div style="display:flex;align-items:center;gap:8px;font-size:.82rem"><span style="width:10px;height:10px;border-radius:50%;background:#ef4444"></span> Server Error · 0.8%</div>
-              <div style="display:flex;align-items:center;gap:8px;font-size:.82rem"><span style="width:10px;height:10px;border-radius:50%;background:#f59e0b"></span> Rate Limit · 0.5%</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="grid-2">
-        <div class="card"><h3><i data-lucide="bot" style="width:18px;height:18px;color:var(--green)"></i> Top Models</h3><table class="table"><thead><tr><th>#</th><th>Model</th><th>Volume</th><th></th><th style="text-align:right">%</th></tr></thead><tbody id="modelsTable"></tbody></table></div>
-        <div class="card"><h3><i data-lucide="globe" style="width:18px;height:18px;color:var(--blue)"></i> Top Countries</h3><table class="table"><thead><tr><th>#</th><th>Country</th><th>Volume</th><th></th><th style="text-align:right">%</th></tr></thead><tbody id="countriesTable"></tbody></table></div>
-      </div>
-    </div>
-
-    <!-- GUIDE PAGE -->
-    <div class="page" id="page-guide">
-      <div class="card" style="margin-bottom:24px;">
-        <h3><i data-lucide="building-2" style="width:18px;height:18px;color:var(--purple)"></i> Структура компании Ahemen AI</h3>
-        <div style="font-size:.82rem;color:var(--ink-3);margin-bottom:16px;">Иерархия руководства. Нажмите на роль для обсуждения задачи.</div>
-        <div id="rolesTree"></div>
-      </div>
-    </div>
-
-    <!-- TASKS PAGE -->
-    <div class="page" id="page-tasks">
-      <div class="card"><h3><i data-lucide="kanban" style="width:18px;height:18px;color:var(--green)"></i> Task Board — Задачи от руководства</h3><div class="task-board" id="taskBoard"></div></div>
-    </div>
-
-    <!-- ANALYTICS PAGE -->
-    <div class="page" id="page-analytics">
-      <div class="stats">
-        <div class="stat"><div class="label">ARPU</div><div class="value">$72.50</div><div class="change up">↑ 5.2%</div></div>
-        <div class="stat"><div class="label">LTV</div><div class="value">$864</div><div class="change up">↑ 12.1%</div></div>
-        <div class="stat"><div class="label">Monthly Budget</div><div class="value">$31k</div><div class="change down">↓ 2.3%</div></div>
-        <div class="stat"><div class="label">Active Users</div><div class="value">1,284</div><div class="change up">↑ 5.3%</div></div>
-      </div>
-      <div class="card"><h3><i data-lucide="dollar-sign" style="width:18px;height:18px;color:var(--purple)"></i> Cost Forecast (7 days)</h3><div id="forecastList"></div></div>
-    </div>
-
-    <!-- PROVIDERS PAGE -->
-    <div class="page" id="page-providers">
-      <div class="card"><h3><i data-lucide="server" style="width:18px;height:18px;color:var(--green)"></i> Provider Status</h3><div id="providersList"></div></div>
-    </div>
-
-    <!-- API KEYS PAGE -->
-    <div class="page" id="page-apikeys">
-      <div class="card" style="margin-bottom:16px;"><h3><i data-lucide="key-round" style="width:18px;height:18px;color:var(--amber)"></i> API Keys</h3><button class="btn primary" onclick="generateKey()"><i data-lucide="plus" style="width:14px;height:14px"></i> Создать новый ключ</button></div>
-      <div id="keysList"></div>
-    </div>
-
-    <!-- DOCS PAGE -->
-    <div class="page" id="page-docs">
-      <div class="card"><h3><i data-lucide="book-open" style="width:18px;height:18px;color:var(--blue)"></i> Documentation</h3>
-        <div style="margin-bottom:16px;"><h4 style="font-size:.95rem;font-weight:700;margin-bottom:8px;">Quick Start</h4><p style="font-size:.88rem;color:var(--ink-2);line-height:1.6;">Используйте наш API для доступа к моделям через единый эндпоинт:</p><pre style="background:#1a1d29;color:#e8eef6;padding:14px;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.82rem;overflow-x:auto;margin-top:10px;">curl https://api.ahemen.ai/v1/chat/completions \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"model":"claude-3-5-sonnet","messages":[{"role":"user","content":"Hello"}]}'</pre></div>
-        <div><h4 style="font-size:.95rem;font-weight:700;margin-bottom:8px;">Models</h4><p style="font-size:.88rem;color:var(--ink-2);">Доступные модели: <code style="background:var(--bg);padding:2px 6px;border-radius:4px;font-size:.82rem;">claude-3-5-sonnet</code>, <code style="background:var(--bg);padding:2px 6px;border-radius:4px;font-size:.82rem;">gpt-4o</code>, <code style="background:var(--bg);padding:2px 6px;border-radius:4px;font-size:.82rem;">claude-3-opus</code></p></div>
-      </div>
-    </div>
-
+  <div class="nav-right">
+    <span class="badge live"><span class="dot"></span> Live</span>
+    <span class="badge pro">Pro</span>
+    <div class="avatar">KV</div>
   </div>
-  <div class="foot">Ahemen AI Analytics · Updated <span id="ts">—</span></div>
+</nav>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat blue"><div class="label">Total Requests</div><div class="value">3,310,278</div><div class="change up">↑ 12.4%</div></div>
+  <div class="stat red"><div class="label">Total Errors</div><div class="value">4,273</div><div class="change down">↓ 3.1%</div></div>
+  <div class="stat green"><div class="label">Total Cost</div><div class="value">$93,128</div><div class="change up">↑ 8.7%</div></div>
+  <div class="stat amber"><div class="label">Avg Latency</div><div class="value">6.058s</div><div class="change down">↓ 1.2%</div></div>
+  <div class="stat purple"><div class="label">Active Users</div><div class="value">1,284</div><div class="change up">↑ 5.3%</div></div>
 </div>
+
+<!-- FILTERS -->
+<div class="filters">
+  <div class="filter active">All</div>
+  <div class="filter">Models</div>
+  <div class="filter">Countries</div>
+  <div class="filter">Providers</div>
+  <div class="filter">Errors</div>
+</div>
+
+<!-- ROW 1 -->
+<div class="grid">
+  <div class="card">
+    <h3><span class="icon blue"><i data-lucide="trending-up" style="width:16px;height:16px"></i></span> Requests Over Time</h3>
+    <canvas id="reqChart" class="chart"></canvas>
+  </div>
+  <div class="card">
+    <h3><span class="icon red"><i data-lucide="alert-circle" style="width:16px;height:16px"></i></span> Error Breakdown</h3>
+    <div class="donut-wrap">
+      <div class="donut"><svg width="160" height="160" viewBox="0 0 160 160"><circle cx="80" cy="80" r="65" fill="none" stroke="#e8ecf2" stroke-width="22"/><circle cx="80" cy="80" r="65" fill="none" stroke="#ef4444" stroke-width="22" stroke-dasharray="40.8 408" stroke-dashoffset="0" stroke-linecap="round"/><circle cx="80" cy="80" r="65" fill="none" stroke="#f59e0b" stroke-width="22" stroke-dasharray="91.8 408" stroke-dashoffset="-40.8" stroke-linecap="round"/><circle cx="80" cy="80" r="65" fill="none" stroke="#4f7cff" stroke-width="22" stroke-dasharray="305.4 408" stroke-dashoffset="-132.6" stroke-linecap="round"/></svg><div class="center"><div><div class="num">4,273</div><div class="txt">Total</div></div></div></div>
+      <div class="legend"><div class="item"><span class="dot" style="background:#4f7cff"></span> Success · 98.7%</div><div class="item"><span class="dot" style="background:#ef4444"></span> Server Error · 0.8%</div><div class="item"><span class="dot" style="background:#f59e0b"></span> Rate Limit · 0.5%</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ROW 2 -->
+<div class="grid-2">
+  <div class="card"><h3><span class="icon green"><i data-lucide="bot" style="width:16px;height:16px"></i></span> Top Models</h3><table class="table"><thead><tr><th>#</th><th>Model</th><th>Volume</th><th></th><th style="text-align:right">%</th></tr></thead><tbody id="modelsTable"></tbody></table></div>
+  <div class="card"><h3><span class="icon blue"><i data-lucide="globe" style="width:16px;height:16px"></i></span> Top Countries</h3><table class="table"><thead><tr><th>#</th><th>Country</th><th>Volume</th><th></th><th style="text-align:right">%</th></tr></thead><tbody id="countriesTable"></tbody></table></div>
+</div>
+
+<!-- ROW 3 -->
+<div class="grid">
+  <div class="card"><h3><span class="icon green"><i data-lucide="monitor" style="width:16px;height:16px"></i></span> Provider Health</h3><div id="providersList"></div></div>
+  <div class="card"><h3><span class="icon amber"><i data-lucide="bell" style="width:16px;height:16px"></i></span> Alerts & Anomalies</h3><div id="alertsList"></div></div>
+</div>
+
+<!-- ROW 4 -->
+<div class="grid-2">
+  <div class="card">
+    <h3><span class="icon purple"><i data-lucide="dollar-sign" style="width:16px;height:16px"></i></span> Financial Metrics</h3>
+    <div class="fin-grid">
+      <div class="fin-item"><div class="k">ARPU</div><div class="v">$72.50</div></div>
+      <div class="fin-item"><div class="k">LTV</div><div class="v">$864</div></div>
+      <div class="fin-item"><div class="k">Monthly Budget</div><div class="v">$31k</div></div>
+    </div>
+    <h4 style="font-size:.85rem;font-weight:700;margin:14px 0 10px">Cost Forecast (7 days)</h4>
+    <div id="forecastList"></div>
+  </div>
+  <div class="card"><h3><span class="icon blue"><i data-lucide="users" style="width:16px;height:16px"></i></span> Top Users</h3><table class="table"><thead><tr><th>#</th><th>User</th><th>Cost</th><th style="text-align:right">Req</th></tr></thead><tbody id="usersTable"></tbody></table></div>
+</div>
+
+<div class="foot">Ahemen AI Analytics · Updated <span id="ts">—</span></div>
 
 <!-- AGENT MODAL -->
 <div class="overlay" id="agentModal" style="z-index:300;">
@@ -313,178 +310,48 @@ body { font-family: var(--font); background: #f0f2f5 url('bg-alpine.jpg') center
 </div>
 
 <script>
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('sidebarOverlay').classList.toggle('open');
+function toggleMobileNav() {
+  document.getElementById('mobileNav').classList.toggle('open');
+  document.getElementById('mobileOverlay').classList.toggle('open');
 }
+
 const pages = ['dashboard','guide','tasks','analytics','providers','apikeys','docs'];
 const pageTitles = {overview:'Overview',guide:'Руководство',tasks:'Задачи',analytics:'Аналитика',providers:'Провайдеры',apikeys:'API Keys',docs:'Документация'};
-document.querySelectorAll('.sidebar-nav a').forEach(a => {
+document.querySelectorAll('.nav-links a').forEach(a => {
   a.addEventListener('click', e => { e.preventDefault(); showPage(a.dataset.page); });
 });
 function showPage(name) {
-  pages.forEach(p => document.getElementById('page-'+p).classList.toggle('active', p===name));
-  document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.toggle('active', a.dataset.page===name));
-  document.getElementById('pageTitle').textContent = pageTitles[name] || name;
-  if (name==='dashboard') initDashboard();
-  if (name==='guide') initGuide();
-  if (name==='tasks') renderTaskBoard();
-  if (name==='analytics') initAnalytics();
-  if (name==='providers') initProvidersPage();
-  if (name==='apikeys') renderKeys();
+  pages.forEach(p => document.getElementById('page-'+p)?.classList.toggle('active', p===name));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.toggle('active', a.dataset.page===name));
 }
 
 /* DATA */
 const models = [{name:"claude-3-5-sonnet",vol:"1,204,518",pct:36.4},{name:"gpt-4o",vol:"892,341",pct:27.0},{name:"claude-3-opus",vol:"521,092",pct:15.7},{name:"gpt-4o-mini",vol:"387,654",pct:11.7},{name:"gemini-1.5-pro",vol:"304,673",pct:9.2}];
 const countries = [{name:"United States",vol:"1,521,456",flag:"🇺🇸",pct:46.0},{name:"United Kingdom",vol:"412,338",flag:"🇬🇧",pct:12.5},{name:"Germany",vol:"298,712",flag:"🇩🇪",pct:9.0},{name:"Canada",vol:"236,445",flag:"🇨🇦",pct:7.1},{name:"France",vol:"198,265",flag:"🇫🇷",pct:6.0}];
 const providers = [{name:"OpenAI",logo:"O",color:"#10a37f",status:"online",uptime:"99.98%",latency:"4.2s"},{name:"Anthropic",logo:"A",color:"#d4a574",status:"online",uptime:"99.95%",latency:"5.8s"},{name:"Google AI",logo:"G",color:"#4285f4",status:"degraded",uptime:"99.70%",latency:"8.1s"},{name:"Mistral",logo:"M",color:"#ff7000",status:"online",uptime:"99.92%",latency:"3.9s"}];
+const alerts = [{type:"danger",icon:"alert-octagon",title:"Spike in 500 errors",desc:"Anthropic Claude-3-opus: +340% in last 10 min",time:"2m ago"},{type:"warn",icon:"alert-triangle",title:"Rate limit approaching",desc:"OpenAI gpt-4o at 85% quota",time:"15m ago"},{type:"info",icon:"info",title:"Latency improved",desc:"Google AI: 8.1s → 6.4s avg",time:"1h ago"},{type:"warn",icon:"alert-triangle",title:"Budget alert",desc:"Daily spend $3,420 vs $3,100 avg",time:"3h ago"}];
+const users = [{name:"Acme Corp",cost:"$12,450",vol:"342k"},{name:"TechStart Inc",cost:"$8,920",vol:"256k"},{name:"DataFlow AI",cost:"$6,340",vol:"189k"},{name:"CloudNine",cost:"$4,810",vol:"134k"},{name:"NexGen Labs",cost:"$3,290",vol:"98k"}];
 const forecast = [{day:"Mon",val:3100},{day:"Tue",val:3420},{day:"Wed",val:2980},{day:"Thu",val:3650},{day:"Fri",val:3890},{day:"Sat",val:2740},{day:"Sun",val:2310}];
 
 /* DASHBOARD */
-let dashboardInitialized = false;
-function initDashboard() {
-  if (dashboardInitialized) return;
-  dashboardInitialized = true;
-  const mt = document.getElementById('modelsTable'); mt.innerHTML = '';
-  models.forEach((m,i) => { const tr=document.createElement('tr'); tr.innerHTML=`<td>${i+1}</td><td style="font-weight:600">${m.name}</td><td style="font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--ink-2)">${m.vol}</td><td><div style="width:80px;height:6px;border-radius:3px;background:var(--bg);overflow:hidden"><div style="width:${m.pct/36.4*100}%;height:100%;border-radius:3px;background:var(--blue)"></div></div></td><td style="text-align:right;font-weight:700">${m.pct}%</td>`; mt.appendChild(tr); });
-  const ct = document.getElementById('countriesTable'); ct.innerHTML = '';
-  countries.forEach((c,i) => { const tr=document.createElement('tr'); tr.innerHTML=`<td>${i+1}</td><td style="font-weight:600">${c.flag} ${c.name}</td><td style="font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--ink-2)">${c.vol}</td><td><div style="width:80px;height:6px;border-radius:3px;background:var(--bg);overflow:hidden"><div style="width:${c.pct/46*100}%;height:100%;border-radius:3px;background:var(--blue)"></div></div></td><td style="text-align:right;font-weight:700">${c.pct}%</td>`; ct.appendChild(tr); });
-  (function(){ const cv=document.getElementById('reqChart'); const ctx=cv.getContext('2d'); const W=cv.parentElement.offsetWidth-40,H=220; cv.width=W; cv.height=H; const data=[210,245,280,310,295,340,380,420,395,440,480,510]; const max=Math.max(...data); const step=W/(data.length-1); ctx.clearRect(0,0,W,H); ctx.beginPath(); ctx.moveTo(0,H); data.forEach((d,i)=>{const x=i*step,y=H-d/max*(H-30); i?ctx.lineTo(x,y):ctx.moveTo(x,y);}); ctx.lineTo(W,H); ctx.closePath(); const grd=ctx.createLinearGradient(0,0,0,H); grd.addColorStop(0,'rgba(79,124,255,.25)'); grd.addColorStop(1,'rgba(79,124,255,0)'); ctx.fillStyle=grd; ctx.fill(); ctx.beginPath(); data.forEach((d,i)=>{const x=i*step,y=H-d/max*(H-30); i?ctx.lineTo(x,y):ctx.moveTo(x,y);}); ctx.strokeStyle='#4f7cff'; ctx.lineWidth=2.5; ctx.lineJoin='round'; ctx.stroke(); data.forEach((d,i)=>{const x=i*step,y=H-d/max*(H-30); ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2); ctx.fillStyle='#4f7cff'; ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=2; ctx.stroke(); }); const months=['Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug']; ctx.fillStyle='#9ca3b5'; ctx.font='600 11px Inter'; ctx.textAlign='center'; months.forEach((m,i)=>{ctx.fillText(m,i*step,H-4);}); })();
-}
+const mt = document.getElementById('modelsTable'); mt.innerHTML = '';
+models.forEach((m,i) => { const tr=document.createElement('tr'); tr.innerHTML=`<td>${i+1}</td><td style="font-weight:600">${m.name}</td><td style="font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--ink-2)">${m.vol}</td><td><div style="width:80px;height:6px;border-radius:3px;background:var(--bg);overflow:hidden"><div style="width:${m.pct/36.4*100}%;height:100%;border-radius:3px;background:var(--blue)"></div></div></td><td style="text-align:right;font-weight:700">${m.pct}%</td>`; mt.appendChild(tr); });
+const ct = document.getElementById('countriesTable'); ct.innerHTML = '';
+countries.forEach((c,i) => { const tr=document.createElement('tr'); tr.innerHTML=`<td>${i+1}</td><td style="font-weight:600">${c.flag} ${c.name}</td><td style="font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--ink-2)">${c.vol}</td><td><div style="width:80px;height:6px;border-radius:3px;background:var(--bg);overflow:hidden"><div style="width:${c.pct/46*100}%;height:100%;border-radius:3px;background:var(--blue)"></div></div></td><td style="text-align:right;font-weight:700">${c.pct}%</td>`; ct.appendChild(tr); });
+const ut = document.getElementById('usersTable'); ut.innerHTML = '';
+users.forEach((u,i) => { const tr=document.createElement('tr'); tr.innerHTML=`<td>${i+1}</td><td style="font-weight:600">${u.name}</td><td style="font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--ink-2)">${u.cost}</td><td style="text-align:right;font-weight:700">${u.vol}</td>`; ut.appendChild(tr); });
+const pl = document.getElementById('providersList'); pl.innerHTML = '';
+providers.forEach(p => { const d=document.createElement('div'); d.style.cssText='display:flex;align-items:center;gap:14px;padding:14px;border-radius:12px;background:var(--card);border:1px solid var(--border);margin-bottom:10px;'; d.innerHTML=`<div style="width:44px;height:44px;border-radius:10px;background:${p.color}20;color:${p.color};display:grid;place-items:center;font-weight:800;font-size:1rem;">${p.logo}</div><div style="flex:1"><div style="font-weight:700;font-size:.95rem;">${p.name}</div><div style="font-size:.78rem;color:var(--ink-3);">Uptime ${p.uptime} · ${p.latency}</div></div><span class="badge-status ${p.status==='online'?'ok':p.status==='degraded'?'warn':'danger'}">${p.status}</span>`; pl.appendChild(d); });
+const al = document.getElementById('alertsList'); al.innerHTML = '';
+alerts.forEach(a => { const d=document.createElement('div'); d.style.cssText=`display:flex;align-items:flex-start;gap:12px;padding:12px;border-radius:10px;margin-bottom:10px;border:1px solid ${a.type==='danger'?'rgba(239,68,68,.3)':a.type==='warn'?'rgba(245,158,11,.3)':'rgba(79,124,255,.3)'};background:${a.type==='danger'?'var(--red-l)':a.type==='warn'?'var(--amber-l)':''}`; d.innerHTML=`<span style="font-size:1.1rem"><i data-lucide="${a.icon}" style="width:18px;height:18px"></i></span><div style="flex:1"><div style="font-weight:700;font-size:.88rem;">${a.title}</div><div style="font-size:.78rem;color:var(--ink-2);margin-top:2px;">${a.desc}</div></div><span style="font-size:.72rem;color:var(--ink-3);white-space:nowrap">${a.time}</span>`; al.appendChild(d); });
+const fl = document.getElementById('forecastList'); fl.innerHTML = '';
+const maxF = Math.max(...forecast.map(f=>f.val));
+forecast.forEach(f => { const d=document.createElement('div'); d.className='forecast-row'; d.innerHTML=`<span class="day">${f.day}</span><div class="bar" style="width:${f.val/maxF*100}%;${f.val>3500?'background:linear-gradient(90deg,#ef4444,#ff8a8a)':''}">$${f.val.toLocaleString()}</div>`; fl.appendChild(d); });
 
-/* GUIDE */
-const ROLES = { ceo:{name:'Генеральный директор',role:'CEO',av:'👑',color:'linear-gradient(135deg,#ffd700,#ff8c00)',skills:['Стратегия','Управление','Решения','Бюджет']}, levels:[{title:'Директора',roles:[{id:'cto',name:'Технический директор',role:'CTO',av:'💻',color:'linear-gradient(135deg,#60a5fa,#3b82f6)',skills:['Архитектура','Разработка','DevOps','AI/ML']},{id:'cfo',name:'Финансовый директор',role:'CFO',av:'💰',color:'linear-gradient(135deg,#4ade80,#16a34a)',skills:['Финансы','Бюджет','Отчётность','Инвестиции']},{id:'coo',name:'Директор по операциям',role:'COO',av:'⚙️',color:'linear-gradient(135deg,#fbbf24,#f59e0b)',skills:['Операции','Процессы','Логистика','KPI']},{id:'cmo',name:'Директор по маркетингу',role:'CMO',av:'📢',color:'linear-gradient(135deg,#f87171,#ef4444)',skills:['Маркетинг','Реклама','Бренд','Контент']},{id:'legal',name:'Юрист',role:'Legal',av:'⚖️',color:'linear-gradient(135deg,#c084fc,#8b5cf6)',skills:['Право','Контракты','Комплаенс','Риски']},{id:'dev_head',name:'Head of Development',role:'Dev Head',av:'🛠',color:'linear-gradient(135deg,#34d399,#10b981)',skills:['Full-Stack','Backend','Frontend','Mobile']},{id:'design_head',name:'Главный веб-дизайнер',role:'Lead Designer',av:'🎨',color:'linear-gradient(135deg,#f472b6,#ec4899)',skills:['UI/UX','Figma','Прототипы','Бренд']}]},{title:'Работники отделов',roles:[{id:'analyst',name:'Аналитик',role:'Analyst',av:'📊',color:'linear-gradient(135deg,#60a5fa,#818cf8)',skills:['SQL','Python','BI','Метрики']},{id:'backend',name:'Backend-разработчик',role:'Backend',av:'⚡',color:'linear-gradient(135deg,#4ade80,#22c55e)',skills:['Node.js','Python','API','Базы данных']},{id:'frontend',name:'Frontend-разработчик',role:'Frontend',av:'🖥',color:'linear-gradient(135deg,#60a5fa,#0ea5e9)',skills:['React','Vue','CSS','TypeScript']},{id:'marketer',name:'Маркетолог',role:'Marketer',av:'📣',color:'linear-gradient(135deg,#fbbf24,#f97316)',skills:['SMM','SEO','Контекст','Email']},{id:'designer',name:'Веб-дизайнер',role:'Designer',av:'✏️',color:'linear-gradient(135deg,#f472b6,#a855f7)',skills:['Figma','Adobe','UI','UX']},{id:'accountant',name:'Бухгалтер',role:'Accountant',av:'🧮',color:'linear-gradient(135deg,#4ade80,#84cc16)',skills:['1С','Налоги','Отчётность','Зарплата']},{id:'hr',name:'HR-менеджер',role:'HR',av:'🤝',color:'linear-gradient(135deg,#c084fc,#6366f1)',skills:['Рекрутинг','Адаптация','KPI','Обучение']},{id:'lawyer',name:'Юрист-консультант',role:'Lawyer',av:'📋',color:'linear-gradient(135deg,#8b5cf6,#4f46e5)',skills:['Договоры','Суд','Комплаенс']}]}] };
+/* CHART */
+(function(){ const cv=document.getElementById('reqChart'); const ctx=cv.getContext('2d'); const W=cv.parentElement.offsetWidth-40,H=220; cv.width=W; cv.height=H; const data=[210,245,280,310,295,340,380,420,395,440,480,510]; const max=Math.max(...data); const step=W/(data.length-1); ctx.clearRect(0,0,W,H); ctx.beginPath(); ctx.moveTo(0,H); data.forEach((d,i)=>{const x=i*step,y=H-d/max*(H-30); i?ctx.lineTo(x,y):ctx.moveTo(x,y);}); ctx.lineTo(W,H); ctx.closePath(); const grd=ctx.createLinearGradient(0,0,0,H); grd.addColorStop(0,'rgba(79,124,255,.25)'); grd.addColorStop(1,'rgba(79,124,255,0)'); ctx.fillStyle=grd; ctx.fill(); ctx.beginPath(); data.forEach((d,i)=>{const x=i*step,y=H-d/max*(H-30); i?ctx.lineTo(x,y):ctx.moveTo(x,y);}); ctx.strokeStyle='#4f7cff'; ctx.lineWidth=2.5; ctx.lineJoin='round'; ctx.stroke(); data.forEach((d,i)=>{const x=i*step,y=H-d/max*(H-30); ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2); ctx.fillStyle='#4f7cff'; ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=2; ctx.stroke(); }); const months=['Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug']; ctx.fillStyle='#9ca3b5'; ctx.font='600 11px Inter'; ctx.textAlign='center'; months.forEach((m,i)=>{ctx.fillText(m,i*step,H-4);}); })();
 
-function initGuide() {
-  const el = document.getElementById('rolesTree'); el.innerHTML = '';
-  const ceo = ROLES.ceo;
-  const ceoEl = document.createElement('div'); ceoEl.className='role-level';
-  ceoEl.innerHTML=`<h4><i data-lucide="crown" style="width:16px;height:16px"></i> ${ceo.name}</h4>`;
-  const ceoItem=document.createElement('div'); ceoItem.className='role-item';
-  ceoItem.innerHTML=`<div class="av" style="background:${ceo.color}">${ceo.av}</div><div class="info"><div class="name">${ceo.name}</div><div class="role">Главный исполнительный директор</div></div><div class="skills">${ceo.skills.map(s=>`<span>${s}</span>`).join('')}</div>`;
-  ceoItem.onclick=()=>openAgent(ceo);
-  ceoEl.appendChild(ceoItem); el.appendChild(ceoEl);
-  ROLES.levels.forEach(level => {
-    const lvlEl = document.createElement('div'); lvlEl.className='role-level';
-    lvlEl.innerHTML=`<h4><i data-lucide="users" style="width:16px;height:16px"></i> ${level.title}</h4>`;
-    level.roles.forEach(r => {
-      const item=document.createElement('div'); item.className='role-item';
-      item.innerHTML=`<div class="av" style="background:${r.color}">${r.av}</div><div class="info"><div class="name">${r.name}</div><div class="role">${r.role}</div></div><div class="skills">${r.skills.map(s=>`<span>${s}</span>`).join('')}</div>`;
-      item.onclick=()=>openAgent(r);
-      lvlEl.appendChild(item);
-    });
-    el.appendChild(lvlEl);
-  });
-  lucide.createIcons();
-}
-
-/* AGENT */
-let currentAgent = null;
-let currentTask = {text:'',status:'discussion',messages:[],decision:null};
-let allTasks = JSON.parse(localStorage.getItem('ahemen_tasks')||'[]');
-
-function openAgent(agent) {
-  currentAgent = agent;
-  currentTask = {text:'',status:'discussion',messages:[],decision:null,agent:agent.id,agentName:agent.name};
-  document.getElementById('agentModalTitle').textContent = agent.name + ' — ' + agent.role;
-  document.getElementById('agentModalDesc').textContent = 'Навыки: ' + agent.skills.join(', ');
-  document.getElementById('chatMessages').innerHTML = '';
-  document.getElementById('agentModal').classList.add('open');
-  addAgentMessage('agent', `Здравствуйте! Я — ${agent.name}. Опишите задачу, и я приму решение. Мои навыки: ${agent.skills.join(', ')}.`);
-}
-function closeAgentModal() { document.getElementById('agentModal').classList.remove('open'); }
-function addAgentMessage(who, text) {
-  const el = document.getElementById('chatMessages');
-  const d = document.createElement('div'); d.className = 'chat-msg ' + who;
-  d.innerHTML = `<div class="who">${who==='user'?'Вы':currentAgent.name}</div><div class="txt">${text}</div>`;
-  el.appendChild(d); el.scrollTop = el.scrollHeight;
-  currentTask.messages.push({who, text});
-}
-function sendMessage() {
-  const input = document.getElementById('chatInput');
-  const text = input.value.trim(); if (!text) return;
-  currentTask.text = text;
-  addAgentMessage('user', text);
-  input.value = '';
-  setTimeout(() => {
-    const decision = generateDecision(currentAgent, text);
-    addAgentMessage('agent', decision);
-    currentTask.decision = decision;
-    currentTask.status = 'completed';
-    allTasks.push({...currentTask, ts: new Date().toISOString()});
-    localStorage.setItem('ahemen_tasks', JSON.stringify(allTasks));
-    const el = document.getElementById('chatMessages');
-    const d = document.createElement('div'); d.className='decision-box';
-    d.innerHTML=`<h5><i data-lucide="check-circle" style="width:16px;height:16px"></i> Решение принято</h5><div class="decision-text">${decision}</div>`;
-    el.appendChild(d); el.scrollTop = el.scrollHeight;
-    lucide.createIcons();
-    renderTaskBoard();
-  }, 800 + Math.random()*1200);
-}
-function generateDecision(agent, task) {
-  const decisions = {
-    ceo: `Как Генеральный директор, рассмотрел задачу: "${task}". Решение: утверждаю реализацию. Назначаю ответственных из соответствующих отделов. Бюджет и сроки будут согласованы в течение дня. Проект запускается немедленно.`,
-    cto: `Как Технический директор, проанализировал задачу: "${task}". Техническое решение: используем современный стек (React/Node.js/AI API). Архитектура — микросервисная. Срок реализации оценю в 2-3 недели. Назначаю Backend и Frontend разработчиков.`,
-    cfo: `Как Финансовый директор, оценил задачу: "${task}". Финансовый анализ: бюджет проекта ≈ $15,000-25,000. ROI ожидается в 6 месяцев. Рекомендую выделить средства из резервного фонда. Одобряю финансирование.`,
-    coo: `Как Директор по операциям, рассмотрел: "${task}". Операционный план: разбить на 5 этапов, KPI для каждого отдела определены. Срок — 3 недели. Контроль качества на каждом этапе. Одобряю.`,
-    cmo: `Как Директор по маркетингу, оценил: "${task}". Маркетинговая стратегия: таргет + контент + email. Бюджет на продвижение — $5,000. Ожидаемый охват — 500k+. Запускаем кампанию параллельно с разработкой.`,
-    legal: `Как Юрист, проверил: "${task}". Юридическая экспертиза: риски минимальны. Рекомендую подписать NDA с подрядчиками, зарегистрировать IP. Одобряю с юридической точки зрения.`,
-    dev_head: `Как Head of Development, оценил: "${task}". План разработки: спринты по 2 недели, 5 фаз. Стек: React, Node.js, PostgreSQL, AI API. Назначаю команду. Срок — 3 недели.`,
-    design_head: `Как Главный веб-дизайнер, рассмотрел: "${task}". Дизайн-концепция: минимализм, glassmorphism, мобильная адаптация. Создам прототип в Figma за 3 дня, затем UI-кит. Одобряю.`,
-    analyst: `Как Аналитик, проанализировал: "${task}". Данные показывают высокий потенциал. Метрики успеха определены. Рекомендую A/B тестирование. Создам дашборд для мониторинга.`,
-    backend: `Как Backend-разработчик, оценил: "${task}". Архитектура: REST API + WebSocket. Стек: Node.js, Express, PostgreSQL, Redis. Срок — 2 недели. Готов приступить.`,
-    frontend: `Как Frontend-разработчик, рассмотрел: "${task}". План: React + TypeScript, компонентный подход, Storybook. Анимации через Framer Motion. Срок — 2 недели.`,
-    marketer: `Как Маркетолог, оценил: "${task}". Каналы: SMM, SEO, контекстная реклама. Бюджет — $3,000. Ожидаемый CTR — 3.5%. Запускаем предпродажи.`,
-    designer: `Как Веб-дизайнер, рассмотрел: "${task}". Создам UI в Figma: 5 экранов, адаптив, тёмная/светлая тема. Срок — 5 дней. Начинаю.`,
-    accountant: `Как Бухгалтер, проверил: "${task}". Бухгалтерский учёт: оформлю как расходы на развитие. НДС учтён. Одобряю для оплаты.`,
-    hr: `Как HR-менеджер, оценил: "${task}". Кадровое обеспечение: текущая команда справится. При необходимости найм за 2 недели. Одобряю.`,
-    lawyer: `Как Юрист-консультант, проверил: "${task}". Риски низкие. Договор с подрядчиком готов. Одобряю.`,
-  };
-  return decisions[agent.id] || `Рассмотрел задачу: "${task}". Решение: задача принята в работу. Будет выполнена в установленные сроки.`;
-}
-
-/* TASK BOARD */
-function renderTaskBoard() {
-  const el = document.getElementById('taskBoard'); el.innerHTML = '';
-  const cols = [{id:'discussion',name:'Обсуждение',color:'var(--blue)'},{id:'in_progress',name:'В работе',color:'var(--amber)'},{id:'review',name:'На проверке',color:'var(--purple)'},{id:'completed',name:'Выполнено',color:'var(--green)'}];
-  cols.forEach(col => {
-    const c = document.createElement('div'); c.className='task-col';
-    c.innerHTML=`<h5 style="color:${col.color}">${col.name}</h5>`;
-    const tasks = allTasks.filter(t => t.status === col.id);
-    if (!tasks.length) { const empty=document.createElement('div'); empty.style.cssText='color:var(--ink-3);font-size:.78rem;text-align:center;padding:14px;'; empty.textContent='Нет задач'; c.appendChild(empty); }
-    tasks.forEach(t => { const d=document.createElement('div'); d.className='task-card'; d.innerHTML=`<div class="title">${t.agentName}: ${t.text.slice(0,50)}</div><div class="meta">${t.decision?'✅ Решение принято':'💬 Обсуждение'}</div>`; c.appendChild(d); });
-    el.appendChild(c);
-  });
-}
-
-/* ANALYTICS */
-function initAnalytics() {
-  const fl = document.getElementById('forecastList'); fl.innerHTML = '';
-  const maxF = Math.max(...forecast.map(f=>f.val));
-  forecast.forEach(f => { const d=document.createElement('div'); d.style.cssText='display:flex;align-items:center;gap:12px;padding:8px 0;'; d.innerHTML=`<span style="width:50px;font-weight:600;font-size:.85rem;color:var(--ink-2)">${f.day}</span><div style="flex:1;height:24px;border-radius:6px;background:linear-gradient(90deg,var(--blue),#a5bfff);display:flex;align-items:center;padding:0 10px;color:#fff;font-weight:700;font-size:.78rem;min-width:60px;${f.val>3500?'background:linear-gradient(90deg,#ef4444,#ff8a8a)':''}">$${f.val.toLocaleString()}</div>`; fl.appendChild(d); });
-}
-
-/* PROVIDERS */
-function initProvidersPage() {
-  const el = document.getElementById('providersList'); el.innerHTML = '';
-  providers.forEach(p => { const d=document.createElement('div'); d.style.cssText='display:flex;align-items:center;gap:14px;padding:14px;border-radius:12px;background:var(--card);border:1px solid var(--border);margin-bottom:10px;'; d.innerHTML=`<div style="width:44px;height:44px;border-radius:10px;background:${p.color}20;color:${p.color};display:grid;place-items:center;font-weight:800;font-size:1rem;">${p.logo}</div><div style="flex:1"><div style="font-weight:700;font-size:.95rem;">${p.name}</div><div style="font-size:.78rem;color:var(--ink-3);">Uptime ${p.uptime} · ${p.latency}</div></div><span class="badge ${p.status==='online'?'ok':p.status==='degraded'?'warn':'danger'}">${p.status}</span>`; el.appendChild(d); });
-}
-
-/* API KEYS */
-let apiKeys = JSON.parse(localStorage.getItem('ahemen_keys')||'[]');
-if (!apiKeys.length) { apiKeys = [{name:'Production Key', key:'ahemen_sk_live_4f8a2b1c9d3e5f6a7b8c', created:'2026-08-15', status:'active'}]; localStorage.setItem('ahemen_keys', JSON.stringify(apiKeys)); }
-function renderKeys() {
-  const el = document.getElementById('keysList'); el.innerHTML = '';
-  apiKeys.forEach((k,i) => { const d=document.createElement('div'); d.style.cssText='display:flex;align-items:center;gap:14px;padding:14px;border-radius:12px;background:var(--card);border:1px solid var(--border);margin-bottom:10px;'; d.innerHTML=`<div style="width:36px;height:36px;border-radius:8px;background:var(--blue-l);color:var(--blue);display:grid;place-items:center;"><i data-lucide="key" style="width:18px;height:18px"></i></div><div style="flex:1"><div style="font-weight:700;font-size:.9rem;">${k.name}</div><div style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--ink-3);">${k.key.slice(0,20)}···${k.key.slice(-6)}</div></div><div style="display:flex;gap:6px;"><button onclick="copyKey(${i})" style="padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--card);font-size:.75rem;font-weight:600;cursor:pointer;">Copy</button><button onclick="deleteKey(${i})" style="padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--card);font-size:.75rem;font-weight:600;cursor:pointer;color:var(--red);">✕</button></div>`; el.appendChild(d); });
-  lucide.createIcons();
-}
-function generateKey() { const name=prompt('Название ключа:'); if (!name) return; const key='ahemen_sk_'+Math.random().toString(36).slice(2,12)+Math.random().toString(36).slice(2,12); apiKeys.push({name,key,created:new Date().toISOString().slice(0,10),status:'active'}); localStorage.setItem('ahemen_keys', JSON.stringify(apiKeys)); renderKeys(); }
-function copyKey(i) { navigator.clipboard.writeText(apiKeys[i].key); alert('Скопировано!'); }
-function deleteKey(i) { if (!confirm('Удалить ключ?')) return; apiKeys.splice(i,1); localStorage.setItem('ahemen_keys', JSON.stringify(apiKeys)); renderKeys(); }
-
-/* TIMESTAMP */
 document.getElementById('ts').textContent = new Date().toLocaleTimeString('ru-RU');
-initDashboard();
 lucide.createIcons();
 </script>
 </body></html>
