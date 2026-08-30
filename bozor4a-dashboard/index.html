@@ -8,7 +8,7 @@
 <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
 <style>
 :root {
-  --bg: #f0f2f5; --card: rgba(255,255,255,.85); --border: rgba(0,0,0,.08);
+  --bg: #f0f2f5; --card: rgba(255,255,255,.85); --border: rgba(0,0,0,.15);
   --ink: #1a1d29; --ink-2: #5f6577; --ink-3: #9ca3b5;
   --blue: #4f7cff; --blue-l: #e8efff;
   --green: #16a34a; --green-l: #e6f7ed;
@@ -36,7 +36,7 @@ body::before {
 .mobile-nav { display: none; position: fixed; top: 0; left: 0; bottom: 0; width: 280px; background: var(--card); border-right: 1px solid var(--border); z-index: 300; padding: 20px; flex-direction: column; gap: 8px; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: 4px 0 24px rgba(0,0,0,.1); }
 .mobile-nav.open { display: flex; }
 .mobile-nav-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-.mobile-nav a { padding: 12px 16px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: .95rem; color: var(--ink-2); }
+.mobile-nav a { padding: 12px 16px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: .95rem; color: var(--ink-2); border: 1px solid transparent; }
 .mobile-nav a:hover, .mobile-nav a.active { background: var(--blue-l); color: var(--blue); }
 
 /* NAV */
@@ -48,7 +48,7 @@ body::before {
 .nav-links a { padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: .88rem; color: var(--ink-2); transition: all .15s; }
 .nav-links a:hover, .nav-links a.active { background: var(--blue-l); color: var(--blue); }
 .nav-right { display: flex; align-items: center; gap: 12px; }
-.badge { padding: 6px 12px; border-radius: 8px; font-size: .78rem; font-weight: 700; border: 1px solid var(--border); }
+.badge { padding: 6px 12px; border-radius: 8px; font-size: .78rem; font-weight: 700; border: 1px solid transparent; }
 .badge.live { background: var(--green-l); color: var(--green); display: inline-flex; align-items: center; gap: 6px; }
 .badge.live .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 1.4s infinite; }
 .badge.blue { background: var(--blue-l); color: var(--blue); }
@@ -68,7 +68,7 @@ body::before {
 .stat { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: 0 4px 16px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.6); }
 .stat .label { font-size: .78rem; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: .6px; }
 .stat .value { font-size: 1.85rem; font-weight: 800; margin-top: 6px; letter-spacing: -.5px; }
-.stat.blue { border-left: 4px solid var(--blue); }
+.stat.blue { border-left: 4px solid var(--blue); background: linear-gradient(90deg, var(--blue-l), transparent); }
 .stat.red { border-left: 4px solid var(--red); }
 .stat.green { border-left: 4px solid var(--green); }
 .stat.amber { border-left: 4px solid var(--amber); }
@@ -127,15 +127,48 @@ body::before {
 
 <div class="content">
   <div id="errbox" class="err-box"></div>
-  <div id="kpis" class="stats"></div>
-  <h3 style="font-size:1rem;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px"><i data-lucide="bar-chart-3" style="width:18px;height:18px;color:var(--amber)"></i> Статусы заказов</h3>
-  <div id="statuses" class="stats"></div>
-  <div class="grid-2">
-    <div class="card"><h3><i data-lucide="trending-up" style="width:18px;height:18px;color:var(--green)"></i> Ходовые товары</h3><div id="top"></div></div>
-    <div class="card"><h3><i data-lucide="truck" style="width:18px;height:18px;color:var(--blue)"></i> Заказы по поставщикам</h3><table class="table"><thead><tr><th>Поставщик</th><th style="text-align:right">Заказов</th></tr></thead><tbody id="by-sup"></tbody></table></div>
+
+  <!-- DASHBOARD -->
+  <div class="page active" id="page-dashboard">
+    <div id="kpis" class="stats"></div>
+    <h3 style="font-size:1rem;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px"><i data-lucide="bar-chart-3" style="width:18px;height:18px;color:var(--amber)"></i> Статусы заказов</h3>
+    <div id="statuses" class="stats"></div>
+    <div class="grid-2">
+      <div class="card"><h3><i data-lucide="trending-up" style="width:18px;height:18px;color:var(--green)"></i> Ходовые товары</h3><div id="top"></div></div>
+      <div class="card"><h3><i data-lucide="truck" style="width:18px;height:18px;color:var(--blue)"></i> Заказы по поставщикам</h3><table class="table"><thead><tr><th>Поставщик</th><th style="text-align:right">Заказов</th></tr></thead><tbody id="by-sup"></tbody></table></div>
+    </div>
+    <div class="card" style="margin-top:22px"><h3><i data-lucide="clipboard-list" style="width:18px;height:18px;color:var(--purple)"></i> Последние заказы</h3><table class="table"><thead><tr><th>ID</th><th>Магазин</th><th>Поставщик</th><th>Позиции</th><th>Сумма</th><th>Комиссия</th><th>Статус</th><th>Когда</th></tr></thead><tbody id="orders"></tbody></table></div>
   </div>
-  <div class="card" style="margin-top:22px"><h3><i data-lucide="clipboard-list" style="width:18px;height:18px;color:var(--purple)"></i> Последние заказы</h3><table class="table"><thead><tr><th>ID</th><th>Магазин</th><th>Поставщик</th><th>Позиции</th><th>Сумма</th><th>Комиссия</th><th>Статус</th><th>Когда</th></tr></thead><tbody id="orders"></tbody></table></div>
+
+  <!-- SUPPLIERS -->
+  <div class="page" id="page-suppliers">
+    <div class="card"><h3><i data-lucide="truck" style="width:18px;height:18px;color:var(--blue)"></i> Поставщики</h3><table class="table"><thead><tr><th>ID</th><th>Название</th><th>Категория</th><th>Контакт</th><th>Рейтинг</th></tr></thead><tbody id="suppliers-tbody"></tbody></table></div>
+  </div>
+
+  <!-- SELLERS -->
+  <div class="page" id="page-sellers">
+    <div class="card"><h3><i data-lucide="store" style="width:18px;height:18px;color:var(--green)"></i> Продавцы</h3><table class="table"><thead><tr><th>ID</th><th>Магазин</th><th>Владелец</th><th>Район</th><th>Контакт</th></tr></thead><tbody id="sellers-tbody"></tbody></table></div>
+  </div>
+
+  <!-- PRODUCTS -->
+  <div class="page" id="page-products">
+    <div class="card"><h3><i data-lucide="package" style="width:18px;height:18px;color:var(--purple)"></i> Товары</h3><table class="table"><thead><tr><th>ID</th><th>Название</th><th>Категория</th><th>Цена, сом</th><th>Остаток</th></tr></thead><tbody id="products-tbody"></tbody></table></div>
+  </div>
+
+  <!-- ORDERS -->
+  <div class="page" id="page-orders">
+    <div class="card"><h3><i data-lucide="clipboard-list" style="width:18px;height:18px;color:var(--amber)"></i> Заказы</h3><table class="table"><thead><tr><th>ID</th><th>Магазин</th><th>Поставщик</th><th>Позиции</th><th>Сумма</th><th>Комиссия</th><th>Статус</th><th>Когда</th></tr></thead><tbody id="orders-tbody"></tbody></table></div>
+  </div>
 </div>
+
+.page { display: none; }
+.page.active { display: block; }
+@media (max-width: 768px) {
+  .grid, .grid-2 { grid-template-columns: 1fr; }
+}
+
+.page { display: none; }
+.page.active { display: block; }
 
 <div class="foot">Bozor4a · Пилот Душанбе · Данные из Google Sheets · Автообновление каждые 10 с</div>
 
@@ -143,6 +176,23 @@ body::before {
 function toggleMobileNav() {
   document.getElementById('mobileNav').classList.toggle('open');
   document.getElementById('mobileOverlay').classList.toggle('open');
+}
+
+function showPage(name) {
+  // Скрываем все страницы
+  var pages = document.querySelectorAll('.page');
+  for (var i = 0; i < pages.length; i++) {
+    pages[i].classList.remove('active');
+  }
+  // Показываем нужную
+  var target = document.getElementById('page-' + name);
+  if (target) target.classList.add('active');
+  
+  // Обновляем active в навигации
+  var links = document.querySelectorAll('.nav-links a, .mobile-nav a');
+  for (var i = 0; i < links.length; i++) {
+    links[i].classList.toggle('active', links[i].dataset.page === name);
+  }
 }
 
 const SID = "18ljshdCnNZw_Cd-rApiEckUvFZIkC1yOTbrnyxM9ukE";
@@ -211,6 +261,23 @@ function renderDashboard(d){
     const when=(o.created_at||"").replace("T"," ").slice(0,16);
     return `<tr><td>${o.order_id||"—"}</td><td>${o.shop_name||"—"}</td><td>${supName[o.supplier_id]||o.supplier_id||"—"}</td><td class="pos">${ps||"—"}</td><td style="font-family:'JetBrains Mono',monospace;font-weight:600">${fmt(num(o.total))}</td><td style="font-family:'JetBrains Mono',monospace;font-weight:600">${fmt(num(o.commission))}</td><td>${badgeStatus(o.status)}</td><td>${when}</td></tr>`;
   }).join('') : '<tr><td colspan="8">Заказов пока нет</td></tr>';
+
+  // Suppliers table
+  document.getElementById('suppliers-tbody').innerHTML = suppliers.map(s=>`<tr><td>${s.supplier_id||"—"}</td><td>${s.supplier_name||"—"}</td><td>${s.category||"—"}</td><td>${s.contact||s.phone||"—"}</td><td>${s.rating||"—"}</td></tr>`).join('')||'<tr><td colspan="5">Нет данных</td></tr>';
+
+  // Sellers table
+  document.getElementById('sellers-tbody').innerHTML = sellers.map(s=>`<tr><td>${s.seller_id||"—"}</td><td>${s.shop_name||"—"}</td><td>${s.owner||"—"}</td><td>${s.district||s.area||"—"}</td><td>${s.contact||s.phone||"—"}</td></tr>`).join('')||'<tr><td colspan="5">Нет данных</td></tr>';
+
+  // Products table
+  document.getElementById('products-tbody').innerHTML = products.map(p=>`<tr><td>${p.product_id||"—"}</td><td>${p.name||p.product_name||"—"}</td><td>${p.category||"—"}</td><td style="font-family:'JetBrains Mono',monospace;font-weight:600">${fmt(num(p.price))}</td><td style="font-family:'JetBrains Mono',monospace;font-weight:600">${fmt(num(p.stock))}</td></tr>`).join('')||'<tr><td colspan="5">Нет данных</td></tr>';
+
+  // Orders table (page-orders)
+  document.getElementById('orders-tbody').innerHTML = rows.length ? rows.map(o=>{
+    let pos=[]; try{ pos=JSON.parse(o.positions||'[]'); }catch(e){}
+    const ps=pos.map(p=>`${p.qty} ${p.unit} ${p.key}`).join(", ");
+    const when=(o.created_at||"").replace("T"," ").slice(0,16);
+    return `<tr><td>${o.order_id||"—"}</td><td>${o.shop_name||"—"}</td><td>${supName[o.supplier_id]||o.supplier_id||"—"}</td><td class="pos">${ps||"—"}</td><td style="font-family:'JetBrains Mono',monospace;font-weight:600">${fmt(num(o.total))}</td><td style="font-family:'JetBrains Mono',monospace;font-weight:600">${fmt(num(o.commission))}</td><td>${badgeStatus(o.status)}</td><td>${when}</td></tr>`;
+  }).join('') : '<tr><td colspan="8">Нет данных</td></tr>';
 }
 
 loadData();
